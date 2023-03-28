@@ -2,14 +2,15 @@ const { client } = require("./index");
 
 async function dropTables() {
   try {
-    // console.log("Starting to drop tables...");
-    // await client.query(`
-    // DROP TABLE IF EXISTS
-    // DROP TABLE IF EXISTS
-    // DROP TABLE IF EXISTS
-    // DROP TABLE IF EXISTS `
-    // );
-    // console.log("Finished dropping tables!");
+    console.log("Starting to drop tables...");
+    await client.query(`
+    DROP TABLE IF EXISTS inventory;
+    DROP TABLE IF EXISTS car_tags;
+    DROP TABLE IF EXISTS hubs;
+    DROP TABLE IF EXISTS tags;
+    DROP TABLE IF EXISTS cars;
+    DROP TABLE IF EXISTS users;`);
+    console.log("Finished dropping tables!");
   } catch (error) {
     console.log("Error when dropping tables!");
     throw error;
