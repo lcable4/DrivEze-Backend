@@ -67,3 +67,30 @@ async function createTables() {
     throw error;
   }
 }
+
+async function rebuildDB() {
+  try {
+    client.connect();
+
+    await dropTables();
+    await createTables();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function testDB() {
+  try {
+    console.log("Starting to test database...");
+
+    console.log("Finished database tests!");
+  } catch (error) {
+    console.log("Error testing database!");
+    console.error(error);
+  }
+}
+
+rebuildDB()
+  .then(testDB)
+  .catch(console.error)
+  .finally(() => client.end());
