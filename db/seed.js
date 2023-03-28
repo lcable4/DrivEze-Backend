@@ -1,21 +1,4 @@
-const {
-  client,
-  getAllUsers,
-  createUser,
-  updateUser,
-  createPost,
-  updatePost,
-  getAllPosts,
-  getPostsByUser,
-  getUserById,
-  createTags,
-  addTagsToPost,
-  createPostTag,
-  getPostsByTagName,
-  getAllTags,
-  getUserByUsername,
-  getPostById,
-} = require("./index");
+const { client } = require("./index");
 
 async function dropTables() {
   try {
