@@ -1,4 +1,6 @@
 const { client } = require("./index");
+const bcrypt = require("bcrypt");
+const { createUser, createCar } = require("./");
 
 async function dropTables() {
   try {
@@ -68,12 +70,154 @@ async function createTables() {
   }
 }
 
+async function createInitialUsers() {
+  console.log("Starting to create users...");
+  try {
+    const usersToCreate = [
+      { name: "albert", password: "bertie99" },
+      { username: "sandra", password: "sandra123" },
+      { username: "glamgal", password: "glamgal123" },
+    ];
+    const users = await Promise.all(usersToCreate.map(createUser));
+
+    console.log("Users created:");
+    console.log(users);
+    console.log("Finished creating users!");
+  } catch (error) {
+    console.error("Error creating users!");
+    throw error;
+  }
+}
+
+async function createInitialVehicles() {
+  console.log("Starting to create vehicles...");
+  try {
+    const vehiclesToCreate = [
+      {
+        name: "Ford Focus",
+        description: "high-mpg sedan",
+        price: 100,
+        hubLocation: "Nevada",
+        category: "car",
+      },
+      {
+        name: "Toyota Camry",
+        description: "high-mpg sedan",
+        price: 100,
+        hubLocation: "Arizona",
+        category: "car",
+      },
+      {
+        name: "Honda Civic",
+        description: "high-mpg sedan",
+        price: 100,
+        hubLocation: "Texas",
+        category: "car",
+      },
+      {
+        name: "Chevrolet Silverado",
+        description: "powerful truck",
+        price: 150,
+        hubLocation: "Nevada",
+        category: "truck",
+      },
+      {
+        name: "Ford F-150",
+        description: "powerful truck",
+        price: 150,
+        hubLocation: "Colorado",
+        category: "truck",
+      },
+      {
+        name: "Ram 1500",
+        description: "powerful truck",
+        price: 150,
+        hubLocation: "Arizona",
+        category: "truck",
+      },
+      {
+        name: "Jeep Wrangler",
+        description: "off-road SUV",
+        price: 200,
+        hubLocation: "Nevada",
+        category: "SUV",
+      },
+      {
+        name: "Toyota 4Runner",
+        description: "off-road SUV",
+        price: 200,
+        hubLocation: "Colorado",
+        category: "SUV",
+      },
+      {
+        name: "Chevrolet Tahoe",
+        description: "family SUV",
+        price: 175,
+        hubLocation: "Texas",
+        category: "SUV",
+      },
+      {
+        name: "Tesla Model S",
+        description: "luxury electric sedan",
+        price: 400,
+        hubLocation: "Nevada",
+        category: "luxury",
+      },
+      {
+        name: "BMW 7 Series",
+        description: "luxury sedan",
+        price: 350,
+        hubLocation: "Colorado",
+        category: "luxury",
+      },
+      {
+        name: "Mercedes-Benz S-Class",
+        description: "luxury sedan",
+        price: 350,
+        hubLocation: "Texas",
+        category: "luxury",
+      },
+      {
+        name: "Mercedes-Benz GLS",
+        description: "luxury SUV",
+        price: 400,
+        hubLocation: "Nevada",
+        category: "luxury",
+      },
+      {
+        name: "Range Rover",
+        description: "luxury SUV",
+        price: 400,
+        hubLocation: "Colorado",
+        category: "luxury",
+      },
+      {
+        name: "Lamborghini Urus",
+        description: "luxury SUV",
+        price: 500,
+        hubLocation: "Texas",
+        category: "luxury",
+      },
+    ];
+    const vehicles = await Promise.all(vehiclesToCreate.map(createCar));
+
+    console.log("Vehicles created:");
+    console.log(vehicles);
+    console.log("Finished creating vehicles!");
+  } catch (error) {
+    console.error("Error creating vehicles!");
+    throw error;
+  }
+}
+
 async function rebuildDB() {
   try {
     client.connect();
 
     await dropTables();
     await createTables();
+    await createInitialVehicles();
+    await createInitialUsers();
   } catch (error) {
     console.error(error);
   }
