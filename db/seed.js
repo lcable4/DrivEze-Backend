@@ -34,7 +34,7 @@ async function createTables() {
         description TEXT NOT NULL,
         price INTEGER NOT NULL,
         "hubLocation" VARCHAR(255) NOT NULL,
-        active BOOLEAN DEFAULT TRUE,
+        active BOOLEAN DEFAULT TRUE
       );
 
       CREATE TABLE tags(
@@ -51,7 +51,7 @@ async function createTables() {
 
       CREATE TABLE hubs(
         id SERIAL PRIMARY KEY,
-        location VARCHAR(255) UNIQUE NOT NULL,
+        location VARCHAR(255) UNIQUE NOT NULL
       );
 
       CREATE TABLE inventory(
