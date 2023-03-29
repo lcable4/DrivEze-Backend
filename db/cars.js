@@ -60,41 +60,41 @@ async function updateCar(carId, fieldsToUpdate) {
     const { name, description, price, hubLocation, active } = fieldsToUpdate;
 
     const updateFields = [];
-    const queryParams = [];
+    const params = [];
 
     if (name) {
       updateFields.push(`name=$${updateFields.length + 1}`);
-      queryParams.push(name);
+      params.push(name);
     }
 
     if (description) {
       updateFields.push(`description=$${updateFields.length + 1}`);
-      queryParams.push(description);
+      params.push(description);
     }
 
     if (price) {
       updateFields.push(`price=$${updateFields.length + 1}`);
-      queryParams.push(price);
+      params.push(price);
     }
 
     if (hubLocation) {
       updateFields.push(`"hubLocation"=$${updateFields.length + 1}`);
-      queryParams.push(hubLocation);
+      params.push(hubLocation);
     }
 
     if (active !== undefined) {
       updateFields.push(`active=$${updateFields.length + 1}`);
-      queryParams.push(active);
+      params.push(active);
     }
 
     const { rows } = await client.query(
       `
       UPDATE cars
       SET ${updateFields.join(", ")}
-      WHERE id=$${queryParams.length + 1}
+      WHERE id=$${params.length + 1}
       RETURNING *;
     `,
-      [...queryParams, carId]
+      [...params, carId]
     );
 
     if (rows.length) {
