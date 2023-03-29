@@ -5,9 +5,6 @@ const { createUser } = require("./users");
 const { createCar } = require("./cars");
 const { createHub } = require("./hubs");
 
-// const { createUser, createCar } = require("./")
-//hello
-
 async function dropTables() {
   try {
     console.log("Starting to drop tables...");
@@ -41,7 +38,7 @@ async function createTables() {
       );
 
       CREATE TABLE cars(
-        id SERIAL PRIMARY KEY,
+        id SERIAL PRIMARY KEY UNIQUE,
         name VARCHAR(255) NOT NULL,
         description TEXT NOT NULL,
         price INTEGER NOT NULL,
@@ -96,9 +93,13 @@ async function createInitialUsers() {
   console.log("Starting to create users...");
   try {
     const usersToCreate = [
-      { name: "albert", password: "bertie99" },
-      { username: "sandra", password: "sandra123" },
-      { username: "glamgal", password: "glamgal123" },
+      { name: "albert", password: "bertie99", email: "albert@gmail.com" },
+      { username: "sandra", password: "sandra123", email: "sandra@gmail.com" },
+      {
+        username: "glamgal",
+        password: "glamgal123",
+        email: "glamgal@gmail.com",
+      },
     ];
     const users = await Promise.all(usersToCreate.map(createUser));
 
