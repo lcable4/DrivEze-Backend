@@ -1,8 +1,13 @@
 const { client } = require("./index");
 const bcrypt = require("bcrypt");
+
 // const { createUser } = require("./users");
 const { createCar } = require("./cars");
 const { createHub } = require("./hubs");
+
+=======
+const { createUser, createCar } = require("./");
+//hello
 
 async function dropTables() {
   try {
@@ -27,7 +32,8 @@ async function createTables() {
     await client.query(`
     CREATE TABLE users(
       id SERIAL PRIMARY KEY,
-      location VARCHAR(255) NOT NULL,
+      email VARCHAR(255) UNIQUE NOT NULL,
+      location VARCHAR(255),
       active BOOLEAN DEFAULT TRUE,
       username VARCHAR(255) UNIQUE NOT NULL,
       password VARCHAR(255) NOT NULL
