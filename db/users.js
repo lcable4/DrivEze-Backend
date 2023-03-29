@@ -11,7 +11,6 @@ async function createUser({ username, password, email }) {
     } = await client.query(
       `INSERT INTO users (username, password, email)
              VALUES($1, $2, $3)
-             ON CONFLICT(username, email) DO NOTHING
              RETURNING id, username, email;
             `,
       [username, password, email]
