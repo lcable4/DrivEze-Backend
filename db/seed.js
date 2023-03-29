@@ -1,7 +1,7 @@
 const { client } = require("./index");
 const bcrypt = require("bcrypt");
 const { createUser, createCar } = require("./");
-
+//hello
 async function dropTables() {
   try {
     console.log("Starting to drop tables...");
