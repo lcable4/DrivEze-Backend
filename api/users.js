@@ -6,16 +6,46 @@ const { requireUser} = require("./utils")
 
 const { getUserByUsernameWithPassword, getUser, createUser, getUserById } = require("../db/users");
 const { DefaultDeserializer } = require('v8');
+function ValidateEmail(input) {
+
+  var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+  if (input.value.match(validRegex)) {
+    next({
+      name: "Valid email",
+      message:"Valid email address"
+    })
+    document.form1.text1.focus();
+
+    return true;
+  } else {
+    next({
+      name: "Invalid email",
+      message: "Invalid email address"
+    })
+    return false;
+
+  }
+}
+
 
 usersRouter.post("/register", async (req, res, next) => {
-    const { username, password } = req.body;
-    
+    const { username, password, email } = req.body;
+
     try {
-      const register = await createUser({ username, password })
+      const register = await createUser({ username, password, email })
       if (password.length < 8) {
         next({
           name: "Password too short",
           message: "Password too short",
+        })
+      }
+      if (email){
+        
+      }else{
+        next({
+          name: "Invalid email",
+          message: "Invalid email address"
         })
       }
       const token = jwt.sign(
@@ -42,6 +72,8 @@ usersRouter.post("/register", async (req, res, next) => {
         return res.status(400).send({ message: 'Username already taken' });
       } else if(error.message === 'Password too short') {
         return res.status(400).send({ message: 'Password too short' });
+      }else if(error.message === 'Email is not valid'){
+        return res.status(400).send({message:'Email is not valid'})
       }else {
         console.log(error);
         return res.status(500).send({ message: 'Error creating user'});
