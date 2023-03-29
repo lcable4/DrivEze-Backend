@@ -1,17 +1,19 @@
 const { client } = require("./index");
 const bcrypt = require("bcrypt");
 
-// const { createUser } = require("./users");
+const { createUser } = require("./users");
 const { createCar } = require("./cars");
 const { createHub } = require("./hubs");
 
-const { createUser, createCar } = require("./");
+// const { createUser, createCar } = require("./")
 //hello
 
 async function dropTables() {
   try {
     console.log("Starting to drop tables...");
     await client.query(`
+    DROP TABLE IF EXISTS cart_items;
+    DROP TABLE IF EXISTS cart;
     DROP TABLE IF EXISTS inventory;
     DROP TABLE IF EXISTS car_tags;
     DROP TABLE IF EXISTS hubs;
@@ -67,7 +69,8 @@ async function createTables() {
       CREATE TABLE inventory(
         id SERIAL PRIMARY KEY,
         "hubId" INTEGER REFERENCES hubs(id),
-        "carId" INTEGER REFERENCES cars(id)
+        "carId" INTEGER REFERENCES cars(id),
+        UNIQUE("carId","hubId")
       );
 
       CREATE TABLE cart(
@@ -76,10 +79,10 @@ async function createTables() {
         "isOrdered" BOOLEAN DEFAULT TRUE
       );
 
-      CREATE cart_items(
+      CREATE TABLE cart_items(
         id SERIAL PRIMARY KEY,
-        "carId" INTEGER REFERENCES cars(id)
-        price INTEGER REFERENCES cars(prize)
+        "carId" INTEGER REFERENCES cars(id),
+        price INTEGER 
       );
     `);
     console.log("Finished building tables!");
@@ -97,10 +100,10 @@ async function createInitialUsers() {
       { username: "sandra", password: "sandra123" },
       { username: "glamgal", password: "glamgal123" },
     ];
-    // const users = await Promise.all(usersToCreate.map(createUser));
+    const users = await Promise.all(usersToCreate.map(createUser));
 
     console.log("Users created:");
-    // console.log(users);
+    console.log(users);
     console.log("Finished creating users!");
   } catch (error) {
     console.error("Error creating users!");
