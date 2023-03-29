@@ -69,6 +69,18 @@ async function createTables() {
         "hubId" INTEGER REFERENCES hubs(id),
         "carId" INTEGER REFERENCES cars(id)
       );
+
+      CREATE TABLE cart(
+        id SERIAL PRIMARY KEY,
+        "userId" INTEGER REFERENCES users(id),
+        "isOrdered" BOOLEAN DEFAULT TRUE
+      );
+
+      CREATE cart_items(
+        id SERIAL PRIMARY KEY,
+        "carId" INTEGER REFERENCES cars(id)
+        price INTEGER REFERENCES cars(prize)
+      );
     `);
     console.log("Finished building tables!");
   } catch (error) {
