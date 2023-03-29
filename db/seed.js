@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const { createUser } = require("./users");
 const { createCar } = require("./cars");
 const { createHub } = require("./hubs");
+const { createTags } = require("./tags");
 
 async function dropTables() {
   try {
@@ -128,6 +129,34 @@ async function createInitialHubs() {
     console.log("Finished creating hubs!");
   } catch (error) {
     console.error("Error creating hubs!");
+    throw error;
+  }
+}
+
+async function createInitialTags() {
+  console.log("Starting to create tags...");
+  try {
+    const tagsToCreate = [
+      { id: 1, name: "Truck" },
+      { id: 2, name: "Sedan" },
+      { id: 3, name: "Coupe" },
+      { id: 4, name: "Van" },
+      { id: 5, name: "Minivan" },
+      { id: 6, name: "Hatchback" },
+      { id: 7, name: "SUV" },
+      { id: 8, name: "Convertible" },
+      { id: 9, name: "Luxury" },
+      { id: 10, name: "Electric" },
+      { id: 11, name: "Gas" },
+      { id: 12, name: "Hybrid" },
+    ];
+    const tags = await Promise.all(tagsToCreate.map(createTags));
+
+    console.log("Tags created:");
+    console.log(tags);
+    console.log("Finished creating tags!");
+  } catch (error) {
+    console.error("Error creating tags!");
     throw error;
   }
 }
@@ -260,6 +289,7 @@ async function rebuildDB() {
     await dropTables();
     await createTables();
     await createInitialVehicles();
+    await createInitialTags();
     await createInitialUsers();
     await createInitialHubs();
   } catch (error) {
