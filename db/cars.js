@@ -1,15 +1,15 @@
 const { client } = require("./index");
 
-async function createCar({ name, description, price, hubLocation, category }) {
+async function createCar({ name, description, price, hubLocation }) {
   try {
     console.log(`Creating new car: ${name}...`);
     const { rows } = await client.query(
       `
-      INSERT INTO cars(name, description, price, "hubLocation", category)
-      VALUES ($1, $2, $3, $4, $5,)
+      INSERT INTO cars(name, description, price, "hubLocation")
+      VALUES ($1, $2, $3, $4)
       RETURNING *;
     `,
-      [name, description, price, hubLocation, category]
+      [name, description, price, hubLocation]
     );
 
     return rows[0];
