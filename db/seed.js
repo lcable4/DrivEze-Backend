@@ -74,7 +74,7 @@ async function createTables() {
         id SERIAL PRIMARY KEY,
         "carId" INTEGER REFERENCES cars(id)
         price INTEGER REFERENCES cars(prize)
-      )
+      );
     `);
     console.log("Finished building tables!");
   } catch (error) {
