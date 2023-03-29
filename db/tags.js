@@ -6,35 +6,31 @@ async function getAllTags() {
       `);
   return rows;
 }
-
-async function createTags(tagList) {
-  if (tagList.length === 0) {
+async function createTags(name) {
+  if (name.length === 0) {
     return;
   }
-
-  const insertValues = tagList.map((_, index) => `$${index + 1}`).join("), (");
-
-  const selectValues = tagList.map((_, index) => `$${index + 1}`).join(", ");
-
   try {
-    await client.query(
+    const search = await client.query(
       `
-        INSERT INTO tags(name)
-        VALUES (${insertValues})
-        ON CONFLICT (name) DO NOTHING`,
-      tagList
+            SELECT * FROM tags
+            WHERE name =($1);`,
+      [name]
     );
-
-    const { rows } = await client.query(
+    if (search.rows.length > 0) {
+      console.log(`Tag with name '${name}' already exists`);
+      return;
+    }
+    const result = await client.query(
       `
-        
-        SELECT * FROM tags
-        WHERE name
-        IN (${selectValues});`,
-      tagList
+          INSERT INTO tags(name)
+          VALUES ($1)
+          RETURNING id, name
+        `,
+      [name]
     );
-
-    return rows;
+    console.log(`Created tag with name '${name}'`);
+    return result.rows[0];
   } catch (error) {
     throw error;
   }
