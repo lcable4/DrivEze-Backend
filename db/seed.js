@@ -1,7 +1,14 @@
 const { client } = require("./index");
 const bcrypt = require("bcrypt");
+
+// const { createUser } = require("./users");
+const { createCar } = require("./cars");
+const { createHub } = require("./hubs");
+
+=======
 const { createUser, createCar } = require("./");
 //hello
+
 async function dropTables() {
   try {
     console.log("Starting to drop tables...");
@@ -79,13 +86,33 @@ async function createInitialUsers() {
       { username: "sandra", password: "sandra123" },
       { username: "glamgal", password: "glamgal123" },
     ];
-    const users = await Promise.all(usersToCreate.map(createUser));
+    // const users = await Promise.all(usersToCreate.map(createUser));
 
     console.log("Users created:");
-    console.log(users);
+    // console.log(users);
     console.log("Finished creating users!");
   } catch (error) {
     console.error("Error creating users!");
+    throw error;
+  }
+}
+
+async function createInitialHubs() {
+  console.log("Starting to create hubs...");
+  try {
+    const hubsToCreate = [
+      { id: 1, location: "Arizona" },
+      { id: 2, location: "Nevada" },
+      { id: 3, location: "Texas" },
+      { id: 4, location: "Colorado" },
+    ];
+    const hubs = await Promise.all(hubsToCreate.map(createHub));
+
+    console.log("Hubs created:");
+    console.log(hubs);
+    console.log("Finished creating hubs!");
+  } catch (error) {
+    console.error("Error creating hubs!");
     throw error;
   }
 }
@@ -219,6 +246,7 @@ async function rebuildDB() {
     await createTables();
     await createInitialVehicles();
     await createInitialUsers();
+    await createInitialHubs();
   } catch (error) {
     console.error(error);
   }
