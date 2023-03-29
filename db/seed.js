@@ -9,6 +9,8 @@ async function dropTables() {
   try {
     console.log("Starting to drop tables...");
     await client.query(`
+    DROP TABLE IF EXISTS cart_items;
+    DROP TABLE IF EXISTS cart;
     DROP TABLE IF EXISTS inventory;
     DROP TABLE IF EXISTS car_tags;
     DROP TABLE IF EXISTS hubs;
@@ -64,7 +66,8 @@ async function createTables() {
       CREATE TABLE inventory(
         id SERIAL PRIMARY KEY,
         "hubId" INTEGER REFERENCES hubs(id),
-        "carId" INTEGER REFERENCES cars(id)
+        "carId" INTEGER REFERENCES cars(id),
+        UNIQUE("carId","hubId")
       );
 
       CREATE TABLE cart(
@@ -76,7 +79,7 @@ async function createTables() {
       CREATE TABLE cart_items(
         id SERIAL PRIMARY KEY,
         "carId" INTEGER REFERENCES cars(id),
-        price INTEGER
+        price INTEGER 
       );
     `);
     console.log("Finished building tables!");
