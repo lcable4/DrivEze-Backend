@@ -1,138 +1,184 @@
-const { client } = require("./index");
+const client = require("./index");
 
-async function createCar({ name, description, price, hubLocation }) {
-  try {
-    console.log(`Creating new car: ${name}...`);
-    const { rows } = await client.query(
-      `
-      INSERT INTO cars(name, description, price, "hubLocation")
-      VALUES ($1, $2, $3, $4)
-      RETURNING *;
-    `,
-      [name, description, price, hubLocation]
-    );
 
-    return rows[0];
-  } catch (error) {
-    console.error(error);
-  }
+async function createCar({ name, description, daily_rate, hubLocation })
+{
+    try{
+        await client.connect();
+
+        const
+        {
+            rows:[car]
+        }
+        = await client.query(`
+        INSERT INTO cars(name, description, daily_rate, "hubLocation")
+        VALUES ($1, $2, $3, $4)
+        RETURNING *;`,
+        [name, description, daily_rate, hubLocation]
+        );
+        await client.release();
+        return car;
+    }
+    catch(e)
+    {
+        console.error(e);
+    }
 }
 
-async function getCarById(carId) {
-  try {
-    console.log(`Getting car with ID ${carId}...`);
-    const { rows } = await client.query(
-      `
-      SELECT *
-      FROM cars
-      WHERE id=$1;
-    `,
-      [carId]
-    );
+async function updateCar({carId, ...fields})
+{
+    try
+    {
+        const setString = Object.keys(fields)
+        .map((key, index) => `"${key}"=$${index +1}`)
+        .join(", ");
 
-    if (rows.length) {
-      return rows[0];
+        await client.connect();
+
+        const 
+        {
+            rows:[car]
+        }
+        = await client.query(`
+            UPDATE cars
+            SET ${setString}
+            WHERE id=${carId}
+            RETURNING *;
+        `,
+        [...fields]
+        );
+
+        await client.release();
+
+        return car;
     }
-
-    throw new Error(`No car with ID ${carId} found.`);
-  } catch (error) {
-    console.error(error);
-  }
+    catch(e)
+    {
+        console.error(e);
+    }
 }
 
-async function getAllCars() {
-  try {
-    console.log("Getting all cars...");
-    const { rows } = await client.query(`
-      SELECT *
-      FROM cars;
-    `);
+async function getAllCars()
+{
+    try
+    {
+        await client.connect();
+        const
+        {
+            rows:[cars]
+        }
+        = await client.query(`
+        SELECT *
+        FROM cars;
+      `)
 
-    return rows;
-  } catch (error) {
-    console.error(error);
-  }
+        await client.release();
+
+        return cars;
+    }
+    catch(e)
+    {
+        console.error(e);
+    }
 }
 
-async function updateCar(carId, fieldsToUpdate) {
-  try {
-    console.log(`Updating car with ID ${carId}...`);
-    const { name, description, price, hubLocation, active } = fieldsToUpdate;
+async function getCarById(carId)
+{
+    try
+    {
+        await client.connect();
+        const
+        {
+            rows:[car]
+        }
+        = await client.query(`
+        SELECT *
+        FROM cars
+        WHERE id=$1;
+        `,
+        [carId]
+        );
 
-    const updateFields = [];
-    const params = [];
+        await client.release();
 
-    if (name) {
-      updateFields.push(`name=$${updateFields.length + 1}`);
-      params.push(name);
+        return car;
     }
-
-    if (description) {
-      updateFields.push(`description=$${updateFields.length + 1}`);
-      params.push(description);
+    catch(e)
+    {
+        console.error(e);
     }
-
-    if (price) {
-      updateFields.push(`price=$${updateFields.length + 1}`);
-      params.push(price);
-    }
-
-    if (hubLocation) {
-      updateFields.push(`"hubLocation"=$${updateFields.length + 1}`);
-      params.push(hubLocation);
-    }
-
-    if (active !== undefined) {
-      updateFields.push(`active=$${updateFields.length + 1}`);
-      params.push(active);
-    }
-
-    const { rows } = await client.query(
-      `
-      UPDATE cars
-      SET ${updateFields.join(", ")}
-      WHERE id=$${params.length + 1}
-      RETURNING *;
-    `,
-      [...params, carId]
-    );
-
-    if (rows.length) {
-      return rows[0];
-    }
-
-    throw new Error(`No car with ID ${carId} found.`);
-  } catch (error) {
-    console.error(error);
-  }
 }
 
-async function deleteCar(carId) {
-  try {
-    console.log(`Deleting car with ID ${carId}...`);
-    const { rows } = await client.query(
-      `
-      DELETE FROM cars
-      WHERE id=$1
-      RETURNING *;
-    `,
-      [carId]
-    );
+async function getCarsByHubLocation(hubId)
+{
+    try
+    {
 
-    if (rows.length) {
-      return rows[0];
     }
-
-    throw new Error(`No car with ID ${carId} found.`);
-  } catch (error) {
-    console.error(error);
-  }
+    catch(e)
+    {
+        console.error(e);
+    }
 }
 
-module.exports = {
-  createCar,
-  getCarById,
-  getAllCars,
-  updateCar,
-  deleteCar,
-};
+async function getCarsByTag(tagId)
+{
+    try
+    {
+
+    }
+    catch(e)
+    {
+        console.error(e);
+    }
+}
+
+async function deleteCar(carId)
+{
+    try
+    {
+        await client.connect();
+
+        const 
+        {
+            rows:[car]
+        }
+        = await client.query(`
+         DELETE FROM cars
+         WHERE id=$1
+         RETURNING *;
+        `,
+         [carId]
+        );
+
+        await client.release();
+
+        return car;
+    }
+    catch(e)
+    {
+        console.error(e);
+    }
+}
+
+async function deactivateCar(carId)
+{
+    try
+    {
+
+    }
+    catch(e)
+    {
+        console.error(e);
+    }
+}
+
+module.exports = 
+{
+    createCar,
+    updateCar,
+    getAllCars,
+    getCarById,
+    getCarsByHubLocation,
+    deleteCar, 
+}

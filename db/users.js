@@ -1,110 +1,164 @@
-const { client } = require("./index");
+const client = require("./index");
 const bcrypt = require("bcrypt");
 
-async function createUser({ username, password, email }) {
-  const SALT_COUNT = 10;
-  const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
-  password = hashedPassword;
-  try {
-    const {
-      rows: [user],
-    } = await client.query(
-      `INSERT INTO users (username, password, email)
-             VALUES($1, $2, $3)
-             RETURNING id, username, email;
-            `,
-      [username, password, email]
-    );
-    return user;
-  } catch (error) {
-    throw error;
-  }
-}
-
-async function getUser({ username, password }) {
-  const user = await getUserByUsername(username);
-  const hashedPassword = user.password;
-  const isValid = await bcrypt.compare(password, hashedPassword);
-  try {
-    if (!isValid) {
-      return null;
-    } else {
-      delete user.password;
-      return user;
+async function createUser({username, password, email})
+{
+    const SALT_COUNT = 10;
+    const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
+    password = hashedPassword;
+    try
+    {
+        await client.connect();
+        const {
+            rows:[user],
+        }
+        = await client.query(
+            `INSERT INTO users (username, password, email)
+            VALUES($1, $2, $3)
+            RETURNING id, username, email;`,
+            [username, password, email]
+        );
+        await client.release();
+        return user;
     }
-  } catch (error) {
-    throw error;
-  }
+    catch(e)
+    {
+        throw e;
+    }
 }
 
-async function getUserById(userId) {
-  try {
-    const {
-      rows: [user],
-    } = await client.query(
-      `SELECT *
+async function getUserById(userId)
+{
+    try
+    {
+        await client.connect();
+        const 
+        {
+            rows: [user],
+        }
+        = await client.query(
+            `SELECT *
             FROM users
             WHERE id = $1;
             `,
-      [userId]
-    );
-    if (!user) {
-      return null;
-    } else {
-      delete user.password;
-      return user;
+            [userId]
+        );
+        await client.release();
+        if(!user)
+        {
+            return null;
+        }
+        else
+        {
+            delete user.password;
+            return user;
+        }
     }
-  } catch (error) {
-    throw error;
-  }
+    catch(e)
+    {
+        throw e;
+    }
 }
 
-async function getUserByUsername(username) {
-  try {
-    const {
-      rows: [user],
-    } = await client.query(
-      `SELECT *
-            FROM users
-            WHERE username = $1;
-            `,
-      [username]
-    );
-    if (!user) {
-      return null;
-    } else {
-      return user;
-    }
-  } catch (error) {
-    throw error;
-  }
-}
-
-async function getUserByEmail(email) {
-  try {
-    const {
-      rows: [user],
-    } = await client.query(
-      `SELECT *
+async function getUserByEmail(email)
+{
+    try
+    {
+        await client.connect();
+        const {
+            rows:[user],
+        }
+        = await client.query(
+            `SELECT *
             FROM users
             WHERE email = $1;
             `,
-      [email]
-    );
-    if (!user) {
-      return null;
-    } else {
-      return user;
+            [email]
+        );
+        await client.release();
+        if(!user)
+        {
+            return null;
+        }
+        else
+        {
+            delete user.password;
+            return user;
+        }
     }
-  } catch (error) {
-    throw error;
-  }
+    catch(e)
+    {
+        throw e;
+    }
 }
 
-module.exports = {
-  createUser,
-  getUser,
-  getUserById,
-  getUserByUsername,
-  getUserByEmail,
-};
+async function updateUser({userId, ...fields})
+{
+    try
+    {
+        const setString = Object.keys(fields)
+            .map((key, index)=> `"${key}"=$${index+1}`)
+            .join(", ");
+
+        await client.connect();
+
+        const
+        {
+            rows: [user]
+        } = await client.query(`
+            UPDATE users
+            SET ${setString}
+            WHERE id=${userId}
+            RETURNING *;
+        `, 
+            Object.values(fields)
+        );
+        
+        await client.release();
+        return user;
+    }
+
+    catch(e)
+    {
+        throw e;
+    }
+}
+
+async function deleteUser(userId)
+{
+    try
+    {
+        await client.connect();
+
+        const
+        {
+            rows:[user]
+        }
+        = await client.query(`
+            DELETE FROM users
+            WHERE id=$1
+            RETURNING *;`,
+            [userId]
+        );
+        await client.release();
+        return user;
+    }
+    catch(e)
+    {
+        throw e;
+    }
+}
+
+async function deactivateUser()
+{
+
+}
+
+module.exports = 
+{
+    createUser,
+    getUserById,
+    getUserByEmail,
+    updateUser,
+    deleteUser,
+}

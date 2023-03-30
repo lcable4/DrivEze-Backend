@@ -1,76 +1,119 @@
-const { client } = require("./index");
+const client = require('./index');
 
-async function getAllTags() {
-  const { rows } = await client.query(`
-      SELECT * FROM tags
-      `);
-  return rows;
-}
+async function createTag(name)
+{
+    try
+    {
+        await client.connect();
 
-async function createTags(tagList) {
-  if (tagList.length === 0) {
-    return;
-  }
-
-  const insertValues = tagList.map((_, index) => `$${index + 1}`).join("), (");
-
-  const selectValues = tagList.map((_, index) => `$${index + 1}`).join(", ");
-
-  try {
-    await client.query(
-      `
-        INSERT INTO tags(name)
-        VALUES (${insertValues})
-        ON CONFLICT (name) DO NOTHING`,
-      tagList
-    );
-
-    const { rows } = await client.query(
-      `
-        
+        const
+         {
+            rows
+        }
+        = await client.query(`
         SELECT * FROM tags
-        WHERE name
-        IN (${selectValues});`,
-      tagList
-    );
-
-    return rows;
-  } catch (error) {
-    throw error;
-  }
+        WHERE name = ($1);
+        `,
+        [name]
+        );
+        if(rows.length > 0)
+        {
+            console.log(`Tag with name "${name}" already exists`);
+            return;
+        } 
+        const
+        {
+            rows:tag
+        }
+        = await client.query(`
+            INSERT INTO tags(name)
+            VALUES ($1)
+            RETURNING id, name
+            `,
+            [name]
+        );
+        await client.release();
+        return tag;
+    }
+    catch(e)
+    {
+        console.error(e);
+    }
 }
 
-async function createCarTag(carId, tagId) {
-  try {
-    await client.query(
-      `
-            INSERT INTO car_tags("carId", "tagId")
-            VALUES ($1, $2)
-            ON CONFLICT ("carId", "tagId") DO NOTHING;
-          `,
-      [carId, tagId]
-    );
-  } catch (error) {
-    throw error;
-  }
+async function getAllTags()
+{
+    try
+    {
+        client.connect();
+
+        const 
+        {
+            rows:tags
+        }
+        = await client.query(`
+            SELECT * FROM tags
+        `);
+        
+        await client.release();
+        return tags;
+    }
+    catch(e)
+    {
+        console.error(e);
+    }
 }
 
-async function addTagsToCar(carId, tagList) {
-  try {
-    const createCarTagPromises = tagList.map((tag) =>
-      createCarTag(carId, tag.id)
-    );
-    await Promise.all(createCarTagPromises);
+async function getTagById(tagId)
+{
+    try
+    {
+        
+    }
+    catch(e)
+    {
+        console.error(e);
+    }
+}
 
-    return await getCarById(carId);
-  } catch (error) {
-    throw error;
-  }
+async function updateTag(tagId)
+{
+    try
+    {
+        
+    }
+    catch(e)
+    {
+        console.error(e);
+    }
+}
+
+async function deleteTag(tagId)
+{
+    try
+    {
+        
+    }
+    catch(e)
+    {
+        console.error(e);
+    }
+}
+
+async function deactivteTag(tagId)
+{
+    try
+    {
+        
+    }
+    catch(e)
+    {
+        console.error(e);
+    }
 }
 
 module.exports = {
-  getAllTags,
-  createTags,
-  createCarTag,
-  addTagsToCar,
-};
+    createTag,
+    getAllTags,
+    
+}
