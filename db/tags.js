@@ -1,6 +1,7 @@
 const client = require('./index');
 
 async function createTag(name)
+//creates a tag with the given name
 {
     try
     {
@@ -34,6 +35,7 @@ async function createTag(name)
         );
         await client.release();
         return tag;
+        //returns the newly created tag
     }
     catch(e)
     {
@@ -42,6 +44,7 @@ async function createTag(name)
 }
 
 async function getAllTags()
+//gets all tags from the database
 {
     try
     {
@@ -57,6 +60,8 @@ async function getAllTags()
         
         await client.release();
         return tags;
+        //returns an array of all tags
+
     }
     catch(e)
     {
@@ -65,6 +70,7 @@ async function getAllTags()
 }
 
 async function getTagById(tagId)
+//gets all the info from a specific tag based on the given tagId
 {
     try
     {
@@ -84,8 +90,8 @@ async function getTagById(tagId)
         );
 
         await client.release();
-        // returns all the tag info from a specific tag based on the id its given
         return tags;  
+        // returns all the tag info from a specific tag based on the id its given
     }
     catch(e)
     {
@@ -94,6 +100,7 @@ async function getTagById(tagId)
 }
 
 async function updateTag({tagId, ...fields})
+//updates a tag based on the given tagId and fields
 {
   try
   {
@@ -117,8 +124,8 @@ async function updateTag({tagId, ...fields})
       );
 
       await client.release();
-
       return tags;
+      //returns the updated tag
   }
   catch(e)
   {
@@ -142,5 +149,6 @@ module.exports = {
     createTag,
     getAllTags,
     getTagById,
+    updateTag,
     
 }
