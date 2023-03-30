@@ -20,6 +20,7 @@ async function createCar({ name, description, daily_rate, hubLocation }) {
   }
 }
 
+//creates a string and sets the values of the updated fields using Object.keys
 async function updateCar({ carId, ...fields }) {
   try {
     const setString = Object.keys(fields)
@@ -90,6 +91,22 @@ async function getCarById(carId) {
 
 async function getCarsByHubLocation(hubId) {
   try {
+    await client.connect();
+    {
+      const {
+        rows: [car],
+      } = await client.query(
+        `
+        SELECT FROM cars
+        WHERE "hubId"=$1
+        RETURNING *
+        `,
+        [hubId]
+      );
+      await client.release();
+
+      return car;
+    }
   } catch (e) {
     console.error(e);
   }
@@ -142,8 +159,24 @@ async function deleteCar(carId) {
   }
 }
 
+//this function will change the active tag from true to false in the cars table
 async function deactivateCar(carId) {
   try {
+    await client.connect();
+
+    const {
+      rows: [car],
+    } = await client.query(
+      `
+      UPDATE cars
+      SET active = false
+      WHERE id=$1;
+      `,
+      [carId]
+    );
+
+    await client.release();
+    return car;
   } catch (e) {
     console.error(e);
   }
@@ -157,4 +190,5 @@ module.exports = {
   getCarsByHubLocation,
   deleteCar,
   getCarsByTag,
+  deactivateCar,
 };
