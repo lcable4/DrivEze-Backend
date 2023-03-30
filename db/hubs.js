@@ -1,85 +1,129 @@
-const { client } = require("./index");
+const client = require("./index");
 
-async function createHub({ id, location }) {
-  try {
-    console.log(`Creating new hub...`);
-    const { rows } = await client.query(
-      `
-        INSERT INTO hubs(id, location)
-        VALUES ($1, $2)
-        RETURNING *;
-      `,
-      [id, location]
-    );
+async function createHub({ location }) {
+    try {
+        await client.connect();
 
-    return rows[0];
-  } catch (error) {
-    console.error(error);
-  }
+        const
+            {
+                rows: [hub]
+            }
+                = await client.query(`
+            INSERT INTO hubs(location)
+            VALUES ($1)
+            RETURNING *;
+            `,
+                    [location]
+                );
+        await client.release();
+
+        return hub;
+    }
+    catch (e) {
+        console.error(e);
+    }
 }
 
 async function getAllHubs() {
-  try {
-    console.log("Getting all hubs...");
-    const { rows } = await client.query(`
-        SELECT *
-        FROM hubs;
-      `);
+    try {
+        await client.connect();
 
-    return rows;
-  } catch (error) {
-    console.error(error);
-  }
+        const
+            {
+                rows: hubs
+            }
+                = await client.query(`
+            SELECT * FROM hubs;
+        `);
+
+        await client.release();
+
+        return hubs;
+    }
+    catch (e) {
+        console.error(e);
+    }
 }
 
-async function getHubById(id) {
-  try {
-    console.log(`Getting hub with ID ${id}...`);
-    const { rows } = await client.query(
-      `
-        SELECT *
-        FROM hubs
-        WHERE id=$1;
-      `,
-      [id]
-    );
+async function getHubById(hubId) {
+    try {
+        await client.connect();
 
-    if (rows.length) {
-      return rows[0];
+        const
+            {
+                rows: [hub]
+            }
+                = await client.query(`
+            SELECT *
+            FROM hubs
+            WHERE id=$1;
+            `,
+                    [hubId]
+                );
+        await client.release();
+
+        return hub;
     }
-
-    throw new Error(`No hub with ID ${id} found.`);
-  } catch (error) {
-    console.error(error);
-  }
+    catch (e) {
+        console.error(e);
+    }
 }
 
 async function getHubByLocation(location) {
-  try {
-    console.log(`Getting hub with location ${location}...`);
-    const { rows } = await client.query(
-      `
-          SELECT *
-          FROM hubs
-          WHERE location=$1;
-        `,
-      [location]
-    );
+    try {
+        await client.connect();
 
-    console.log(rows, "ROWS LOG!!!!!!!!!!!!!!!!!!!!!!!");
-    if (rows.length) {
-      return rows[0];
+        const
+            {
+                rows: [hub]
+            }
+            = await client.query(`
+            SELECT *
+            FROM hubs
+            WHERE location=$1;
+            `,
+                    [location]
+                );
+        await client.release();
+
+        return hub;
     }
-
-    throw new Error(`No hub with a nearby location.`);
-  } catch (error) {
-    console.error(error);
-  }
+    catch (e) {
+        console.error(e);
+    }
 }
-//ADD CAR TO HUB
-module.exports = {
-  createHub,
-  getHubById,
-  getAllHubs,
-  getHubByLocation,
-};
+
+async function updateHub(hubId) {
+    try {
+
+    }
+    catch (e) {
+        console.error(e);
+    }
+}
+
+async function deleteHub(hubId) {
+    try {
+
+    }
+    catch (e) {
+        console.error(e);
+    }
+}
+
+async function deactivateHub(hubId) {
+    try {
+
+    }
+    catch (e) {
+        console.error(e);
+    }
+}
+
+module.exports =
+{
+    createHub,
+    getAllHubs,
+    getHubById,
+    getHubByLocation
+}

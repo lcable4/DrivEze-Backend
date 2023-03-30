@@ -1,27 +1,22 @@
 {
-  "name": "driveze-backend",
+  "name": "final",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "test:watch": "jest --runInBand --watchAll",
     "seed:dev": "nodemon ./db/seed.js",
     "seed": "node ./db/seed.js",
-    "start:dev": "nodemon index.js",
+    "start:dev": "nodemon server.js",
     "start": "node server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/TheHighnote/DrivEze-Backend.git"
-  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/TheHighnote/DrivEze-Backend/issues"
-  },
-  "homepage": "https://github.com/TheHighnote/DrivEze-Backend#readme",
-  "keywords": [],
-  "description": "",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
@@ -31,7 +26,8 @@
     "nodemon": "^2.0.22",
     "pg": "^8.10.0"
   },
-  "devDependencies": {
+  "devDependencies":
+  {
     "jest": "^29.5.0"
   }
 }
