@@ -68,7 +68,22 @@ async function getTagById(tagId)
 {
     try
     {
-        
+        client.connect();
+
+        const 
+        {
+          rows:tags
+        }
+        = await client.query(`
+          SELECT *
+          FROM tags
+          WHERE "tagId" = $1;
+        `,
+        [tagId]
+        );
+
+        await client.release();
+        return tags;  
     }
     catch(e)
     {
@@ -115,5 +130,6 @@ async function deactivteTag(tagId)
 module.exports = {
     createTag,
     getAllTags,
+    getTagsById,
     
 }
