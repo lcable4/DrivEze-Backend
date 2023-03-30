@@ -108,8 +108,12 @@ async function dropTables() {
           email: "glamgal@gmail.com",
         },
       ];
-      const users = await Promise.all(usersToCreate.map(createUser));
-  
+      //const users = await Promise.all(usersToCreate.map(createUser));
+      const users = [];
+      for(let i = 0; i < usersToCreate.length; i++)
+      {
+        users.push(await createUser(usersToCreate[i]));
+      }
       console.log("Users created:");
       console.log(users);
       console.log("Finished creating users!");
