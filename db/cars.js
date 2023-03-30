@@ -90,6 +90,22 @@ async function getCarById(carId) {
 
 async function getCarsByHubLocation(hubId) {
   try {
+    await client.connect();
+    {
+      const {
+        rows: [car],
+      } = await client.query(
+        `
+        SELECT FROM cars
+        WHERE "hubId"=$1
+        RETURNING *
+        `,
+        [hubId]
+      );
+      await client.release();
+
+      return car;
+    }
   } catch (e) {
     console.error(e);
   }
@@ -144,6 +160,21 @@ async function deleteCar(carId) {
 
 async function deactivateCar(carId) {
   try {
+    await client.connect();
+
+    const {
+      rows: [car],
+    } = await client.query(
+      `
+      UPDATE cars
+      SET active = false
+      WHERE id=$1;
+      `,
+      [carId]
+    );
+
+    await client.release();
+    return car;
   } catch (e) {
     console.error(e);
   }
@@ -157,4 +188,5 @@ module.exports = {
   getCarsByHubLocation,
   deleteCar,
   getCarsByTag,
+  deactivateCar,
 };
