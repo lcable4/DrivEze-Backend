@@ -76,8 +76,8 @@ async function dropTables() {
       
       CREATE TABLE cart(
         id SERIAL PRIMARY KEY,
-        userId INTEGER REFERENCES users(id),
-        isOrdered BOOLEAN DEFAULT FALSE
+        "userId" INTEGER REFERENCES users(id),
+        "isOrdered" BOOLEAN DEFAULT false
       );
       
       CREATE TABLE cart_items(
