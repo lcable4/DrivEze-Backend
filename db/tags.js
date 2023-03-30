@@ -72,7 +72,7 @@ async function getTagById(tagId)
 
         const 
         {
-          rows:tags
+          rows:[tags],
         }
         // selects all information from tags where the id is equal to $1
         = await client.query(` 
