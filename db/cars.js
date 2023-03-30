@@ -20,6 +20,7 @@ async function createCar({ name, description, daily_rate, hubLocation }) {
   }
 }
 
+//creates a string and sets the values of the updated fields using Object.keys
 async function updateCar({ carId, ...fields }) {
   try {
     const setString = Object.keys(fields)
@@ -158,6 +159,7 @@ async function deleteCar(carId) {
   }
 }
 
+//this function will change the active tag from true to false in the cars table
 async function deactivateCar(carId) {
   try {
     await client.connect();
