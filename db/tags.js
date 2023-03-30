@@ -74,7 +74,8 @@ async function getTagById(tagId)
         {
           rows:tags
         }
-        = await client.query(`
+        // selects all information from tags where the id is equal to $1
+        = await client.query(` 
           SELECT *
           FROM tags
           WHERE "tagId" = $1;
@@ -83,6 +84,7 @@ async function getTagById(tagId)
         );
 
         await client.release();
+        // returns all the tag info from a specific tag based on the id its given
         return tags;  
     }
     catch(e)
@@ -130,6 +132,6 @@ async function deactivteTag(tagId)
 module.exports = {
     createTag,
     getAllTags,
-    getTagsById,
+    getTagById,
     
 }
