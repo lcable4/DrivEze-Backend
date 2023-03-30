@@ -93,28 +93,37 @@ async function getTagById(tagId)
     }
 }
 
-async function updateTag(tagId)
+async function updateTag({tagId, ...fields})
 {
-    try
-    {
-        
-    }
-    catch(e)
-    {
-        console.error(e);
-    }
-}
+  try
+  {
+      const setString = Object.keys(fields)
+      .map((key, index) => `"${key}"=$${index +1}`)
+      .join(", ");
 
-async function deleteTag(tagId)
-{
-    try
-    {
-        
-    }
-    catch(e)
-    {
-        console.error(e);
-    }
+      await client.connect();
+
+      const 
+      {
+          rows:[tags],
+      }
+      = await client.query(`
+          UPDATE tags
+          SET ${setString}
+          WHERE id=${tagId}
+          RETURNING *;
+      `,
+      [...fields]
+      );
+
+      await client.release();
+
+      return tags;
+  }
+  catch(e)
+  {
+      console.error(e);
+  }
 }
 
 async function deactivteTag(tagId)
