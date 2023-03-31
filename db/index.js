@@ -6,6 +6,7 @@ const pool = new Pool({
   connectionString:
     process.env.DATABASE_URL || "postgres://localhost/driveZe-dev",
   database: "driveZe-dev",
+
   ssl:
     process.env.NODE_ENV === "production"
       ? { rejectUnauthorized: false }
@@ -34,8 +35,8 @@ class client {
     const result = await this.#client.query(sql, params);
     return result;
   }
-  async release() {
-    //release the connection back to the pool
+
+  async release() { //release the connection back to the pool
     await this.#client.release();
   }
 }
