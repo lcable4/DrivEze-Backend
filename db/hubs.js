@@ -12,7 +12,7 @@ async function createHub({ location }) {
             VALUES ($1)
             RETURNING *;
             `,
-      [location]
+      [id, location]
     );
     await client.release();
 
@@ -143,18 +143,6 @@ async function deactivateHub(hubId) {
     console.error(e);
   }
 }
-
-async function testDB() {}
-try {
-  console.log("Starting to test database...");
-
-  console.log("Calling createHub");
-  const hubs = await createHub({ Nevada });
-  console.log("Result:", hubs);
-} catch (error) {
-  console.log(error);
-}
-testDB();
 
 module.exports = {
   createHub,
