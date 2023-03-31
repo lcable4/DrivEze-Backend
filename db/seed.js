@@ -52,7 +52,8 @@ async function dropTables() {
       
       CREATE TABLE tags(
         id SERIAL PRIMARY KEY,
-        name VARCHAR(255) UNIQUE NOT NULL
+        name VARCHAR(255) UNIQUE NOT NULL,
+        active BOOLEAN DEFAULT TRUE
       );
       
       CREATE TABLE car_tags(
