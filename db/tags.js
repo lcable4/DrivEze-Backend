@@ -78,7 +78,7 @@ async function getTagById(tagId)
 
         const 
         {
-          rows:[tags],
+          rows:[tag],
         }
         // selects all information from tags where the id is equal to $1
         = await client.query(` 
@@ -90,7 +90,7 @@ async function getTagById(tagId)
         );
 
         await client.release();
-        return tags;  
+        return tag;  
         // returns all the tag info from a specific tag based on the id its given
     }
     catch(e)
@@ -112,7 +112,7 @@ async function updateTag({tagId, ...fields})
 
       const 
       {
-          rows:[tags],
+          rows:[tag],
       }
       = await client.query(`
           UPDATE tags
@@ -124,7 +124,7 @@ async function updateTag({tagId, ...fields})
       );
 
       await client.release();
-      return tags;
+      return tag;
       //returns the updated tag
   }
   catch(e)
@@ -134,6 +134,7 @@ async function updateTag({tagId, ...fields})
 }
 
 async function deactivateTag(tagId)
+//switches a tag from active to inactive so that it won't display 
 {
   try 
   {
@@ -141,7 +142,7 @@ async function deactivateTag(tagId)
 
     const 
     {
-      rows: [tags],
+      rows: [tag],
 
     } 
     = await client.query(`
@@ -153,7 +154,8 @@ async function deactivateTag(tagId)
       );
 
     await client.release();
-    return tags;
+    return tag;
+    //returns the deactivated tag back
    } 
   catch (e) 
   {
@@ -162,6 +164,7 @@ async function deactivateTag(tagId)
 }
 
 async function deleteTag(tagId) {
+//deletes a tag based on the tagId given
   try {
     await client.connect();
 
@@ -179,6 +182,7 @@ async function deleteTag(tagId) {
     await client.release();
 
     return tag;
+    //returns all tags minus the one deleted
   } catch (e) {
     console.error(e);
   }
@@ -190,5 +194,6 @@ module.exports = {
     getTagById,
     updateTag,
     deactivateTag,
+    deleteTag,
     
 }
