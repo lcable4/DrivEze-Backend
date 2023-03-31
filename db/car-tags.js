@@ -50,19 +50,16 @@ async function getTagsByCar(carId) {
   try {
     await client.connect();
 
-    const {
-      rows: [tags],
-    } = await client.query(
+    const { rows } = await client.query(
       `
     SELECT * FROM car_tags
-    WHERE "carId" === $1
-    RETURNING *;
+    WHERE "carId" = $1;
     `,
       [carId]
     );
     await client.release();
 
-    return tags;
+    return rows;
   } catch (error) {
     throw error;
   }
@@ -71,36 +68,16 @@ async function getTagsByCar(carId) {
 async function getCarsByTag(tagId) {
   try {
     await client.connect();
-    const {
-      rows: [car],
-    } = await client.query(
+    const { rows } = await client.query(
       `
     SELECT * FROM car_tags
-    WHERE "tagId" === $1
-    RETURNING *;
+    WHERE "tagId" = $1;
     `,
       [tagId]
     );
     await client.release();
-    return car;
+    return rows;
   } catch (error) {
-    throw error;
-  }
-}
-
-async function testDB() {
-  try {
-    await client.connect();
-    console.log("starting to test database");
-
-    console.log("testing addTagToCar()");
-    const tag = await addTagToCar();
-    console.log("addTagToCar() result:", tag);
-
-    console.log("finished testing database");
-    await client.release();
-  } catch (error) {
-    console.log(error);
     throw error;
   }
 }
