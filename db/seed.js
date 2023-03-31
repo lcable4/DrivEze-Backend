@@ -307,27 +307,34 @@ async function createInitialVehicles() {
   }
 }
 
-async function testDBA() {
-  try {
-    console.log("Starting to test database...");
+async function testHubDb()
+{
+  console.log("Starting to test Hub Database Functions")
 
-    console.log("Calling create hub");
-    const hub = await createHub({ location: "New York" });
-    console.log("Result:", hub);
-    console.log("Calling get all hub");
-    const allHubs = await getAllHubs();
-    console.log("Result:", allHubs);
-    const hubById = await getHubById(1);
-    console.log("Hub ID LOG:", hubById);
-    const hubLocation = await getHubByLocation("Nevada");
-    console.log("HUB LOCATION RESULT:", hubLocation);
-    const updatedHub = await updateHub(1, "Kansas");
-    console.log("UPDATED HUB LOG:", updatedHub);
-    const deletedRowCount = await deleteHub(1);
-    console.log(`Deleted ${deletedRowCount} hub(s)`);
-    const deactivatedHub = await deactivateHub(3);
-    console.log(`deactivated ${deactivatedHub} hub(s)`);
-    
+  console.log("Calling create hub");
+  const hub = await createHub({ location: "New York" });
+  console.log("Result:", hub);
+  console.log("Calling get all hub");
+  const allHubs = await getAllHubs();
+  console.log("Result:", allHubs);
+  const hubById = await getHubById(1);
+  console.log("Hub ID LOG:", hubById);
+  const hubLocation = await getHubByLocation("Nevada");
+  console.log("HUB LOCATION RESULT:", hubLocation);
+  const updatedHub = await updateHub(1, "Kansas");
+  console.log("UPDATED HUB LOG:", updatedHub);
+  const deletedRowCount = await deleteHub(1);
+  console.log(`Deleted ${deletedRowCount} hub(s)`);
+  const deactivatedHub = await deactivateHub(3);
+  console.log(`deactivated ${deactivatedHub} hub(s)`);
+
+  console.log("Finish testing Hub Database Functions")
+}
+
+async function testCarDB() {
+  try {
+    console.log("Starting to test Car database...");
+
     console.log("Calling addTagToCar(1, 1)");
     const tag = await addTagToCar(1, 1);
     console.log("addTagToCar() Result:", tag);
@@ -339,10 +346,16 @@ async function testDBA() {
     console.log("calling getTagsByCar()");
     const tags = await removeTagFromCar(1, 1);
     console.log("removeTagFromCar() Result: ", removedTag);
-    console.log("finished testing database");
+    console.log("finished testing Car database");
   } catch (error) {
     console.log(error);
   }
+}
+
+async function testDB()
+{
+  await testHubDb();
+  await testCarDB();
 }
 
 async function rebuildDB() {
@@ -352,7 +365,7 @@ async function rebuildDB() {
   await createInitialTags();
   await createInitialUsers();
   await createInitialHubs();
-  await testDBA();
+  await testDB();
   return;
 }
 
