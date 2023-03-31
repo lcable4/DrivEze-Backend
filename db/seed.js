@@ -71,9 +71,9 @@ async function createTables() {
       
       CREATE TABLE car_tags(
         id SERIAL PRIMARY KEY,
-        carId INTEGER REFERENCES cars(id),
-        tagId INTEGER REFERENCES tags(id),
-        UNIQUE(carId, tagId)
+        "carId" INTEGER REFERENCES cars(id),
+        "tagId" INTEGER REFERENCES tags(id),
+        UNIQUE("carId", "tagId")
       );
       
       CREATE TABLE hubs(
@@ -84,9 +84,9 @@ async function createTables() {
       
       CREATE TABLE inventory(
         id SERIAL PRIMARY KEY,
-        hubId INTEGER REFERENCES hubs(id),
-        carId INTEGER REFERENCES cars(id),
-        UNIQUE(carId, hubId)
+        "hubId" INTEGER REFERENCES hubs(id),
+        "carId" INTEGER REFERENCES cars(id),
+        UNIQUE("carId", "hubId")
       );
       
       CREATE TABLE cart(
@@ -97,8 +97,8 @@ async function createTables() {
       
       CREATE TABLE cart_items(
         id SERIAL PRIMARY KEY,
-        cartId INTEGER REFERENCES cart(id),
-        carId INTEGER REFERENCES cars(id),
+        "cartId" INTEGER REFERENCES cart(id),
+        "carId" INTEGER REFERENCES cars(id),
         price INTEGER,
         quantity INTEGER NOT NULL DEFAULT 1
       );
@@ -306,6 +306,7 @@ async function createInitialVehicles() {
     throw error;
   }
 }
+
 async function testDBA() {
   try {
     console.log("Starting to test database...");
@@ -326,10 +327,24 @@ async function testDBA() {
     console.log(`Deleted ${deletedRowCount} hub(s)`);
     const deactivatedHub = await deactivateHub(3);
     console.log(`deactivated ${deactivatedHub} hub(s)`);
+    
+    console.log("Calling addTagToCar(1, 1)");
+    const tag = await addTagToCar(1, 1);
+    console.log("addTagToCar() Result:", tag);
+
+    console.log("calling removeTagFromCar(1,1)");
+    const removedTag = await removeTagFromCar(1, 1);
+    console.log("removeTagFromCar() Result: ", removedTag);
+
+    console.log("calling getTagsByCar()");
+    const tags = await removeTagFromCar(1, 1);
+    console.log("removeTagFromCar() Result: ", removedTag);
+    console.log("finished testing database");
   } catch (error) {
     console.log(error);
   }
 }
+
 async function rebuildDB() {
   await dropTables();
   await createTables();
