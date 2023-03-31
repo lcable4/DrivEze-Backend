@@ -298,17 +298,6 @@ async function createInitialVehicles() {
     throw error;
   }
 }
-async function rebuildDB() {
-  await dropTables();
-  await createTables();
-  await createInitialVehicles();
-  await createInitialTags();
-  await createInitialUsers();
-  await createInitialHubs();
-  return;
-}
-
-rebuildDB();
 
 async function testDB() {
   try {
@@ -317,8 +306,30 @@ async function testDB() {
     console.log("Calling addTagToCar(1, 1)");
     const tag = await addTagToCar(1, 1);
     console.log("addTagToCar() Result:", tag);
+
+    console.log("calling removeTagFromCar(1,1)");
+    const removedTag = await removeTagFromCar(1, 1);
+    console.log("removeTagFromCar() Result: ", removedTag);
+
+    console.log("calling getTagsByCar()");
+    const tags = await removeTagFromCar(1, 1);
+    console.log("removeTagFromCar() Result: ", removedTag);
+
+    console.log("finished testing database");
   } catch (error) {
     console.log(error);
   }
 }
-testDB();
+
+async function rebuildDB() {
+  await dropTables();
+  await createTables();
+  await createInitialVehicles();
+  await createInitialTags();
+  await createInitialUsers();
+  await createInitialHubs();
+  await testDB();
+  return;
+}
+
+rebuildDB();

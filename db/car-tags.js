@@ -10,7 +10,8 @@ async function addTagToCar(carId, tagId) {
       `
             INSERT INTO car_tags("carId", "tagId")
             VALUES ($1, $2)
-            ON CONFLICT("carId", "tagId") DO NOTHING;
+            ON CONFLICT("carId", "tagId") DO NOTHING
+            RETURNING *;
             `,
       [carId, tagId]
     );
@@ -19,6 +20,7 @@ async function addTagToCar(carId, tagId) {
     return car_tag;
   } catch (e) {
     console.error(e);
+    throw new Error("Error adding tag");
   }
 }
 
@@ -26,16 +28,19 @@ async function removeTagFromCar(tagId, carId) {
   try {
     await client.connect();
 
-    const result = await client.query(
+    const {
+      rows: [tag],
+    } = await client.query(
       `
-    DELETE tagId FROM car_tags
-    WHERE "tagId" === $1 && "carId" === $2;
+    DELETE FROM car_tags
+    WHERE "tagId" = $1 AND "carId" = $2
+    RETURNING *;
     `,
       [tagId, carId]
     );
     await client.release();
 
-    return result;
+    return tag;
   } catch (error) {
     throw error;
   }
@@ -50,7 +55,8 @@ async function getTagsByCar(carId) {
     } = await client.query(
       `
     SELECT * FROM car_tags
-    WHERE "carId" === $1;
+    WHERE "carId" === $1
+    RETURNING *;
     `,
       [carId]
     );
@@ -70,7 +76,8 @@ async function getCarsByTag(tagId) {
     } = await client.query(
       `
     SELECT * FROM car_tags
-    WHERE "tagId" === $1;
+    WHERE "tagId" === $1
+    RETURNING *;
     `,
       [tagId]
     );
