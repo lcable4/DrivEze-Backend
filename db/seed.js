@@ -337,7 +337,6 @@ async function testUserDB() {
       password: "newpassword",
     });
 
-
     console.log("UPDATED USER LOG", updatedUser);
     const deletedUser = await deleteUser(1);
     console.log(`Deleted ${deletedUser} user(s)`);
@@ -346,9 +345,8 @@ async function testUserDB() {
   } catch (error) {}
 }
 
-async function testHubDb()
-{
-  console.log("Starting to test Hub Database Functions")
+async function testHubDB() {
+  console.log("Starting to test Hub Database Functions");
 
   console.log("Calling create hub");
   const hub = await createHub({ location: "New York" });
@@ -367,11 +365,10 @@ async function testHubDb()
   const deactivatedHub = await deactivateHub(3);
   console.log(`deactivated ${deactivatedHub} hub(s)`);
 
-  console.log("Finish testing Hub Database Functions")
+  console.log("Finish testing Hub Database Functions");
 }
 
 async function testCarDB() {
-
   try {
     console.log("Starting to test Car database...");
 
@@ -417,19 +414,11 @@ async function testCarDB() {
     console.log(error);
   }
 }
-async function testDBA() {
-  try {
-    await testUserDB();
-    await testHubDB();
-  } catch (error) {
-    console.log(error);
-  }
-}
 
-async function testDB()
-{
-  await testHubDb();
+async function testDB() {
+  await testHubDB();
   await testCarDB();
+  await testUserDB();
 }
 
 async function rebuildDB() {
