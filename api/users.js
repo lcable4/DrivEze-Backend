@@ -29,6 +29,7 @@ function ValidateEmail(input) {
 }
 
 
+
 usersRouter.post("/register", async (req, res, next) => {
     const { username, password, email } = req.body;
 

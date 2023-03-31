@@ -27,6 +27,39 @@ async function createUser({username, password, email})
     }
 }
 
+async function getUser({username, password})
+{
+    try
+    {
+    console.log(username, password)
+        await client.connect();
+        const 
+        {
+            rows:[user]
+        }
+        = await client.query(`
+            SELECT * FROM users
+            WHERE username=$1; 
+        `, [username]);
+        await client.release();
+        let isValid;
+        if(user.password)
+        {
+            isValid = await bcrypt.compare(password, user.password);
+        }
+        if(isValid)
+        {
+            delete user.password;
+            return user;
+        }
+        return null;
+    }
+    catch(e)
+    {
+        console.error(e);
+    }
+}
+
 async function getUserById(userId)
 {
     try
@@ -161,4 +194,5 @@ module.exports =
     getUserByEmail,
     updateUser,
     deleteUser,
+    getUser
 }

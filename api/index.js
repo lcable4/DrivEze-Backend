@@ -5,4 +5,8 @@ router.get("/", (req, res) => {
   res.send("Hello, world!");
 });
 
+const userRouter = require("./users")
+
+router.use("/users", userRouter);
+
 module.exports = router;

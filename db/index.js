@@ -2,12 +2,15 @@ const { Pool } = require("pg");
 require("dotenv").config();
 
 const pool = new Pool({ // create the pool object 
-    connectionString:
-      process.env.DATABASE_URL,
-  ssl:
-    process.env.NODE_ENV === "production"
-      ? { rejectUnauthorized: false }
-      : undefined,
+  user:'postgres',
+  password:'password',
+  host:'localhost',
+  port:5555,
+  database: 'driveZe-dev',
+ssl:
+  process.env.NODE_ENV === "production"
+    ? { rejectUnauthorized: false }
+    : undefined,
 });
 
 
