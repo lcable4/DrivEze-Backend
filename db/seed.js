@@ -9,6 +9,7 @@ const {
   getUser,
   deactivateUser,
 } = require("./users");
+const { createCart, getCartByUserId, updateCartStatus } = require("./cart");
 const { createCar } = require("./cars");
 const {
   createHub,
@@ -415,10 +416,20 @@ async function testCarDB() {
   }
 }
 
+async function testCartDB() {
+  const newCart = await createCart(2);
+  console.log("NEW CART RESULT", newCart);
+  const cartByID = await getCartByUserId(2);
+  console.log("CART BY ID RESULT", cartByID);
+  const updatedCart = await updateCartStatus(1);
+  console.log("CART STATUS RESULT", updatedCart);
+}
+
 async function testDB() {
   await testHubDB();
   await testCarDB();
   await testUserDB();
+  await testCartDB();
 }
 
 async function rebuildDB() {
