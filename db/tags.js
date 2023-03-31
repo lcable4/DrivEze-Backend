@@ -135,22 +135,50 @@ async function updateTag({tagId, ...fields})
 
 async function deactivateTag(tagId)
 {
-  try {
+  try 
+  {
     await client.connect();
 
-    const {
+    const 
+    {
       rows: [tags],
-    } = await client.query(
-      `
+
+    } 
+    = await client.query(`
       UPDATE tags
       SET active = false
       WHERE id=$1;
       `,
       [tagId]
-    );
+      );
 
     await client.release();
     return tags;
+   } 
+  catch (e) 
+  {
+    console.error(e);
+  }
+}
+
+async function deleteTag(tagId) {
+  try {
+    await client.connect();
+
+    const {
+      rows: [tag],
+    } = await client.query(
+      `
+         DELETE FROM tags
+         WHERE id=$1
+         RETURNING *;
+        `,
+      [tagId]
+    );
+
+    await client.release();
+
+    return tag;
   } catch (e) {
     console.error(e);
   }
