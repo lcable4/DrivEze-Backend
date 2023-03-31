@@ -1,6 +1,6 @@
 const client = require("./index");
 
-async function addTagToCar(tagId, carId) {
+async function addTagToCar(carId, tagId) {
   try {
     await client.connect();
 
@@ -10,7 +10,7 @@ async function addTagToCar(tagId, carId) {
       `
             INSERT INTO car_tags("carId", "tagId")
             VALUES ($1, $2)
-            ON CONFLICT("carId, "tagId") DO NOTHING;
+            ON CONFLICT("carId", "tagId") DO NOTHING;
             `,
       [carId, tagId]
     );

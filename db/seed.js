@@ -1,6 +1,4 @@
-
 const client = require("./index");
-
 
 const { createUser } = require("./users");
 const { createCar } = require("./cars");
@@ -65,9 +63,9 @@ async function createTables() {
       
       CREATE TABLE car_tags(
         id SERIAL PRIMARY KEY,
-        carId INTEGER REFERENCES cars(id),
-        tagId INTEGER REFERENCES tags(id),
-        UNIQUE(carId, tagId)
+        "carId" INTEGER REFERENCES cars(id),
+        "tagId" INTEGER REFERENCES tags(id),
+        UNIQUE("carId", "tagId")
       );
       
       CREATE TABLE hubs(
@@ -78,9 +76,9 @@ async function createTables() {
       
       CREATE TABLE inventory(
         id SERIAL PRIMARY KEY,
-        hubId INTEGER REFERENCES hubs(id),
-        carId INTEGER REFERENCES cars(id),
-        UNIQUE(carId, hubId)
+        "hubId" INTEGER REFERENCES hubs(id),
+        "carId" INTEGER REFERENCES cars(id),
+        UNIQUE("carId", "hubId")
       );
       
       CREATE TABLE cart(
@@ -91,8 +89,8 @@ async function createTables() {
       
       CREATE TABLE cart_items(
         id SERIAL PRIMARY KEY,
-        cartId INTEGER REFERENCES cart(id),
-        carId INTEGER REFERENCES cars(id),
+        "cartId" INTEGER REFERENCES cart(id),
+        "carId" INTEGER REFERENCES cars(id),
         price INTEGER,
         quantity INTEGER NOT NULL DEFAULT 1
       );
@@ -312,15 +310,15 @@ async function rebuildDB() {
 
 rebuildDB();
 
-// async function testDB() {
-//   try {
-//     console.log("Starting to test database...");
+async function testDB() {
+  try {
+    console.log("Starting to test database...");
 
-//     console.log("Calling ");
-
-//     console.log("Result:");
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-// testDB();
+    console.log("Calling addTagToCar(1, 1)");
+    const tag = await addTagToCar(1, 1);
+    console.log("addTagToCar() Result:", tag);
+  } catch (error) {
+    console.log(error);
+  }
+}
+testDB();
