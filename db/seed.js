@@ -1,4 +1,6 @@
+
 const client = require("./index");
+
 
 const { createUser } = require("./users");
 const { createCar } = require("./cars");
@@ -57,7 +59,8 @@ async function createTables() {
       
       CREATE TABLE tags(
         id SERIAL PRIMARY KEY,
-        name VARCHAR(255) UNIQUE NOT NULL
+        name VARCHAR(255) UNIQUE NOT NULL,
+        active BOOLEAN DEFAULT TRUE
       );
       
       CREATE TABLE car_tags(
@@ -307,17 +310,17 @@ async function rebuildDB() {
   return;
 }
 
-async function testDB() {
-  try {
-    console.log("Starting to test database...");
-
-    console.log("Calling create hub");
-    const hub = await createHub("New York");
-    console.log("Result: hub");
-  } catch (error) {
-    console.log(error);
-  }
-}
-testDB();
-
 rebuildDB();
+
+// async function testDB() {
+//   try {
+//     console.log("Starting to test database...");
+
+//     console.log("Calling ");
+
+//     console.log("Result:");
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+// testDB();

@@ -1,6 +1,7 @@
 const client = require('./index');
 
 async function createTag(name)
+//creates a tag with the given name
 {
     try
     {
@@ -28,12 +29,13 @@ async function createTag(name)
         = await client.query(`
             INSERT INTO tags(name)
             VALUES ($1)
-            RETURNING id, name
+            RETURNING *
             `,
             [name]
         );
         await client.release();
         return tag;
+        //returns the newly created tag
     }
     catch(e)
     {
@@ -42,6 +44,7 @@ async function createTag(name)
 }
 
 async function getAllTags()
+//gets all tags from the database
 {
     try
     {
@@ -57,6 +60,8 @@ async function getAllTags()
         
         await client.release();
         return tags;
+        //returns an array of all tags
+
     }
     catch(e)
     {
@@ -65,10 +70,28 @@ async function getAllTags()
 }
 
 async function getTagById(tagId)
+//gets all the info from a specific tag based on the given tagId
 {
     try
     {
-        
+        client.connect();
+
+        const 
+        {
+          rows:[tag],
+        }
+        // selects all information from tags where the id is equal to $1
+        = await client.query(` 
+          SELECT *
+          FROM tags
+          WHERE "tagId" = $1;
+        `,
+        [tagId]
+        );
+
+        await client.release();
+        return tag;  
+        // returns all the tag info from a specific tag based on the id its given
     }
     catch(e)
     {
@@ -76,44 +99,105 @@ async function getTagById(tagId)
     }
 }
 
-async function updateTag(tagId)
+async function updateTag({tagId, ...fields})
+//updates a tag based on the given tagId and fields
 {
-    try
-    {
-        
-    }
-    catch(e)
-    {
-        console.error(e);
-    }
+  try
+  {
+      const setString = Object.keys(fields)
+      .map((key, index) => `"${key}"=$${index +1}`)
+      .join(", ");
+
+      await client.connect();
+
+      const 
+      {
+          rows:[tag],
+      }
+      = await client.query(`
+          UPDATE tags
+          SET ${setString}
+          WHERE id=${tagId}
+          RETURNING *;
+      `,
+      [...fields]
+      );
+
+      await client.release();
+      return tag;
+      //returns the updated tag
+  }
+  catch(e)
+  {
+      console.error(e);
+  }
 }
 
-async function deleteTag(tagId)
+async function deactivateTag(tagId)
+//switches a tag from active to inactive so that it won't display 
 {
-    try
+  try 
+  {
+    await client.connect();
+
+    const 
     {
-        
-    }
-    catch(e)
-    {
-        console.error(e);
-    }
+      rows: [tag],
+
+    } 
+    = await client.query(`
+      UPDATE tags
+      SET active = false
+      WHERE id=$1;
+      `,
+      [tagId]
+      );
+
+    await client.release();
+    return tag;
+    //returns the deactivated tag back
+   } 
+  catch (e) 
+  {
+    console.error(e);
+  }
 }
 
-async function deactivteTag(tagId)
-{
-    try
+async function deleteTag(tagId) {
+//deletes a tag based on the tagId given
+  try 
+  {
+    await client.connect();
+
+    const 
     {
-        
-    }
-    catch(e)
-    {
-        console.error(e);
-    }
+      rows: [tag],
+    } 
+    = await client.query(`
+         DELETE FROM tags
+         WHERE id=$1
+         RETURNING *;
+        `,
+      [tagId]
+    );
+
+    await client.release();
+
+    return tag;
+    //returns all tags minus the one deleted
+  } 
+  catch (e) 
+  {
+    console.error(e);
+  }
 }
 
 module.exports = {
     createTag,
     getAllTags,
+    getTagById,
+    updateTag,
+    deactivateTag,
+    deleteTag,
     
 }
