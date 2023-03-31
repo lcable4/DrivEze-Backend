@@ -1,6 +1,14 @@
 const client = require("./index");
 
-const { createUser } = require("./users");
+const {
+  createUser,
+  getUserById,
+  getUserByEmail,
+  updateUser,
+  deleteUser,
+  getUser,
+  deactivateUser,
+} = require("./users");
 const { createCar } = require("./cars");
 const {
   createHub,
@@ -306,6 +314,37 @@ async function createInitialVehicles() {
     throw error;
   }
 }
+async function testUserDB() {
+  try {
+    const newUser = await createUser({
+      username: "John",
+      password: "Johhny123",
+      email: "john@gmail.com",
+    });
+    console.log("NEW USER LOG", newUser);
+    const user = await getUser({ username: "sandra", password: "sandra123" });
+    console.log("GET USER LOG", user);
+    const userByID = await getUserById(2);
+    console.log("USER BY ID", userByID);
+    const userByEmail = await getUserByEmail("glamgal@gmail.com");
+    console.log("USER BY EMAIL", userByEmail);
+    const updatedUser = await updateUser({
+      userId: 1,
+      email: "newemail@example.com",
+      location: "New York",
+      active: false,
+      username: "newusername",
+      password: "newpassword",
+    });
+
+
+    console.log("UPDATED USER LOG", updatedUser);
+    const deletedUser = await deleteUser(1);
+    console.log(`Deleted ${deletedUser} user(s)`);
+    const deactivatedUser = await deactivateUser(3);
+    console.log(`Deactivated ${deactivatedUser} user(s)`);
+  } catch (error) {}
+}
 
 async function testHubDb()
 {
@@ -332,6 +371,7 @@ async function testHubDb()
 }
 
 async function testCarDB() {
+
   try {
     console.log("Starting to test Car database...");
 
@@ -351,7 +391,7 @@ async function testCarDB() {
     console.log(`Deleted ${deletedRowCount} hub(s)`);
     const deactivatedHub = await deactivateHub(3);
     console.log(`deactivated ${deactivatedHub} hub(s)`);
-    
+
     console.log("Calling addTagToCar(1, 1)");
     const tag1 = await addTagToCar(1, 1);
     const tag2 = await addTagToCar(1, 2);
@@ -373,6 +413,14 @@ async function testCarDB() {
     console.log("getCarsByTag(1) Result: ", cars);
 
     console.log("finished testing database");
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function testDBA() {
+  try {
+    await testUserDB();
+    await testHubDB();
   } catch (error) {
     console.log(error);
   }
