@@ -327,18 +327,27 @@ async function testDBA() {
     console.log(`Deleted ${deletedRowCount} hub(s)`);
     const deactivatedHub = await deactivateHub(3);
     console.log(`deactivated ${deactivatedHub} hub(s)`);
-    
+
     console.log("Calling addTagToCar(1, 1)");
-    const tag = await addTagToCar(1, 1);
-    console.log("addTagToCar() Result:", tag);
+    const tag1 = await addTagToCar(1, 1);
+    const tag2 = await addTagToCar(1, 2);
+    const tag3 = await addTagToCar(1, 3);
+    console.log("addTagToCar(1, 1) Result:", tag1);
+    console.log("addTagToCar(1, 2) Result:", tag2);
+    console.log("addTagToCar(1, 3) Result:", tag3);
 
-    console.log("calling removeTagFromCar(1,1)");
-    const removedTag = await removeTagFromCar(1, 1);
-    console.log("removeTagFromCar() Result: ", removedTag);
+    // console.log("calling removeTagFromCar(1,1)");
+    // const removedTag = await removeTagFromCar(1, 1);
+    // console.log("removeTagFromCar() Result: ", removedTag);
 
-    console.log("calling getTagsByCar()");
-    const tags = await removeTagFromCar(1, 1);
-    console.log("removeTagFromCar() Result: ", removedTag);
+    console.log("calling getTagsByCar(1)");
+    const tags = await getTagsByCar(1);
+    console.log("getTagsByCar(1) Result: ", tags);
+
+    console.log("calling getCarsByTag(1)");
+    const cars = await getCarsByTag(1);
+    console.log("getCarsByTag(1) Result: ", cars);
+
     console.log("finished testing database");
   } catch (error) {
     console.log(error);
