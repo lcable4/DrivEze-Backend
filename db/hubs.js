@@ -144,6 +144,18 @@ async function deactivateHub(hubId) {
   }
 }
 
+async function testDB() {}
+try {
+  console.log("Starting to test database...");
+
+  console.log("Calling createHub");
+  const hubs = await createHub({ Nevada });
+  console.log("Result:", hubs);
+} catch (error) {
+  console.log(error);
+}
+testDB();
+
 module.exports = {
   createHub,
   getAllHubs,
