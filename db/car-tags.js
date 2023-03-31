@@ -81,8 +81,26 @@ async function getCarsByTag(tagId) {
   }
 }
 
+async function testDB() {
+  try {
+    await client.connect();
+    console.log("starting to test database");
+
+    console.log("testing addTagToCar()");
+    const tag = await addTagToCar();
+    console.log("addTagToCar() result:", tag);
+
+    console.log("finished testing database");
+    await client.release();
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 module.exports = {
   addTagToCar,
+  removeTagFromCar,
   getTagsByCar,
   getCarsByTag,
 };

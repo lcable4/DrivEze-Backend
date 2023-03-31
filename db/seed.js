@@ -1,9 +1,17 @@
-const client  = require("./index");
+
+const client = require("./index");
+
 
 const { createUser } = require("./users");
 const { createCar } = require("./cars");
 const { createHub } = require("./hubs");
 const { createTag } = require("./tags");
+const {
+  addTagToCar,
+  removeTagFromCar,
+  getTagsByCar,
+  getCarsByTag,
+} = require("./car-tags");
 
 async function dropTables() {
   try {
