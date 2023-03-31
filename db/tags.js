@@ -29,7 +29,7 @@ async function createTag(name)
         = await client.query(`
             INSERT INTO tags(name)
             VALUES ($1)
-            RETURNING id, name
+            RETURNING *
             `,
             [name]
         );
@@ -165,13 +165,15 @@ async function deactivateTag(tagId)
 
 async function deleteTag(tagId) {
 //deletes a tag based on the tagId given
-  try {
+  try 
+  {
     await client.connect();
 
-    const {
+    const 
+    {
       rows: [tag],
-    } = await client.query(
-      `
+    } 
+    = await client.query(`
          DELETE FROM tags
          WHERE id=$1
          RETURNING *;
@@ -183,7 +185,9 @@ async function deleteTag(tagId) {
 
     return tag;
     //returns all tags minus the one deleted
-  } catch (e) {
+  } 
+  catch (e) 
+  {
     console.error(e);
   }
 }
