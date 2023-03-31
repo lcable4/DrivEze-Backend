@@ -2,7 +2,15 @@ const client = require("./index");
 
 const { createUser } = require("./users");
 const { createCar } = require("./cars");
-const { createHub } = require("./hubs");
+const {
+  createHub,
+  getAllHubs,
+  getHubById,
+  getHubByLocation,
+  updateHub,
+  deleteHub,
+  deactivateHub,
+} = require("./hubs");
 const { createTag } = require("./tags");
 const {
   addTagToCar,
@@ -299,10 +307,27 @@ async function createInitialVehicles() {
   }
 }
 
-async function testDB() {
+async function testDBA() {
   try {
     console.log("Starting to test database...");
 
+    console.log("Calling create hub");
+    const hub = await createHub({ location: "New York" });
+    console.log("Result:", hub);
+    console.log("Calling get all hub");
+    const allHubs = await getAllHubs();
+    console.log("Result:", allHubs);
+    const hubById = await getHubById(1);
+    console.log("Hub ID LOG:", hubById);
+    const hubLocation = await getHubByLocation("Nevada");
+    console.log("HUB LOCATION RESULT:", hubLocation);
+    const updatedHub = await updateHub(1, "Kansas");
+    console.log("UPDATED HUB LOG:", updatedHub);
+    const deletedRowCount = await deleteHub(1);
+    console.log(`Deleted ${deletedRowCount} hub(s)`);
+    const deactivatedHub = await deactivateHub(3);
+    console.log(`deactivated ${deactivatedHub} hub(s)`);
+    
     console.log("Calling addTagToCar(1, 1)");
     const tag = await addTagToCar(1, 1);
     console.log("addTagToCar() Result:", tag);
@@ -314,7 +339,6 @@ async function testDB() {
     console.log("calling getTagsByCar()");
     const tags = await removeTagFromCar(1, 1);
     console.log("removeTagFromCar() Result: ", removedTag);
-
     console.log("finished testing database");
   } catch (error) {
     console.log(error);
@@ -328,7 +352,7 @@ async function rebuildDB() {
   await createInitialTags();
   await createInitialUsers();
   await createInitialHubs();
-  await testDB();
+  await testDBA();
   return;
 }
 
