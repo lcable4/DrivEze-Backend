@@ -12,7 +12,7 @@ async function createHub({ location }) {
             VALUES ($1)
             RETURNING *;
             `,
-      [location]
+      [id, location]
     );
     await client.release();
 
