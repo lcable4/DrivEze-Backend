@@ -1,4 +1,4 @@
-const { client } = require("./index");
+const client  = require("./index");
 
 const { createUser } = require("./users");
 const { createCar } = require("./cars");
@@ -64,7 +64,7 @@ async function createTables() {
       
       CREATE TABLE hubs(
         id SERIAL PRIMARY KEY,
-        location VARCHAR(255) UNIQUE NOT NULL
+        location VARCHAR(255) UNIQUE NOT NULL,
         active BOOLEAN DEFAULT TRUE
       );
       
@@ -304,15 +304,15 @@ async function rebuildDB() {
 
 rebuildDB();
 
-async function testDB() {
-  try {
-    console.log("Starting to test database...");
+// async function testDB() {
+//   try {
+//     console.log("Starting to test database...");
 
-    console.log("Calling ");
+//     console.log("Calling ");
 
-    console.log("Result:");
-  } catch (error) {
-    console.log(error);
-  }
-}
-testDB();
+//     console.log("Result:");
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+// testDB();
