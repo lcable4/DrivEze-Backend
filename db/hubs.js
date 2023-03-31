@@ -1,5 +1,5 @@
 const client = require("./index");
-
+//Creates a new hub
 async function createHub({ location }) {
   try {
     await client.connect();
@@ -21,7 +21,7 @@ async function createHub({ location }) {
     console.error(e);
   }
 }
-
+//Returns all hubs
 async function getAllHubs() {
   try {
     await client.connect();
@@ -37,7 +37,7 @@ async function getAllHubs() {
     console.error(e);
   }
 }
-
+//Returns hub that matches ID passed in
 async function getHubById(hubId) {
   try {
     await client.connect();
@@ -59,7 +59,7 @@ async function getHubById(hubId) {
     console.error(e);
   }
 }
-
+//Returns hub associated with given location passed in
 async function getHubByLocation(location) {
   try {
     await client.connect();
@@ -81,7 +81,7 @@ async function getHubByLocation(location) {
     console.error(e);
   }
 }
-
+//updates a hub's location that matches the ID passed in
 async function updateHub(hubId, location) {
   try {
     await client.connect();
@@ -103,22 +103,19 @@ async function updateHub(hubId, location) {
     console.error(e);
   }
 }
-
+//Deletes a hub matching the ID passed in
 async function deleteHub(hubId) {
   try {
     await client.connect();
-    const {
-      rows: [hub],
-    } = await client.query(
+    const { rowCount } = await client.query(
       `
-        DELETE FROM hubs
-        WHERE id=$1
-        RETURNING *;
-            `,
+          DELETE FROM hubs
+          WHERE id=$1;
+        `,
       [hubId]
     );
     await client.release();
-    return hub;
+    return rowCount;
   } catch (e) {
     console.error(e);
   }
@@ -127,9 +124,7 @@ async function deleteHub(hubId) {
 async function deactivateHub(hubId) {
   try {
     await client.connect();
-    const {
-      rows: [hub],
-    } = await client.query(
+    const { rowCount } = await client.query(
       `
         UPDATE hubs
         SET active = false
@@ -138,7 +133,7 @@ async function deactivateHub(hubId) {
       [hubId]
     );
     await client.release();
-    return hub;
+    return rowCount;
   } catch (e) {
     console.error(e);
   }
