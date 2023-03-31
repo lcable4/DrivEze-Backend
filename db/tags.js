@@ -133,16 +133,27 @@ async function updateTag({tagId, ...fields})
   }
 }
 
-async function deactivteTag(tagId)
+async function deactivateTag(tagId)
 {
-    try
-    {
-        
-    }
-    catch(e)
-    {
-        console.error(e);
-    }
+  try {
+    await client.connect();
+
+    const {
+      rows: [tags],
+    } = await client.query(
+      `
+      UPDATE tags
+      SET active = false
+      WHERE id=$1;
+      `,
+      [tagId]
+    );
+
+    await client.release();
+    return tags;
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 module.exports = {
@@ -150,5 +161,6 @@ module.exports = {
     getAllTags,
     getTagById,
     updateTag,
+    deactivateTag,
     
 }
