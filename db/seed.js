@@ -4,6 +4,12 @@ const { createUser } = require("./users");
 const { createCar } = require("./cars");
 const { createHub } = require("./hubs");
 const { createTag } = require("./tags");
+const {
+  addTagToCar,
+  removeTagFromCar,
+  getTagsByCar,
+  getCarsByTag,
+} = require("./car-tags");
 
 async function dropTables() {
   try {
@@ -63,7 +69,8 @@ async function createTables() {
       
       CREATE TABLE hubs(
         id SERIAL PRIMARY KEY,
-        location VARCHAR(255) UNIQUE NOT NULL
+        location VARCHAR(255) UNIQUE NOT NULL,
+        active BOOLEAN DEFAULT TRUE
       );
       
       CREATE TABLE inventory(
@@ -188,105 +195,90 @@ async function createInitialVehicles() {
         description: "high-mpg sedan",
         daily_rate: 100,
         hubLocation: "Nevada",
-        category: "car",
       },
       {
         name: "Toyota Camry",
         description: "high-mpg sedan",
         daily_rate: 100,
         hubLocation: "Arizona",
-        category: "car",
       },
       {
         name: "Honda Civic",
         description: "high-mpg sedan",
         daily_rate: 100,
         hubLocation: "Texas",
-        category: "car",
       },
       {
         name: "Chevrolet Silverado",
         description: "powerful truck",
         daily_rate: 150,
         hubLocation: "Nevada",
-        category: "truck",
       },
       {
         name: "Ford F-150",
         description: "powerful truck",
         daily_rate: 150,
         hubLocation: "Colorado",
-        category: "truck",
       },
       {
         name: "Ram 1500",
         description: "powerful truck",
         daily_rate: 150,
         hubLocation: "Arizona",
-        category: "truck",
       },
       {
         name: "Jeep Wrangler",
         description: "off-road SUV",
         daily_rate: 200,
         hubLocation: "Nevada",
-        category: "SUV",
       },
       {
         name: "Toyota 4Runner",
         description: "off-road SUV",
         daily_rate: 200,
         hubLocation: "Colorado",
-        category: "SUV",
       },
       {
         name: "Chevrolet Tahoe",
         description: "family SUV",
         daily_rate: 175,
         hubLocation: "Texas",
-        category: "SUV",
       },
       {
         name: "Tesla Model S",
         description: "luxury electric sedan",
         daily_rate: 400,
         hubLocation: "Nevada",
-        category: "luxury",
       },
       {
         name: "BMW 7 Series",
         description: "luxury sedan",
         daily_rate: 350,
         hubLocation: "Colorado",
-        category: "luxury",
       },
       {
         name: "Mercedes-Benz S-Class",
         description: "luxury sedan",
         daily_rate: 350,
         hubLocation: "Texas",
-        category: "luxury",
       },
       {
         name: "Mercedes-Benz GLS",
         description: "luxury SUV",
         daily_rate: 400,
         hubLocation: "Nevada",
-        category: "luxury",
       },
       {
         name: "Range Rover",
         description: "luxury SUV",
         daily_rate: 400,
         hubLocation: "Colorado",
-        category: "luxury",
       },
       {
         name: "Lamborghini Urus",
         description: "luxury SUV",
         daily_rate: 500,
         hubLocation: "Texas",
-        category: "luxury",
       },
     ];
     //const vehicles = await Promise.all(vehiclesToCreate.map(createCar));
@@ -317,13 +309,15 @@ async function rebuildDB() {
 
 async function testDB() {
   try {
-    console.log("starting to test database");
+    console.log("Starting to test database...");
 
-    console.log("Finished database tests!");
+    console.log("Calling create hub");
+    const hub = await createHub("New York");
+    console.log("Result: hub");
   } catch (error) {
     console.log(error);
-    throw error;
   }
 }
+testDB();
 
 rebuildDB();
