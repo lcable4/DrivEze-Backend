@@ -36,7 +36,8 @@ class client {
     return result;
   }
 
-  async release() { //release the connection back to the pool
+  async release() {
+    //release the connection back to the pool
     await this.#client.release();
   }
 }

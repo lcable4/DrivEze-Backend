@@ -350,7 +350,7 @@ async function testUserDB() {
   } catch (error) {}
 }
 
-async function testHubDb() {
+async function testHubDB() {
   console.log("Starting to test Hub Database Functions");
 
   console.log("Calling create hub");
@@ -415,14 +415,6 @@ async function testCarDB() {
     console.log("getCarsByTag(1) Result: ", cars);
 
     console.log("finished testing database");
-  } catch (error) {
-    console.log(error);
-  }
-}
-async function testDBA() {
-  try {
-    await testUserDB();
-    await testHubDB();
   } catch (error) {
     console.log(error);
   }
