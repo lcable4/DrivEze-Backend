@@ -8,11 +8,11 @@ async function addTagToCar(carId, tagId) {
       rows: [car_tag],
     } = await client.query(
       `
-            INSERT INTO car_tags("carId", "tagId")
-            VALUES ($1, $2)
-            ON CONFLICT("carId", "tagId") DO NOTHING
-            RETURNING *;
-            `,
+        INSERT INTO car_tags("carId", "tagId")
+        VALUES ($1, $2)
+        ON CONFLICT("carId", "tagId") DO NOTHING
+        RETURNING *;
+      `,
       [carId, tagId]
     );
     await client.release();

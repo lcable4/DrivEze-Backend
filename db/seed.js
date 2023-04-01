@@ -26,6 +26,11 @@ const {
   getTagsByCar,
   getCarsByTag,
 } = require("./car-tags");
+const {
+  addCarToHubInventory,
+  removeCarFromHubInventory,
+  getInventoryByHubId,
+} = require("./inventory");
 
 async function dropTables() {
   try {
@@ -337,7 +342,6 @@ async function testUserDB() {
       password: "newpassword",
     });
 
-
     console.log("UPDATED USER LOG", updatedUser);
     const deletedUser = await deleteUser(1);
     console.log(`Deleted ${deletedUser} user(s)`);
@@ -346,9 +350,8 @@ async function testUserDB() {
   } catch (error) {}
 }
 
-async function testHubDb()
-{
-  console.log("Starting to test Hub Database Functions")
+async function testHubDb() {
+  console.log("Starting to test Hub Database Functions");
 
   console.log("Calling create hub");
   const hub = await createHub({ location: "New York" });
@@ -367,11 +370,10 @@ async function testHubDb()
   const deactivatedHub = await deactivateHub(3);
   console.log(`deactivated ${deactivatedHub} hub(s)`);
 
-  console.log("Finish testing Hub Database Functions")
+  console.log("Finish testing Hub Database Functions");
 }
 
 async function testCarDB() {
-
   try {
     console.log("Starting to test Car database...");
 
@@ -426,10 +428,36 @@ async function testDBA() {
   }
 }
 
-async function testDB()
-{
+async function testInventoryDB() {
+  console.log(
+    "////////////////////////////////////////////testing inventory////////////////////////////////////////////"
+  );
+
+  console.log("calling addCarToHubInventory(3, 4)");
+  const car1 = await addCarToHubInventory(3, 4);
+  const car2 = await addCarToHubInventory(8, 4);
+  const car3 = await addCarToHubInventory(6, 4);
+  console.log("addCarToHubInventory(3) Result: ", car1);
+  console.log("addCarToHubInventory(8) Result: ", car2);
+  console.log("addCarToHubInventory(6) Result: ", car3);
+
+  // console.log("calling removeCarFromHubInventory(3, 4)");
+  // const removedCar = await removeCarFromHubInventory(3, 4);
+  // console.log("removeCarFromHubInventory() Result: ", removedCar);
+
+  console.log("calling getInventoryByHubId()");
+  const inventory = await getInventoryByHubId(4);
+  console.log("getInventoryByHubId() Result: ", inventory);
+
+  console.log(
+    "////////////////////////////////////////////finished testing inventory////////////////////////////////////////////"
+  );
+}
+
+async function testDB() {
   await testHubDb();
   await testCarDB();
+  await testInventoryDB();
 }
 
 async function rebuildDB() {
