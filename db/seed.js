@@ -325,20 +325,23 @@ async function createInitialVehicles() {
 async function testTagsDB(){
   console.log("testing Tags for DB")
 try{
+  console.log("/////////////////TESTING TAGS/////////////////")
+  const createdTag = await createTag("Luxury Sports Car")
+  console.log("CREATED TAG", createdTag)
   const updatedTag = await updateTag({
     tagId: 13,
     name: 'Testing Testing'
   });
   console.log("UPDATE TAGS", updatedTag)
-  const deactivatedTag = await deactivateTag(13)
-  console.log(`DEACTIVATED ${deactivatedTag} TAG(S)`)
-  const deletedTag = await deleteTag(13)
-  console.log(`DELETED ${deletedTag}`)
   const tags = await getAllTags();
   console.log("GOT ALL TAGS", tags);
   const getTagId = await getTagById(8);
   console.log("GETTING TAG BY ID", getTagId)
-
+  const deactivatedTag = await deactivateTag(6)
+  console.log(`DEACTIVATED ${deactivatedTag} TAG(S)`)
+  const deletedTag = await deleteTag(13)
+  console.log(`DELETED ${deletedTag}`)
+  
 } catch {
   console.error(error)
 }
