@@ -4,13 +4,14 @@ const { requireUser } = require("./utils");
 const {
     createCars,
     updateCars,
-    getAllCars,
     getCarById,
     getCarsByHubLocation,
     deleteCar,
     getCarsByTag,
     deactivateCar,
 } = require("../db");
+
+const {getAllCars} =require("../db/cars")
 
 // Get /api/cars/:id
 vehiclesRouter.get("/:id",requireUser, async (req, res, next) => {
@@ -23,12 +24,12 @@ vehiclesRouter.get("/:id",requireUser, async (req, res, next) => {
 });
 // Get /api/cars
 vehiclesRouter.get("/", async (req, res, next) => {
-    try {
+    
         const result = await getAllCars();
+        console.log(result, "result")
         res.send(result);
-    } catch ({name, message}) {
-        next({name,message});
-    }
+   
+     
 });
 
 //Post /api/cars
@@ -76,7 +77,7 @@ vehiclesRouter.delete("/:cars-tags", requireUser, async (req, res, next) => {
             res.status(403);
             next({
               name: "Delete Error",
-              message: "This Post does not belong to you.",
+              message: "This Car does not belong to you.",
             });
             
           } else {
@@ -88,3 +89,5 @@ vehiclesRouter.delete("/:cars-tags", requireUser, async (req, res, next) => {
           next({ name, message });
         }
 })
+
+module.exports = vehiclesRouter;

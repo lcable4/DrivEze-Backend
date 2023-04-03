@@ -9,4 +9,7 @@ const userRouter = require("./users")
 
 router.use("/users", userRouter);
 
+const vehiclesRouter = require("./cars")
+router.use("/cars", vehiclesRouter)
+
 module.exports = router;
