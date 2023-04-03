@@ -27,6 +27,11 @@ const {
   getTagsByCar,
   getCarsByTag,
 } = require("./car-tags");
+const {
+  addCarToHubInventory,
+  removeCarFromHubInventory,
+  getInventoryByHubId,
+} = require("./inventory");
 
 async function dropTables() {
   try {
@@ -416,6 +421,7 @@ async function testCarDB() {
   }
 }
 
+
 async function testCartDB() {
   const newCart = await createCart(2);
   console.log("NEW CART RESULT", newCart);
@@ -423,13 +429,43 @@ async function testCartDB() {
   console.log("CART BY ID RESULT", cartByID);
   const updatedCart = await updateCartStatus(1);
   console.log("CART STATUS RESULT", updatedCart);
+
+async function testInventoryDB() {
+  console.log(
+    "////////////////////////////////////////////testing inventory////////////////////////////////////////////"
+  );
+
+  console.log("calling addCarToHubInventory(3, 4)");
+  const car1 = await addCarToHubInventory(3, 4);
+  const car2 = await addCarToHubInventory(8, 4);
+  const car3 = await addCarToHubInventory(6, 4);
+  console.log("addCarToHubInventory(3) Result: ", car1);
+  console.log("addCarToHubInventory(8) Result: ", car2);
+  console.log("addCarToHubInventory(6) Result: ", car3);
+
+  // console.log("calling removeCarFromHubInventory(3, 4)");
+  // const removedCar = await removeCarFromHubInventory(3, 4);
+  // console.log("removeCarFromHubInventory() Result: ", removedCar);
+
+  console.log("calling getInventoryByHubId()");
+  const inventory = await getInventoryByHubId(4);
+  console.log("getInventoryByHubId() Result: ", inventory);
+
+  console.log(
+    "////////////////////////////////////////////finished testing inventory////////////////////////////////////////////"
+  );
+
 }
 
 async function testDB() {
-  await testHubDB();
+  await testHubDb();
   await testCarDB();
+
   await testUserDB();
   await testCartDB();
+
+  await testInventoryDB();
+
 }
 
 async function rebuildDB() {
