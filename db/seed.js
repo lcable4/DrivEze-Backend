@@ -17,7 +17,6 @@ const {
   getCarById,
   getCarsByHubLocation,
   deleteCar,
-  getCarsByTag,
   deactivateCar,
 } = require("./cars");
 const {
@@ -121,13 +120,13 @@ async function createTables() {
       
       CREATE TABLE cart(
         id SERIAL PRIMARY KEY,
-        "userId" INTEGER REFERENCES users(id),
+        "userId" INTEGER REFERENCES users(id) ON DELETE CASCADE,
         "isOrdered" BOOLEAN DEFAULT false
       );
       
       CREATE TABLE cart_items(
         id SERIAL PRIMARY KEY,
-        "cartId" INTEGER REFERENCES cart(id),
+        "cartId" INTEGER REFERENCES cart(id) ON DELETE CASCADE,
         "carId" INTEGER REFERENCES cars(id),
         price INTEGER,
         quantity INTEGER NOT NULL DEFAULT 1
@@ -513,7 +512,7 @@ async function testCartItemsDB() {
   console.log(
     "////////////////////////////////////////////testing cart-items////////////////////////////////////////////"
   );
-  const carToCart = await addCarToCart(3, 1, 2000);
+  const carToCart = await addCarToCart(3, 2, 2000);
   console.log(carToCart, "CART TEST RESULT");
   const removedCar = await removeCarFromCart(2, 1);
   console.log(removedCar, "REMOVED RESULT");
