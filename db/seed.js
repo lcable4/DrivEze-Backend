@@ -473,9 +473,9 @@ async function testCarTagsDB() {
   );
   try {
     console.log("Calling addTagToCar(1, 1)");
-    const tag1 = await addTagToCar(1, 1);
-    const tag2 = await addTagToCar(1, 2);
-    const tag3 = await addTagToCar(1, 3);
+    const tag1 = await addTagToCar(2, 1);
+    const tag2 = await addTagToCar(2, 2);
+    const tag3 = await addTagToCar(2, 3);
     console.log("addTagToCar(1, 1) Result:", tag1);
     console.log("addTagToCar(1, 2) Result:", tag2);
     console.log("addTagToCar(1, 3) Result:", tag3);
@@ -503,7 +503,7 @@ async function testCartDB() {
   console.log("NEW CART2 RESULT", newCart2);
   const cartByID = await getCartByUserId(2);
   console.log("CART BY ID RESULT", cartByID);
-  const updatedCart = await updateCartStatus(1);
+  const updatedCart = await updateCartStatus(2);
   console.log("CART STATUS RESULT", updatedCart);
 }
 async function testInventoryDB() {
