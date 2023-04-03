@@ -99,14 +99,45 @@ async function getTagById(id)
     }
 }
 
-async function updateTag({tagId, ...fields})
+// async function updateTag({tagId, ...fields})
+// //updates a tag based on the given tagId and fields
+// {
+//   try
+//   {
+//       const setString = Object.keys(fields)
+//       .map((key, index) => `"${key}"=$${index +1}`)
+//       .join(", ");
+
+//       await client.connect();
+
+//       const 
+//       {
+//           rows:[tag],
+//       }
+//       = await client.query(`
+//           UPDATE tags
+//           SET ${setString}
+//           WHERE id=${tagId}
+//           RETURNING *;
+//       `,
+//       [...Object.values(fields)]
+//       );
+
+//       await client.release();
+//       return tag;
+//       //returns the updated tag
+//   }
+//   catch(e)
+//   {
+//       console.error(e);
+//   }
+// }
+
+async function updateTag({tagId, name})
 //updates a tag based on the given tagId and fields
 {
   try
   {
-      const setString = Object.keys(fields)
-      .map((key, index) => `"${key}"=$${index +1}`)
-      .join(", ");
 
       await client.connect();
 
@@ -116,11 +147,11 @@ async function updateTag({tagId, ...fields})
       }
       = await client.query(`
           UPDATE tags
-          SET ${setString}
-          WHERE id=${tagId}
+          SET name = $1
+          WHERE id = $2
           RETURNING *;
       `,
-      [...fields]
+      [name, tagId]
       );
 
       await client.release();

@@ -20,7 +20,7 @@ const {
   deleteHub,
   deactivateHub,
 } = require("./hubs");
-const { createTag } = require("./tags");
+const { createTag, updateTag, deactivateTag, deleteTag } = require("./tags");
 const {
   addTagToCar,
   removeTagFromCar,
@@ -192,6 +192,7 @@ async function createInitialTags() {
       "Electric",
       "Gas",
       "Hybrid",
+      "Dummy Data"
     ];
     //const tags = await Promise.all(tagsToCreate.map(createTags));
     const tags = [];
@@ -320,6 +321,21 @@ async function createInitialVehicles() {
     throw error;
   }
 }
+
+async function testTagsDB(){
+  console.log("testing Tags for DB")
+try{
+  const updatedTag = await updateTag({
+    tagId: 13,
+    name: 'Testing Testing'
+  });
+  console.log("UPDATE TAGS", updatedTag)
+
+} catch {
+  console.error(error)
+}
+}
+
 async function testUserDB() {
   try {
     const newUser = await createUser({
@@ -429,7 +445,7 @@ async function testCartDB() {
   console.log("CART BY ID RESULT", cartByID);
   const updatedCart = await updateCartStatus(1);
   console.log("CART STATUS RESULT", updatedCart);
-
+}
 async function testInventoryDB() {
   console.log(
     "////////////////////////////////////////////testing inventory////////////////////////////////////////////"
@@ -458,9 +474,9 @@ async function testInventoryDB() {
 }
 
 async function testDB() {
-  await testHubDb();
+  await testHubDB();
   await testCarDB();
-
+  await testTagsDB();
   await testUserDB();
   await testCartDB();
 
