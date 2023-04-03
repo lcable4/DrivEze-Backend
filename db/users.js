@@ -1,6 +1,6 @@
 const client = require("./index");
 const bcrypt = require("bcrypt");
-
+//Creates a new user
 async function createUser({ username, password, email }) {
   const SALT_COUNT = 10;
   const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
@@ -21,7 +21,35 @@ async function createUser({ username, password, email }) {
     throw e;
   }
 }
-
+//Gets the user that matches the username and password that is passed in
+async function getUser({ username, password }) {
+  try {
+    console.log(username, password);
+    await client.connect();
+    const {
+      rows: [user],
+    } = await client.query(
+      `
+            SELECT * FROM users
+            WHERE username=$1; 
+        `,
+      [username]
+    );
+    await client.release();
+    let isValid;
+    if (user.password) {
+      isValid = await bcrypt.compare(password, user.password);
+    }
+    if (isValid) {
+      delete user.password;
+      return user;
+    }
+    return null;
+  } catch (e) {
+    console.error(e);
+  }
+}
+//Gets the user who's ID matches what the ID that is passed in
 async function getUserById(userId) {
   try {
     await client.connect();
@@ -45,7 +73,7 @@ async function getUserById(userId) {
     throw e;
   }
 }
-
+//Returns the user who's email matches what is passed in
 async function getUserByEmail(email) {
   try {
     await client.connect();
@@ -69,7 +97,7 @@ async function getUserByEmail(email) {
     throw e;
   }
 }
-
+//updates all fields for a user that matches the ID that is passed in
 async function updateUser({ userId, ...fields }) {
   try {
     const setString = Object.keys(fields)
@@ -101,9 +129,7 @@ async function deleteUser(userId) {
   try {
     await client.connect();
 
-    const {
-      rows: [user],
-    } = await client.query(
+    const { rowCount } = await client.query(
       `
             DELETE FROM users
             WHERE id=$1
@@ -111,18 +137,35 @@ async function deleteUser(userId) {
       [userId]
     );
     await client.release();
-    return user;
+    return rowCount;
   } catch (e) {
     console.error(e);
   }
 }
 
-async function deactivateUser() {}
-
+async function deactivateUser(userId) {
+  try {
+    await client.connect();
+    const { rowCount } = await client.query(
+      `
+          UPDATE users
+          SET active = false
+          WHERE id=$1;
+          `,
+      [userId]
+    );
+    await client.release();
+    return rowCount;
+  } catch (e) {
+    console.error(e);
+  }
+}
 module.exports = {
   createUser,
   getUserById,
   getUserByEmail,
   updateUser,
   deleteUser,
+  getUser,
+  deactivateUser,
 };

@@ -1,10 +1,25 @@
-
 const client = require("./index");
 
-
-const { createUser } = require("./users");
+const {
+  createUser,
+  getUserById,
+  getUserByEmail,
+  updateUser,
+  deleteUser,
+  getUser,
+  deactivateUser,
+} = require("./users");
+const { createCart, getCartByUserId, updateCartStatus } = require("./cart");
 const { createCar } = require("./cars");
-const { createHub } = require("./hubs");
+const {
+  createHub,
+  getAllHubs,
+  getHubById,
+  getHubByLocation,
+  updateHub,
+  deleteHub,
+  deactivateHub,
+} = require("./hubs");
 const { createTag } = require("./tags");
 const {
   addTagToCar,
@@ -12,6 +27,11 @@ const {
   getTagsByCar,
   getCarsByTag,
 } = require("./car-tags");
+const {
+  addCarToHubInventory,
+  removeCarFromHubInventory,
+  getInventoryByHubId,
+} = require("./inventory");
 
 async function dropTables() {
   try {
@@ -65,9 +85,9 @@ async function createTables() {
       
       CREATE TABLE car_tags(
         id SERIAL PRIMARY KEY,
-        carId INTEGER REFERENCES cars(id),
-        tagId INTEGER REFERENCES tags(id),
-        UNIQUE(carId, tagId)
+        "carId" INTEGER REFERENCES cars(id),
+        "tagId" INTEGER REFERENCES tags(id),
+        UNIQUE("carId", "tagId")
       );
       
       CREATE TABLE hubs(
@@ -78,9 +98,9 @@ async function createTables() {
       
       CREATE TABLE inventory(
         id SERIAL PRIMARY KEY,
-        hubId INTEGER REFERENCES hubs(id),
-        carId INTEGER REFERENCES cars(id),
-        UNIQUE(carId, hubId)
+        "hubId" INTEGER REFERENCES hubs(id),
+        "carId" INTEGER REFERENCES cars(id),
+        UNIQUE("carId", "hubId")
       );
       
       CREATE TABLE cart(
@@ -91,8 +111,8 @@ async function createTables() {
       
       CREATE TABLE cart_items(
         id SERIAL PRIMARY KEY,
-        cartId INTEGER REFERENCES cart(id),
-        carId INTEGER REFERENCES cars(id),
+        "cartId" INTEGER REFERENCES cart(id),
+        "carId" INTEGER REFERENCES cars(id),
         price INTEGER,
         quantity INTEGER NOT NULL DEFAULT 1
       );
@@ -300,6 +320,154 @@ async function createInitialVehicles() {
     throw error;
   }
 }
+async function testUserDB() {
+  try {
+    const newUser = await createUser({
+      username: "John",
+      password: "Johhny123",
+      email: "john@gmail.com",
+    });
+    console.log("NEW USER LOG", newUser);
+    const user = await getUser({ username: "sandra", password: "sandra123" });
+    console.log("GET USER LOG", user);
+    const userByID = await getUserById(2);
+    console.log("USER BY ID", userByID);
+    const userByEmail = await getUserByEmail("glamgal@gmail.com");
+    console.log("USER BY EMAIL", userByEmail);
+    const updatedUser = await updateUser({
+      userId: 1,
+      email: "newemail@example.com",
+      location: "New York",
+      active: false,
+      username: "newusername",
+      password: "newpassword",
+    });
+
+    console.log("UPDATED USER LOG", updatedUser);
+    const deletedUser = await deleteUser(1);
+    console.log(`Deleted ${deletedUser} user(s)`);
+    const deactivatedUser = await deactivateUser(3);
+    console.log(`Deactivated ${deactivatedUser} user(s)`);
+  } catch (error) {}
+}
+
+async function testHubDB() {
+  console.log("Starting to test Hub Database Functions");
+
+  console.log("Calling create hub");
+  const hub = await createHub({ location: "New York" });
+  console.log("Result:", hub);
+  console.log("Calling get all hub");
+  const allHubs = await getAllHubs();
+  console.log("Result:", allHubs);
+  const hubById = await getHubById(1);
+  console.log("Hub ID LOG:", hubById);
+  const hubLocation = await getHubByLocation("Nevada");
+  console.log("HUB LOCATION RESULT:", hubLocation);
+  const updatedHub = await updateHub(1, "Kansas");
+  console.log("UPDATED HUB LOG:", updatedHub);
+  const deletedRowCount = await deleteHub(1);
+  console.log(`Deleted ${deletedRowCount} hub(s)`);
+  const deactivatedHub = await deactivateHub(3);
+  console.log(`deactivated ${deactivatedHub} hub(s)`);
+
+  console.log("Finish testing Hub Database Functions");
+}
+
+async function testCarDB() {
+  try {
+    console.log("Starting to test Car database...");
+
+    console.log("Calling create hub");
+    const hub = await createHub({ location: "New York" });
+    console.log("Result:", hub);
+    console.log("Calling get all hub");
+    const allHubs = await getAllHubs();
+    console.log("Result:", allHubs);
+    const hubById = await getHubById(1);
+    console.log("Hub ID LOG:", hubById);
+    const hubLocation = await getHubByLocation("Nevada");
+    console.log("HUB LOCATION RESULT:", hubLocation);
+    const updatedHub = await updateHub(1, "Kansas");
+    console.log("UPDATED HUB LOG:", updatedHub);
+    const deletedRowCount = await deleteHub(1);
+    console.log(`Deleted ${deletedRowCount} hub(s)`);
+    const deactivatedHub = await deactivateHub(3);
+    console.log(`deactivated ${deactivatedHub} hub(s)`);
+
+    console.log("Calling addTagToCar(1, 1)");
+    const tag1 = await addTagToCar(1, 1);
+    const tag2 = await addTagToCar(1, 2);
+    const tag3 = await addTagToCar(1, 3);
+    console.log("addTagToCar(1, 1) Result:", tag1);
+    console.log("addTagToCar(1, 2) Result:", tag2);
+    console.log("addTagToCar(1, 3) Result:", tag3);
+
+    // console.log("calling removeTagFromCar(1,1)");
+    // const removedTag = await removeTagFromCar(1, 1);
+    // console.log("removeTagFromCar() Result: ", removedTag);
+
+    console.log("calling getTagsByCar(1)");
+    const tags = await getTagsByCar(1);
+    console.log("getTagsByCar(1) Result: ", tags);
+
+    console.log("calling getCarsByTag(1)");
+    const cars = await getCarsByTag(1);
+    console.log("getCarsByTag(1) Result: ", cars);
+
+    console.log("finished testing database");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+async function testCartDB() {
+  const newCart = await createCart(2);
+  console.log("NEW CART RESULT", newCart);
+  const cartByID = await getCartByUserId(2);
+  console.log("CART BY ID RESULT", cartByID);
+  const updatedCart = await updateCartStatus(1);
+  console.log("CART STATUS RESULT", updatedCart);
+
+async function testInventoryDB() {
+  console.log(
+    "////////////////////////////////////////////testing inventory////////////////////////////////////////////"
+  );
+
+  console.log("calling addCarToHubInventory(3, 4)");
+  const car1 = await addCarToHubInventory(3, 4);
+  const car2 = await addCarToHubInventory(8, 4);
+  const car3 = await addCarToHubInventory(6, 4);
+  console.log("addCarToHubInventory(3) Result: ", car1);
+  console.log("addCarToHubInventory(8) Result: ", car2);
+  console.log("addCarToHubInventory(6) Result: ", car3);
+
+  // console.log("calling removeCarFromHubInventory(3, 4)");
+  // const removedCar = await removeCarFromHubInventory(3, 4);
+  // console.log("removeCarFromHubInventory() Result: ", removedCar);
+
+  console.log("calling getInventoryByHubId()");
+  const inventory = await getInventoryByHubId(4);
+  console.log("getInventoryByHubId() Result: ", inventory);
+
+  console.log(
+    "////////////////////////////////////////////finished testing inventory////////////////////////////////////////////"
+  );
+
+}
+
+async function testDB() {
+  await testHubDb();
+  await testCarDB();
+
+  await testUserDB();
+  await testCartDB();
+
+  await testInventoryDB();
+
+}
+
 async function rebuildDB() {
   await dropTables();
   await createTables();
@@ -307,41 +475,8 @@ async function rebuildDB() {
   await createInitialTags();
   await createInitialUsers();
   await createInitialHubs();
+  await testDB();
   return;
 }
 
 rebuildDB();
-// async function testDB() {
-//   try {
-//     console.log("Starting to test database...");
-
-//     console.log("Calling tags");
-//     const tags = await getAllTags();
-//     console.log("Result!!!!!", tags);
-
-//     console.log("Getting tag by Id")
-//     const getTagId = await getTagById(8);
-//     console.log("Result:", getTagId)
-    
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-// rebuildDB()
-//   .then(testDB)
-//   .catch(console.error)
-
-//   rebuildDB();
-
-  // async function testDB() {
-  //   try {
-  //     console.log("Starting to test database...");
-  
-  //     console.log("Calling ");
-  
-  //     console.log("Result:");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-  // testDB();
