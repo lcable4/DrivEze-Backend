@@ -32,6 +32,13 @@ const {
   removeCarFromHubInventory,
   getInventoryByHubId,
 } = require("./inventory");
+const {
+  addCarToCart,
+  removeCarFromCart,
+  updateCarQuantity,
+  getCartItemsByCartId,
+  clearCart,
+} = require("./cart-items");
 
 async function dropTables() {
   try {
@@ -320,6 +327,45 @@ async function createInitialVehicles() {
     throw error;
   }
 }
+async function createInitialCart() {
+  console.log("Creating initial cart");
+  try {
+    const cartToCreate = [1, 2];
+    const carts = [];
+
+    for (let i = 0; i < cartToCreate.length; i++) {
+      carts.push(await createCart(cartToCreate[i]));
+    }
+    console.log("Carts created:");
+    console.log(carts);
+    console.log("Finished creating carts!");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function createInitialCartItems(cartId) {
+  console.log("Creating initial cart items");
+  try {
+    const cartItemsToCreate = [
+      { carId: 1, price: 1000, quantity: 2 },
+      { carId: 2, price: 1500, quantity: 1 },
+      { carId: 3, price: 2000, quantity: 3 },
+    ];
+    const cartItems = [];
+
+    for (let i = 0; i < cartItemsToCreate.length; i++) {
+      const { carId, price, quantity } = cartItemsToCreate[i];
+      cartItems.push(await addCarToCart(carId, cartId, price, quantity));
+    }
+    console.log("Cart items created:");
+    console.log(cartItems);
+    console.log("Finished creating cart items!");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function testUserDB() {
   try {
     const newUser = await createUser({
@@ -421,7 +467,6 @@ async function testCarDB() {
   }
 }
 
-
 async function testCartDB() {
   const newCart = await createCart(2);
   console.log("NEW CART RESULT", newCart);
@@ -429,7 +474,7 @@ async function testCartDB() {
   console.log("CART BY ID RESULT", cartByID);
   const updatedCart = await updateCartStatus(1);
   console.log("CART STATUS RESULT", updatedCart);
-
+}
 async function testInventoryDB() {
   console.log(
     "////////////////////////////////////////////testing inventory////////////////////////////////////////////"
@@ -454,18 +499,31 @@ async function testInventoryDB() {
   console.log(
     "////////////////////////////////////////////finished testing inventory////////////////////////////////////////////"
   );
+}
 
+async function testCartItemsDB() {
+  console.log(
+    "////////////////////////////////////////////testing cart-items////////////////////////////////////////////"
+  );
+  const carToCart = await addCarToCart(1, 1);
+  console.log(carToCart, "CART TEST RESULT");
+  const removedCar = await removeCarFromCart(2, 2);
+  console.log(removedCar, "REMOVED RESULT");
+  const updatedCar = await updateCarQuantity(1, 2, 3);
+  console.log(updatedCar, "UPDATED CAR RESULT");
+  const getItems = await getCartItemsByCartId(3);
+  console.log(getItems, "GET CART ITEMS RESULT");
+  const clearedCart = await clearCart(2);
+  console.log(clearedCart, "TEST RESULTS");
 }
 
 async function testDB() {
-  await testHubDb();
+  await testHubDB();
   await testCarDB();
-
   await testUserDB();
   await testCartDB();
-
   await testInventoryDB();
-
+  await testCartItemsDB();
 }
 
 async function rebuildDB() {
@@ -475,6 +533,8 @@ async function rebuildDB() {
   await createInitialTags();
   await createInitialUsers();
   await createInitialHubs();
+  await createInitialCart();
+  await createInitialCartItems(1);
   await testDB();
   return;
 }

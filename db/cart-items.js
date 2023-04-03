@@ -1,7 +1,7 @@
 const client = require("./index");
 
 //this function will add a car to the users cart along with its price
-async function addCarToCart(carId, cartId) {
+async function addCarToCart(carId, cartId, price) {
   try {
     await client.connect();
 
@@ -9,13 +9,13 @@ async function addCarToCart(carId, cartId) {
       rows: [cartItem],
     } = await client.query(
       `
-            INSERT into cart_items (cartId, carId, price)
-            SELECT $1, $2, price
+            INSERT into cart_items ("cartId", "carId", price)
+            SELECT $1, $2, $3
             FROM cars
             WHERE id=2
             RETURNING *
             `,
-      [cartId, carId]
+      [cartId, carId, price]
     );
     await client.release();
 
@@ -34,16 +34,17 @@ async function removeCarFromCart(carId, cartId) {
       rows: [cartItem],
     } = await client.query(
       `
-            DELETE FROM cart_items WHERE carId=$1 AND cartId=$2
+            DELETE FROM cart_items WHERE "carId"=$1 AND "cartId"=$2
+            RETURNING *;
             `,
       [carId, cartId]
     );
 
     await client.release();
-
+    console.log(cartItem, "DB CART ITEMS");
     return cartItem;
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 }
 
@@ -58,7 +59,7 @@ async function updateCarQuantity(carId, cartId, quantity) {
       `
         UPDATE cart_items
         SET quantity=$1
-        WHERE carId=$2 AND cartId=$3
+        WHERE "carId"=$2 AND "cartId"=$3
         RETURNING *;
         `,
       [quantity, carId, cartId]
@@ -67,7 +68,7 @@ async function updateCarQuantity(carId, cartId, quantity) {
     await client.release();
     return cartItem;
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 }
 
@@ -82,7 +83,7 @@ async function getCartItemsByCartId(cartId) {
       `
         SELECT *
         FROM cart_items
-        WHERE cartId = $1
+        WHERE "cartId" = $1
         `,
       [cartId]
     );
@@ -90,7 +91,7 @@ async function getCartItemsByCartId(cartId) {
     await client.release();
     return cartItems;
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 }
 
@@ -104,7 +105,7 @@ async function clearCart(cartId) {
     } = await client.query(
       `
         DELETE FROM cart_items
-        WHERE cartId=$1
+        WHERE "cartId"=$1
         RETURNING *
         `,
       [cartId]
@@ -112,7 +113,7 @@ async function clearCart(cartId) {
     await client.release();
     return cart;
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 }
 
