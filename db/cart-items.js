@@ -1,7 +1,7 @@
 const client = require("./index");
 
 //this function will add a car to the users cart along with its price
-async function addCarToCart(carId, cartId) {
+async function addCarToCart(carId, cartId, price) {
   try {
     await client.connect();
 
@@ -9,13 +9,13 @@ async function addCarToCart(carId, cartId) {
       rows: [cartItem],
     } = await client.query(
       `
-            INSERT into cart_items (cartId, carId, price)
-            SELECT $1, $2, price
+            INSERT into cart_items ("cartId", "carId", price)
+            SELECT $1, $2, $3
             FROM cars
             WHERE id=2
             RETURNING *
             `,
-      [cartId, carId]
+      [cartId, carId, price]
     );
     await client.release();
 
@@ -34,16 +34,18 @@ async function removeCarFromCart(carId, cartId) {
       rows: [cartItem],
     } = await client.query(
       `
-            DELETE FROM cart_items WHERE carId=$1 AND cartId=$2
+            DELETE FROM cart_items WHERE "carId"=$1 AND "cartId"=$2
+            RETURNING *;
             `,
       [carId, cartId]
     );
 
     await client.release();
-
+    console.log(cartItem, "DB CART ITEMS");
     return cartItem;
   } catch (error) {
     console.error(error);
+    console.log("Error occurred in removeCarFromCart:", error);
   }
 }
 
@@ -58,16 +60,18 @@ async function updateCarQuantity(carId, cartId, quantity) {
       `
         UPDATE cart_items
         SET quantity=$1
-        WHERE carId=$2 AND cartId=$3
+        WHERE "carId"=$2 AND "cartId"=$3
         RETURNING *;
         `,
       [quantity, carId, cartId]
     );
 
     await client.release();
+    console.log(cartItem, "UPDATED ITEMS");
     return cartItem;
   } catch (error) {
     console.error(error);
+    console.log("Error occurred in updateCarFromCart:", error);
   }
 }
 
@@ -76,21 +80,21 @@ async function getCartItemsByCartId(cartId) {
   try {
     await client.connect();
 
-    const {
-      rows: [cartItems],
-    } = await client.query(
+    const { rows: cartItems } = await client.query(
       `
         SELECT *
         FROM cart_items
-        WHERE cartId = $1
+        WHERE "cartId" = $1
         `,
       [cartId]
     );
 
     await client.release();
+    console.log(cartItems, "CART ITEMS");
     return cartItems;
   } catch (error) {
     console.error(error);
+    console.log("Error occurred in getCarFromCart:", error);
   }
 }
 
@@ -99,12 +103,10 @@ async function clearCart(cartId) {
   try {
     await client.connect();
 
-    const {
-      rows: [cart],
-    } = await client.query(
+    const { rows: cart } = await client.query(
       `
         DELETE FROM cart_items
-        WHERE cartId=$1
+        WHERE "cartId"=$1
         RETURNING *
         `,
       [cartId]
@@ -112,7 +114,8 @@ async function clearCart(cartId) {
     await client.release();
     return cart;
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    console.log("Error occurred in clearCart:", error);
   }
 }
 
