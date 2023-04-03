@@ -53,7 +53,7 @@ async function getAllCars() {
   try {
     await client.connect();
     const {
-      rows: [cars],
+      rows: cars,
     } = await client.query(`
         SELECT *
         FROM cars;
