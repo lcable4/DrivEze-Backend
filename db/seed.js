@@ -333,7 +333,7 @@ try{
   const deactivatedTag = await deactivateTag(13)
   console.log(`DEACTIVATED ${deactivatedTag} TAG(S)`)
   const deletedTag = await deleteTag(13)
-  console.log(`DELETED $`)
+  console.log(`DELETED ${deletedTag}`)
 
 } catch {
   console.error(error)
