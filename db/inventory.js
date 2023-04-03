@@ -1,6 +1,17 @@
 const client = require("./index");
 
 async function addCarToHubInventory(carId, hubId) {
+  // if (hubId > 4 || hubId < 1) {
+  //   console.log(
+  //     `******************************hub: ${hubId} does not exist******************************`
+  //   );
+  //   return null;
+  // } else if (carId > 15 || carId < 0) {
+  //   console.log(
+  //     `******************************car: ${carId} does not exist******************************`
+  //   );
+  //   return null;
+  // } else {
   try {
     await client.connect();
 
@@ -23,6 +34,7 @@ async function addCarToHubInventory(carId, hubId) {
     throw error;
   }
 }
+// }
 
 async function removeCarFromHubInventory(carId, hubId) {
   try {
