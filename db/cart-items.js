@@ -44,7 +44,8 @@ async function removeCarFromCart(carId, cartId) {
     console.log(cartItem, "DB CART ITEMS");
     return cartItem;
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    console.log("Error occurred in removeCarFromCart:", error);
   }
 }
 
@@ -68,7 +69,8 @@ async function updateCarQuantity(carId, cartId, quantity) {
     await client.release();
     return cartItem;
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    console.log("Error occurred in updateCarFromCart:", error);
   }
 }
 
@@ -91,7 +93,8 @@ async function getCartItemsByCartId(cartId) {
     await client.release();
     return cartItems;
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    console.log("Error occurred in getCarFromCart:", error);
   }
 }
 
@@ -114,6 +117,7 @@ async function clearCart(cartId) {
     return cart;
   } catch (error) {
     console.log(error);
+    console.log("Error occurred in clearCart:", error);
   }
 }
 
