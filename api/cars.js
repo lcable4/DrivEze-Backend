@@ -58,3 +58,33 @@ vehiclesRouter.post("/", requireUser, async (req,res, next) => {
         });
     }
 });
+
+// Delete /api/user/id
+vehiclesRouter.delete("/:cars-tags", requireUser, async (req, res, next) => {
+    try{
+        const {id} = req.params;
+        const routine = await getCarById(id);
+        console.log(routine, "id log")
+        console.log(req.user, "req user log")
+        if (!routine) {
+            next({
+              name: "Error",
+              message: "Car does not exist!",
+            });
+          } else if (routine.creatorId !== req.user.id) {
+            console.log("HERE")
+            res.status(403);
+            next({
+              name: "Delete Error",
+              message: "This Post does not belong to you.",
+            });
+            
+          } else {
+            const deletecar = await deleteCar(id);
+            res.send(routine);
+            console.log("HELLO")
+          }
+        } catch ({ name, message }) {
+          next({ name, message });
+        }
+})
