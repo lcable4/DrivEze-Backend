@@ -33,12 +33,12 @@ async function updateCar({ carId, ...fields }) {
       rows: [car],
     } = await client.query(
       `
-            UPDATE cars
-            SET ${setString}
-            WHERE id=${carId}
-            RETURNING *;
-        `,
-      [...fields]
+        UPDATE cars
+        SET ${setString}
+        WHERE id=${carId}
+        RETURNING *;
+      `,
+      [...Object.values(fields)]
     );
 
     await client.release();
@@ -88,48 +88,22 @@ async function getCarById(carId) {
     console.error(e);
   }
 }
-
-async function getCarsByHubLocation(hubId) {
+async function getCarsByHubLocation(hubLocation) {
   try {
     await client.connect();
-    {
-      const {
-        rows: [car],
-      } = await client.query(
-        `
-        SELECT FROM cars
-        WHERE "hubId"=$1
-        RETURNING *
-        `,
-        [hubId]
-      );
-      await client.release();
-
-      return car;
-    }
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-//gets all cars with the associated tagId passed in
-async function getCarsByTag(tagId) {
-  try {
-    await client.connect();
-    {
-      const {
-        rows: [car],
-      } = await client.query(
-        `SELECT FROM cars
-        WHERE tagId=$1
-        RETURNING *
-        `,
-        [tagId]
-      );
-      await client.release();
-
-      return car;
-    }
+    const {
+      rows: [car],
+    } = await client.query(
+      `
+      SELECT *
+      FROM cars
+      WHERE "hubLocation"=$1
+      `,
+      [hubLocation]
+    );
+    await client.release();
+    console.log(car, "CAR BY HUB");
+    return car;
   } catch (e) {
     console.error(e);
   }
@@ -189,6 +163,6 @@ module.exports = {
   getCarById,
   getCarsByHubLocation,
   deleteCar,
-  getCarsByTag,
+  // getCarsByTag,
   deactivateCar,
 };

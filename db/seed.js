@@ -375,6 +375,9 @@ async function createInitialCartItems(cartId) {
 }
 
 async function testUserDB() {
+  console.log(
+    "////////////////////////////////////////////testing users////////////////////////////////////////////"
+  );
   try {
     const newUser = await createUser({
       username: "John",
@@ -406,8 +409,9 @@ async function testUserDB() {
 }
 
 async function testHubDB() {
-  console.log("Starting to test Hub Database Functions");
-
+  console.log(
+    "////////////////////////////////////////////testing hubs////////////////////////////////////////////"
+  );
   console.log("Calling create hub");
   const hub = await createHub({ location: "New York" });
   console.log("Result:", hub);
@@ -440,6 +444,24 @@ async function testCarDB() {
       hubLocation: "Nevada",
     });
     console.log(newCar);
+    const updatedCar = await updateCar({
+      carId: 1,
+      name: "Ford Raptor",
+      description: "Truck",
+      daily_rate: 200,
+      hubLocation: "Texas",
+    });
+    console.log(updatedCar, "UPDATED CAR RESULT");
+    const allCars = await getAllCars();
+    console.log(allCars, "ALL CARS RESULTS");
+    const carByID = await getCarById(3);
+    console.log(carByID, "CAR BY ID RESULTS");
+    const carByHUB = await getCarsByHubLocation(2);
+    console.log(carByHUB, "CAR BY HUB RESULTS");
+    const deletedCar = await deleteCar(1);
+    console.log(deletedCar, "DELETED CAR RESULTS");
+    const deactivatedCar = await deactivateCar(2);
+    console.log(deactivatedCar, "DEACTIVATED CAR RESULTS");
   } catch (error) {
     console.log(error);
   }
@@ -475,8 +497,10 @@ async function testCarTagsDB() {
 }
 
 async function testCartDB() {
-  const newCart = await createCart(2);
-  console.log("NEW CART RESULT", newCart);
+  const newCart1 = await createCart(2);
+  const newCart2 = await createCart(3);
+  console.log("NEW CART RESULT", newCart1);
+  console.log("NEW CART2 RESULT", newCart2);
   const cartByID = await getCartByUserId(2);
   console.log("CART BY ID RESULT", cartByID);
   const updatedCart = await updateCartStatus(1);
@@ -512,24 +536,32 @@ async function testCartItemsDB() {
   console.log(
     "////////////////////////////////////////////testing cart-items////////////////////////////////////////////"
   );
-  const carToCart = await addCarToCart(3, 2, 2000);
-  console.log(carToCart, "CART TEST RESULT");
-  const removedCar = await removeCarFromCart(2, 1);
+  const carToCart1 = await addCarToCart(3, 2, 1000);
+  const carToCart2 = await addCarToCart(4, 2, 3000);
+  const carToCart3 = await addCarToCart(5, 2, 5000);
+  console.log(carToCart1, "CART TEST RESULT");
+  console.log(carToCart2, "CART TEST RESULT2");
+  console.log(carToCart3, "CART TEST RESULT3");
+
+  const removedCar = await removeCarFromCart(3, 2);
   console.log(removedCar, "REMOVED RESULT");
-  const updatedCar = await updateCarQuantity(1, 1, 1);
+
+  const updatedCar = await updateCarQuantity(4, 2, 3);
   console.log(updatedCar, "UPDATED CAR RESULT");
-  const getItems = await getCartItemsByCartId(1);
+
+  const getItems = await getCartItemsByCartId(2);
   console.log(getItems, "GET CART ITEMS RESULT");
-  const clearedCart = await clearCart(1);
+
+  const clearedCart = await clearCart(2);
   console.log(clearedCart, "TEST RESULTS");
 }
 
 async function testDB() {
+  await testUserDB();
   await testHubDB();
   await testCarDB();
-  await testUserDB();
-  await testCartDB();
   await testCarTagsDB();
+  await testCartDB();
   await testInventoryDB();
   await testCartItemsDB();
 }
@@ -537,9 +569,9 @@ async function testDB() {
 async function rebuildDB() {
   await dropTables();
   await createTables();
+  await createInitialUsers();
   await createInitialVehicles();
   await createInitialTags();
-  await createInitialUsers();
   await createInitialHubs();
   await createInitialCart();
   await createInitialCartItems(1);

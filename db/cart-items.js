@@ -67,6 +67,7 @@ async function updateCarQuantity(carId, cartId, quantity) {
     );
 
     await client.release();
+    console.log(cartItem, "UPDATED ITEMS");
     return cartItem;
   } catch (error) {
     console.error(error);
@@ -79,9 +80,7 @@ async function getCartItemsByCartId(cartId) {
   try {
     await client.connect();
 
-    const {
-      rows: [cartItems],
-    } = await client.query(
+    const { rows: cartItems } = await client.query(
       `
         SELECT *
         FROM cart_items
@@ -91,6 +90,7 @@ async function getCartItemsByCartId(cartId) {
     );
 
     await client.release();
+    console.log(cartItems, "CART ITEMS");
     return cartItems;
   } catch (error) {
     console.error(error);
@@ -103,9 +103,7 @@ async function clearCart(cartId) {
   try {
     await client.connect();
 
-    const {
-      rows: [cart],
-    } = await client.query(
+    const { rows: cart } = await client.query(
       `
         DELETE FROM cart_items
         WHERE "cartId"=$1
