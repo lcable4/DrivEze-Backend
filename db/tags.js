@@ -69,8 +69,8 @@ async function getAllTags()
     }
 }
 
-async function getTagById(tagId)
-//gets all the info from a specific tag based on the given tagId
+async function getTagById(id)
+//gets all the info from a specific tag based on the given id
 {
     try
     {
@@ -84,9 +84,9 @@ async function getTagById(tagId)
         = await client.query(` 
           SELECT *
           FROM tags
-          WHERE "tagId" = $1;
+          WHERE id = $1;
         `,
-        [tagId]
+        [id]
         );
 
         await client.release();

@@ -311,16 +311,37 @@ async function rebuildDB() {
 }
 
 rebuildDB();
-
 // async function testDB() {
 //   try {
 //     console.log("Starting to test database...");
 
-//     console.log("Calling ");
+//     console.log("Calling tags");
+//     const tags = await getAllTags();
+//     console.log("Result!!!!!", tags);
 
-//     console.log("Result:");
+//     console.log("Getting tag by Id")
+//     const getTagId = await getTagById(8);
+//     console.log("Result:", getTagId)
+    
 //   } catch (error) {
 //     console.log(error);
 //   }
 // }
-// testDB();
+// rebuildDB()
+//   .then(testDB)
+//   .catch(console.error)
+
+//   rebuildDB();
+
+  // async function testDB() {
+  //   try {
+  //     console.log("Starting to test database...");
+  
+  //     console.log("Calling ");
+  
+  //     console.log("Result:");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+  // testDB();
