@@ -20,7 +20,7 @@ const {
   deleteHub,
   deactivateHub,
 } = require("./hubs");
-const { createTag, updateTag, deactivateTag, deleteTag } = require("./tags");
+const { createTag, updateTag, deactivateTag, deleteTag, getAllTags, getTagById } = require("./tags");
 const {
   addTagToCar,
   removeTagFromCar,
@@ -334,6 +334,10 @@ try{
   console.log(`DEACTIVATED ${deactivatedTag} TAG(S)`)
   const deletedTag = await deleteTag(13)
   console.log(`DELETED ${deletedTag}`)
+  const tags = await getAllTags();
+  console.log("GOT ALL TAGS", tags);
+  const getTagId = await getTagById(8);
+  console.log("GETTING TAG BY ID", getTagId)
 
 } catch {
   console.error(error)
