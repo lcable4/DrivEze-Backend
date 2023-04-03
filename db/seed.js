@@ -429,7 +429,7 @@ async function testCartDB() {
   console.log("CART BY ID RESULT", cartByID);
   const updatedCart = await updateCartStatus(1);
   console.log("CART STATUS RESULT", updatedCart);
-
+}
 async function testInventoryDB() {
   console.log(
     "////////////////////////////////////////////testing inventory////////////////////////////////////////////"
@@ -458,7 +458,7 @@ async function testInventoryDB() {
 }
 
 async function testDB() {
-  await testHubDb();
+  await testHubDB();
   await testCarDB();
 
   await testUserDB();

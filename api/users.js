@@ -27,9 +27,6 @@ function ValidateEmail(input) {
 
   }
 }
-
-
-
 usersRouter.post("/register", async (req, res, next) => {
     const { username, password, email } = req.body;
 
@@ -59,7 +56,6 @@ usersRouter.post("/register", async (req, res, next) => {
           expiresIn: "1w",
         }
       );
-  
       res.send({
         message: "thank you for signing up",
         token,
