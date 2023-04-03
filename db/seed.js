@@ -374,7 +374,7 @@ async function createInitialCartItems(cartId) {
   } catch (error) {
     console.log(error);
   }
-
+}
 
 async function testTagsDB(){
   console.log("testing Tags for DB")
