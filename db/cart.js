@@ -1,17 +1,76 @@
 const client = require("./index");
 
+// Creates a new cart and assigns it to the user whos ID is passed in
+async function createCart(userId) {
+  try {
+    await client.connect();
 
-async function createCart()
-{
+    const {
+      rows: [cart],
+    } = await client.query(
+      `
+          INSERT INTO cart ("userId")
+          VALUES ($1)
+          RETURNING *;
+        `,
+      [userId]
+    );
 
+    await client.release();
+    return cart;
+  } catch (e) {
+    console.error(e);
+  }
 }
 
-async function getCartByUserId(userId)
-{
+//Gets the cart associated to the userId passed in.
+async function getCartByUserId(userId) {
+  try {
+    await client.connect();
 
+    const {
+      rows: [cart],
+    } = await client.query(
+      `
+          SELECT *
+          FROM cart
+          WHERE "userId" = $1;
+        `,
+      [userId]
+    );
+
+    await client.release();
+    return cart;
+  } catch (e) {
+    console.error(e);
+  }
+}
+//Updates the status of an item in the cart from isOrdered false to true
+async function updateCartStatus(cartId) {
+  try {
+    await client.connect();
+
+    const {
+      rows: [cart],
+    } = await client.query(
+      `
+          UPDATE cart
+          SET "isOrdered" = true
+          WHERE id = $1
+          RETURNING *;
+        `,
+      [cartId]
+    );
+
+    await client.release();
+    return cart;
+  } catch (e) {
+    console.error(e);
+  }
 }
 
-async function updateCartStatus(cartId)
-{
-
-}
+module.exports = {
+  createCart,
+  getCartByUserId,
+  updateCartStatus,
+};
