@@ -173,7 +173,7 @@ async function deactivateTag(tagId)
 
     const 
     {
-      rows: [tag],
+      rowCount
 
     } 
     = await client.query(`
@@ -185,7 +185,7 @@ async function deactivateTag(tagId)
       );
 
     await client.release();
-    return tag;
+    return rowCount;
     //returns the deactivated tag back
    } 
   catch (e) 
