@@ -69,7 +69,7 @@ async function getAllTags()
     }
 }
 
-async function getTagById(id)
+async function getTagById(tagId)
 //gets all the info from a specific tag based on the given id
 {
     try
@@ -86,7 +86,7 @@ async function getTagById(id)
           FROM tags
           WHERE id = $1;
         `,
-        [id]
+        [tagId]
         );
 
         await client.release();
@@ -99,14 +99,11 @@ async function getTagById(id)
     }
 }
 
-async function updateTag({tagId, ...fields})
+async function updateTag({tagId, name})
 //updates a tag based on the given tagId and fields
 {
   try
   {
-      const setString = Object.keys(fields)
-      .map((key, index) => `"${key}"=$${index +1}`)
-      .join(", ");
 
       await client.connect();
 
@@ -116,11 +113,11 @@ async function updateTag({tagId, ...fields})
       }
       = await client.query(`
           UPDATE tags
-          SET ${setString}
-          WHERE id=${tagId}
+          SET name = $1
+          WHERE id = $2
           RETURNING *;
       `,
-      [...fields]
+      [name, tagId]
       );
 
       await client.release();
@@ -142,7 +139,7 @@ async function deactivateTag(tagId)
 
     const 
     {
-      rows: [tag],
+      rowCount
 
     } 
     = await client.query(`
@@ -154,7 +151,7 @@ async function deactivateTag(tagId)
       );
 
     await client.release();
-    return tag;
+    return rowCount;
     //returns the deactivated tag back
    } 
   catch (e) 
