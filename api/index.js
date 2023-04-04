@@ -14,7 +14,10 @@ router.use("/tags", tagsRouter);
 const inventoryRouter = require("./inventory");
 router.use("/inventory", inventoryRouter);
 
-const vehiclesRouter = require("./cars")
-router.use("/cars", vehiclesRouter)
+const vehiclesRouter = require("./cars");
+router.use("/cars", vehiclesRouter);
+
+const carTagsRouter = require("./car-tags");
+router.use("/car-tags", carTagsRouter);
 
 module.exports = router;
