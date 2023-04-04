@@ -33,9 +33,10 @@ async function getCartByUserId(userId) {
       rows: [cart],
     } = await client.query(
       `
-          SELECT *
-          FROM cart
-          WHERE "userId" = $1;
+      SELECT cart.id AS cartId
+      FROM cart
+      JOIN users ON cart."userId" = users.id
+      WHERE users.id = $1;
         `,
       [userId]
     );
