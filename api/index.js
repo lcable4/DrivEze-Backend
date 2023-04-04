@@ -6,7 +6,10 @@ router.get("/", (req, res) => {
 });
 
 const userRouter = require("./users");
+const tagsRouter = require("./tags");
+
 router.use("/users", userRouter);
+router.use("/tags", tagsRouter);
 
 const inventoryRouter = require("./inventory");
 router.use("/inventory", inventoryRouter);

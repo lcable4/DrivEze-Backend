@@ -17,6 +17,7 @@ async function createCart(userId) {
     );
 
     await client.release();
+
     return cart;
   } catch (e) {
     console.error(e);
