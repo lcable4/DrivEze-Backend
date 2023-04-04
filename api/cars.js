@@ -3,15 +3,13 @@ const vehiclesRouter = express.Router();
 const { requireUser } = require("./utils");
 const {
     createCar,
-    updateCars,
+    getAllCars,
     getCarById,
     getCarsByHubLocation,
     deleteCar,
     getCarsByTag,
     deactivateCar,
 } = require("../db/cars");
-
-const {getAllCars} =require("../db/cars")
 
 // Get /api/cars/:id
 vehiclesRouter.get("/:id", async (req, res, next) => {
