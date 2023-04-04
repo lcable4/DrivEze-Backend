@@ -9,4 +9,6 @@ const userRouter = require("./users")
 
 router.use("/users", userRouter);
 
+const hubsRouter = require("./hubs");
+router.use("/hubs", hubsRouter);
 module.exports = router;

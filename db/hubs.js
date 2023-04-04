@@ -26,7 +26,7 @@ async function getAllHubs() {
   try {
     await client.connect();
 
-    const { rows: [hubs] } = await client.query(`
+    const { rows: hubs } = await client.query(`
             SELECT * FROM hubs;
         `);
 
@@ -43,7 +43,7 @@ async function getHubById(hubId) {
     await client.connect();
 
     const {
-      rows: [hub],
+      rows: hub,
     } = await client.query(
       `
             SELECT *
@@ -65,7 +65,7 @@ async function getHubByLocation(location) {
     await client.connect();
 
     const {
-      rows: [hub],
+      rows: hub,
     } = await client.query(
       `
             SELECT *
@@ -87,7 +87,7 @@ async function updateHub(hubId, location) {
     await client.connect();
 
     const {
-      rows: [hub],
+      rows: hub,
     } = await client.query(
       `
           UPDATE hubs

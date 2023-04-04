@@ -60,6 +60,7 @@ hubsRouter.patch("/:hubId", async (req, res, next) => {
           location,
         });
         res.send(updatedHub);
+        console.log(updatedHub)
       } catch (error) {
         next({
           name: "",
@@ -88,3 +89,4 @@ hubsRouter.delete("/deleteHub/:id", async (req, res, next) => {
   }
 });
 
+module.exports = hubsRouter;
