@@ -122,30 +122,6 @@ usersRouter.get("/me", requireUser, async(req, res, next) => {
       next(error);
     }
   });
-
-  usersRouter.get("/:username/routines", async(req, res, next) => {
-    let { username } = req.params;
-    console.log(username, "USERNAME LOG")
-    try {
-      const userObject = await getUserByUsernameWithPassword(username);
-      console.log(userObject, "USER OB")
-      if (!userObject) {
-        next({
-          name: "UserDoesNotExist",
-          message: `User: ${username} Does Not Exist.`,
-        });
-      } else if (req.user && userObject.id === req.user.id) {
-        const allRoutines = await getAllRoutinesByUser({ username });
-        console.log(allRoutines, "ALL ROUTINES LOG")
-        res.send(allRoutines);
-      } else {
-        const publicRoutines = await getPublicRoutinesByUser({ username });
-        console.log(publicRoutines, " PUBLIC ROUTINES LOG ")
-        res.send(publicRoutines);
-      }
-    } catch ({ name, message }) {
-      next({ name, message });
-    }
-  });
+  
 
 module.exports = usersRouter;
