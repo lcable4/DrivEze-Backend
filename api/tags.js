@@ -17,8 +17,8 @@ tagsRouter.post("/", async (req, res, next) => {
     const { tagName } = req.body;
     const tag = await createTag(tagName);
     res.send(tag);
-  } catch (error) {
-    next(error);
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 
@@ -28,8 +28,8 @@ tagsRouter.get("/", async (req, res, next) => {
   try {
     const tags = await getAllTags();
     res.send(tags);
-  } catch (error) {
-    next(error);
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 
@@ -40,8 +40,8 @@ tagsRouter.get("/:id", async (req, res, next) => {
     const { id } = req.params;
     const tags = await getTagById(id);
     res.send(tags);
-  } catch (error) {
-    console.log(error);
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 
@@ -53,8 +53,8 @@ tagsRouter.patch("/:id", async (req, res, next) => {
     const { name } = req.body;
     const updatedTag = await updateTag({ tagId: id, name });
     res.send(updatedTag);
-  } catch (error) {
-    console.log(error);
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 
@@ -69,9 +69,9 @@ tagsRouter.patch("/deactivateTag/:id", async (req, res, next) => {
     } else {
       res.status(404).json({ message: `Tag ${id} not found.` });
     }
-  } catch (error) {
-    console.error(error);
+  } catch ({ name, message }) {
     res.status(500).json({ message: "Internal server error." });
+    next({ name, message });
   }
 });
 
@@ -86,9 +86,9 @@ tagsRouter.delete("/deleteTag/:id", async (req, res, next) => {
     } else {
       res.status(404).json({ message: `Tag ${id} was not found` });
     }
-  } catch (error) {
-    console.log(error);
+  } catch ({ name, message }) {
     res.status(500).json({ message: "Internal server error." });
+    next({ name, message });
   }
 });
 
