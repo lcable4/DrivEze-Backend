@@ -12,13 +12,12 @@ async function addCarToCart(carId, cartId, price) {
             INSERT into cart_items ("cartId", "carId", price)
             SELECT $1, $2, $3
             FROM cars
-            WHERE id=2
+            WHERE cars.id=$2
             RETURNING *
             `,
       [cartId, carId, price]
     );
     await client.release();
-
     return cartItem;
   } catch (error) {
     console.error(error);
