@@ -67,16 +67,8 @@ vehiclesRouter.delete("/:id", async (req, res, next) => {
         //     console.log("HELLO")
         //   }
         const deletecar = await deleteCar(id);
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
->>>>>>> Stashed changes
              res.send(deletecar);
-             console.log("HELLO")
-=======
-        res.send(routine);
-        console.log("HELLO")
->>>>>>> f30b1de898ddadbce88bb07c0d17bd949923449d
+
         } catch ({ name, message }) {
           next({ name, message });
         }
