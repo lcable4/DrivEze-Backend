@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {getAllHubs}  = require("../db/hubs");
+const {getAllHubs, createHub, getHubById, updateHub, deleteHub}  = require("../db/hubs");
 
 
 router.get("/", async (req, res, next) => {
@@ -24,7 +24,7 @@ router.get("/", async (req, res, next) => {
     };
   
     try {
-      const hub = await createActivity(hubData);
+      const hub = await createHub(hubData);
       if (hub) {
         res.send(hub);
       } else {
@@ -68,10 +68,10 @@ router.get("/", async (req, res, next) => {
     }
   });
 
-  router.delete("/:id", async (req, res, next) => {
+  router.delete("/:hubId", async (req, res, next) => {
     try{
-        const {id} = req.params;
-        const hub = await getHubById(id);
+        const {hubId} = req.params;
+        const hub = await getHubById(hubId);
         console.log(hub, "hubId log")
         if (!hub) {
             next({
@@ -79,10 +79,10 @@ router.get("/", async (req, res, next) => {
               message: "Hub does not exist!",
              });
           } else {
-            const deleteHub = await deleteHub(id);
+            const deleteHub = await deleteHub(hubId);
             res.send(hub);
           }
-        const deleteHub = await deleteHub(id);
+        const deleteHub = await deleteHub(hubId);
         res.send(hub);
         } catch ({ name, message }) {
           next({ name, message });
