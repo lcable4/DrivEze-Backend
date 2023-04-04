@@ -82,12 +82,12 @@ async function getHubByLocation(location) {
   }
 }
 //updates a hub's location that matches the ID passed in
-async function updateHub(hubId, location) {
+async function updateHub(location, hubId) {
   try {
     await client.connect();
 
     const {
-      rows: hub,
+      rows: [hub],
     } = await client.query(
       `
           UPDATE hubs

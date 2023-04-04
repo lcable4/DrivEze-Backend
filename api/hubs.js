@@ -43,34 +43,14 @@ hubsRouter.post("/", async (req, res, next) => {
   }
 });
 
-hubsRouter.patch("/:hubId", async (req, res, next) => {
+hubsRouter.patch("/:id", async (req, res, next) => {
   try {
-    const { hubId } = req.params;
-    const getHubId = await getHubById(hubId);
-    if (!getHubId) {
-      next({
-        name: "not found",
-        message: `Hub ${hubId} not found`,
-      });
-    } else {
-      const { location } = req.body;
-      try {
-        const updatedHub = await updateHub({
-          id: hubId,
-          location,
-        });
-        res.send(updatedHub);
-        console.log(updatedHub)
-      } catch (error) {
-        next({
-          name: "",
-          message: `An hub with location ${location} already exists`,
-        });
-        console.log(error);
-      }
-    }
-  } catch (error) {
-    console.log(error);
+    const { id } = req.params;
+    const { location } = req.body;
+    const updatedHub = await updateHub({ hubId: id, location });
+    res.send(updatedHub);
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 
