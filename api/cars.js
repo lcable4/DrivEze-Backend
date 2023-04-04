@@ -1,32 +1,24 @@
 const express = require("express");
 const vehiclesRouter = express.Router();
-const { requireUser } = require("./utils");
 const {
     createCar,
     getAllCars,
     getCarById,
-    getCarsByHubLocation,
     deleteCar,
-    getCarsByTag,
-    deactivateCar,
 } = require("../db/cars");
 
 // Get /api/cars/:id
-vehiclesRouter.get("/:id", async (req, res, next) => {
-
+vehiclesRouter.get("/:id", async (req, res) => {
     const {id} = req.params
     const result = await getCarById(id);
     res.send(result)
     
 });
 // Get /api/cars
-vehiclesRouter.get("/", async (req, res, next) => {
-    
+vehiclesRouter.get("/", async (req, res) => {
     const result = await getAllCars();
     console.log(result, "result")
     res.send(result);
-   
-     
 });
 
 //Post /api/cars
@@ -38,13 +30,12 @@ vehiclesRouter.post("/", async (req,res, next) => {
         daily_rate,
         hubLocation,
     };
-
-        const post = await createCar(data);
-        if (post){
-            res.send(post);
-        }else {
-            next({name: "Car Error", message: "Error creating cars"});
-        }
+    const post = await createCar(data);
+    if (post){
+        res.send(post);
+    }else {
+        next({name: "Car Error", message: "Error creating cars"});
+    }
     
   
     
@@ -76,8 +67,8 @@ vehiclesRouter.delete("/:id", async (req, res, next) => {
         //     console.log("HELLO")
         //   }
         const deletecar = await deleteCar(id);
-             res.send(routine);
-             console.log("HELLO")
+        res.send(routine);
+        console.log("HELLO")
         } catch ({ name, message }) {
           next({ name, message });
         }
