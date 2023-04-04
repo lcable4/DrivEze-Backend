@@ -18,7 +18,12 @@ const vehiclesRouter = require("./cars")
 router.use("/cars", vehiclesRouter)
 
 
+
 const cartRouter = require("./cart");
 router.use("/cart", cartRouter);
+
+
+const hubsRouter = require("./hubs");
+router.use("/hubs", hubsRouter);
 
 module.exports = router;
