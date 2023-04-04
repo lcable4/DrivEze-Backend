@@ -11,4 +11,7 @@ const tagsRouter = require("./tags");
 router.use("/users", userRouter);
 router.use("/tags", tagsRouter);
 
+const inventoryRouter = require("./inventory");
+router.use("/inventory", inventoryRouter);
+
 module.exports = router;
