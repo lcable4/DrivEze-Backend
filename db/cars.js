@@ -113,7 +113,14 @@ async function getCarsByHubLocation(hubLocation) {
 async function deleteCar(carId) {
   try {
     await client.connect();
-
+    const {
+      rows:[result]
+    } = await client.query(`
+        DELETE FROM car_tags
+        WHERE "carId"=$1
+        RETURNING *;
+    `, [carId])
+    console.log(result);
     const {
       rows:[inventoryRow]
     } = await client.query(`
