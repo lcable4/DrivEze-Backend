@@ -115,6 +115,14 @@ async function deleteCar(carId) {
     await client.connect();
 
     const {
+      rows:[inventoryRow]
+    } = await client.query(`
+        DELETE FROM inventory
+        WHERE "carId"=$1
+        RETURNING *;
+    `,[carId])
+    console.log(inventoryRow)
+    const {
       rows: [car],
     } = await client.query(
       `
@@ -163,6 +171,6 @@ module.exports = {
   getCarById,
   getCarsByHubLocation,
   deleteCar,
-  // getCarsByTag,
+  //getCarsByTag,
   deactivateCar,
 };
