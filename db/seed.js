@@ -590,7 +590,12 @@ async function testCartItemsDB() {
 }
 
 async function testDB() {
+
+  await testHubDB();
+  await testCarDB();
+
   await testTagsDB();
+
 
   await testUserDB();
   await testHubDB();
@@ -615,3 +620,4 @@ async function rebuildDB() {
 }
 
 rebuildDB();
+
