@@ -107,7 +107,7 @@ async function createTables() {
       
       CREATE TABLE car_tags(
         id SERIAL PRIMARY KEY,
-        "carId" INTEGER REFERENCES cars(id),
+        "carId" INTEGER REFERENCES cars(id) ON DELETE CASCADE,
         "tagId" INTEGER REFERENCES tags(id),
         UNIQUE("carId", "tagId")
       );
@@ -120,8 +120,8 @@ async function createTables() {
       
       CREATE TABLE inventory(
         id SERIAL PRIMARY KEY,
-        "hubId" INTEGER REFERENCES hubs(id),
-        "carId" INTEGER REFERENCES cars(id),
+        "hubId" INTEGER REFERENCES hubs(id) ON DELETE CASCADE,
+        "carId" INTEGER REFERENCES cars(id) ON DELETE CASCADE,
         UNIQUE("carId", "hubId")
       );
       
@@ -134,7 +134,7 @@ async function createTables() {
       CREATE TABLE cart_items(
         id SERIAL PRIMARY KEY,
         "cartId" INTEGER REFERENCES cart(id) ON DELETE CASCADE,
-        "carId" INTEGER REFERENCES cars(id),
+        "carId" INTEGER REFERENCES cars(id) ON DELETE CASCADE,
         price INTEGER,
         quantity INTEGER NOT NULL DEFAULT 1
       );
