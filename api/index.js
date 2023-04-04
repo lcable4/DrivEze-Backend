@@ -17,4 +17,6 @@ router.use("/inventory", inventoryRouter);
 const vehiclesRouter = require("./cars")
 router.use("/cars", vehiclesRouter)
 
+const hubsRouter = require("./hubs");
+router.use("/hubs", hubsRouter);
 module.exports = router;

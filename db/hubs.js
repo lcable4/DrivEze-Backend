@@ -43,7 +43,7 @@ async function getHubById(hubId) {
     await client.connect();
 
     const {
-      rows: [hub],
+      rows: hub,
     } = await client.query(
       `
             SELECT *
@@ -65,7 +65,7 @@ async function getHubByLocation(location) {
     await client.connect();
 
     const {
-      rows: [hub],
+      rows: hub,
     } = await client.query(
       `
             SELECT *
@@ -82,7 +82,7 @@ async function getHubByLocation(location) {
   }
 }
 //updates a hub's location that matches the ID passed in
-async function updateHub(hubId, location) {
+async function updateHub(location, hubId) {
   try {
     await client.connect();
 
