@@ -42,4 +42,28 @@ carTagsRouter.delete("/delete/:tagId/:carId", async (req, res, next) => {
   }
 });
 
+carTagsRouter.get("/tags-by-car/:carId", async (req, res, next) => {
+  try {
+    const { carId } = req.params;
+
+    const tags = await getTagsByCar(carId);
+
+    res.send(tags);
+  } catch (error) {
+    next(error);
+  }
+});
+
+carTagsRouter.get("/cars-by-tag/:tagId", async (req, res, next) => {
+  try {
+    const { tagId } = req.params;
+
+    const cars = await getCarsByTag(tagId);
+
+    res.send(cars);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = carTagsRouter;
