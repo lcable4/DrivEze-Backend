@@ -5,9 +5,14 @@ router.get("/", (req, res) => {
   res.send("Hello, world!");
 });
 
-const userRouter = require("./users")
+const userRouter = require("./users");
+const tagsRouter = require("./tags");
 
 router.use("/users", userRouter);
+router.use("/tags", tagsRouter);
+
+const inventoryRouter = require("./inventory");
+router.use("/inventory", inventoryRouter);
 
 const vehiclesRouter = require("./cars")
 router.use("/cars", vehiclesRouter)
