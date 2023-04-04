@@ -16,7 +16,7 @@ router.get("/", async (req, res, next) => {
     }
   });
 
-  router.post("/", requireUser, async (req, res, next) => {
+  router.post("/", async (req, res, next) => {
     const { location = "" } = req.body;
   
     const hubData = {
@@ -67,3 +67,24 @@ router.get("/", async (req, res, next) => {
       console.log(error);
     }
   });
+
+  router.delete("/:id", async (req, res, next) => {
+    try{
+        const {id} = req.params;
+        const hub = await getHubById(id);
+        console.log(hub, "hubId log")
+        if (!hub) {
+            next({
+              name: "Error",
+              message: "Hub does not exist!",
+             });
+          } else {
+            const deleteHub = await deleteHub(id);
+            res.send(hub);
+          }
+        const deleteHub = await deleteHub(id);
+        res.send(hub);
+        } catch ({ name, message }) {
+          next({ name, message });
+        }
+})
