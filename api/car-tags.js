@@ -7,6 +7,8 @@ const {
   getTagsByCar,
   getCarsByTag,
 } = require("../db/car-tags");
+const { getCarById } = require("../db/cars");
+const { getTagById } = require("../db/tags");
 
 carTagsRouter.use((req, res, next) => {
   console.log("a request is being made to /car-tags");
@@ -22,9 +24,33 @@ carTagsRouter.get("/", (req, res, next) => {
 carTagsRouter.post("/add-tag/:tagId/:carId", async (req, res, next) => {
   try {
     const { tagId, carId } = req.params;
+    const checkCarId = await getCarById(carId);
+    if (!checkCarId) {
+      next({
+        name: "carDoesNotExist",
+        message: `a car with id: ${carId} does not exist`,
+      });
+    } else {
+      const checkTagId = await getTagById(tagId);
+      if (!checkTagId) {
+        next({
+          name: "tagDoesNotExist",
+          message: `a tag with id: ${tagId} does not exist`,
+        });
+      } else {
+        const carTag = await addTagToCar(carId, tagId);
+        console.log(carTag, " carTag!");
 
-    const carTag = await addTagToCar(carId, tagId);
-    res.send(carTag);
+        if (carTag) {
+          res.send(carTag);
+        } else {
+          next({
+            name: "errorAddingTagsToCar",
+            message: `error adding tagId: ${tagId} to carId: ${carId}`,
+          });
+        }
+      }
+    }
   } catch (error) {
     next(error);
   }
