@@ -26,7 +26,7 @@ async function getAllHubs() {
   try {
     await client.connect();
 
-    const { rows: hubs } = await client.query(`
+    const { rows: [hubs] } = await client.query(`
             SELECT * FROM hubs;
         `);
 
