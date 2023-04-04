@@ -43,17 +43,6 @@ hubsRouter.post("/", async (req, res, next) => {
   }
 });
 
-// hubsRouter.patch("/:id", async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const { location } = req.body;
-//     const updatedHub = await updateHub({ hubId: id, location });
-//     res.send(updatedHub);
-//   } catch ({ name, message }) {
-//     next({ name, message });
-//   }
-// });
-
 hubsRouter.patch("/:hubId", async (req, res, next) => {
   try {
     const { hubId } = req.params;
