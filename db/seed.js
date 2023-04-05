@@ -54,6 +54,7 @@ const {
   getCartItemsByCartId,
   clearCart,
 } = require("./cart-items");
+const { createAdmin } = require("./admin");
 
 async function dropTables() {
   try {
@@ -67,7 +68,9 @@ async function dropTables() {
       DROP TABLE IF EXISTS hubs;
       DROP TABLE IF EXISTS tags;
       DROP TABLE IF EXISTS cars;
-      DROP TABLE IF EXISTS users;`);
+      DROP TABLE IF EXISTS users;
+      DROP TABLE IF EXISTS admins;
+      `);
     console.log("Finished dropping tables!");
     await client.release();
   } catch (error) {
@@ -81,6 +84,14 @@ async function createTables() {
     await client.connect();
     console.log("Starting to build tables...");
     await client.query(`
+      CREATE TABLE admins(
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) UNIQUE NOT NULL,
+        active BOOLEAN DEFAULT TRUE,
+        "isAdmin" BOOLEAN DEFAULT TRUE
+      );
+
       CREATE TABLE users(
         id SERIAL PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,
@@ -171,6 +182,27 @@ async function createInitialUsers() {
     console.error("Error creating users!");
     throw error;
   }
+}
+
+async function createAdminUsers()
+{
+  console.log("Starting to create admin users...")
+  const userToCreate = [
+    {username:"carter", password:"password"}
+  ]
+  try
+  {
+      const users = [];
+      for(let i = 0; i < userToCreate.length; i++)
+      {
+        users.push(await createAdmin(userToCreate[i]));
+      }
+    }
+    catch(error)
+    {
+      console.error("Error creating admin users");
+      throw error;
+    }
 }
 
 async function createInitialHubs() {
@@ -610,6 +642,7 @@ async function rebuildDB() {
   await dropTables();
   await createTables();
   await createInitialUsers();
+  await createAdminUsers();
   await createInitialVehicles();
   await createInitialTags();
   await createInitialHubs();

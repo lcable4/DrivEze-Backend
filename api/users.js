@@ -50,7 +50,6 @@ usersRouter.post("/register", async (req, res, next) => {
         {
           id: register.id,
           username,
-          password
         },
         process.env.JWT_SECRET,
         {
@@ -60,10 +59,6 @@ usersRouter.post("/register", async (req, res, next) => {
       res.send({
         message: "thank you for signing up",
         token,
-        user: {
-          id: register.id,
-          username,
-        },
       });
     } catch (error) {
       if (error.message === 'Username already taken') {
@@ -115,9 +110,12 @@ usersRouter.post("/login", async (req, res, next) => {
     }
   });
 
-usersRouter.get("/me", requireUser, async(req, res, next) => {
+usersRouter.get("/me", async(req, res, next) => {
     try {
-      res.send(req.user);
+      if(req.user)
+        res.send(req.user);
+      else
+        next({name:"No Auth", message:"You must be logged in to perform this action"})
     } catch (error) {
       console.log(error)
       next(error);

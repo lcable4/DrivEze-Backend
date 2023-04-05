@@ -17,10 +17,15 @@ router.use(async(req, res, next)=>
     const token = auth.slice(prefix.length);
     try
     {
-      const {id} = jwt.verify(token, JWT_SECRET);
-      if(id)
+      const vToken = jwt.verify(token, JWT_SECRET);
+      if(vToken.isAdmin)
       {
-        req.user = await getUserById(id);
+        req.admin = true; //if a function can only be used by a admin it must check if(req.admin)
+        next();
+      }
+      else if(vToken.id)
+      {
+        req.user = await getUserById(id);// if a function can only be used by a logged in user it must use if(req.user) or requireUser from ./utils
         next();
       }
     }
@@ -67,5 +72,8 @@ router.use("/cart", cartRouter);
 const hubsRouter = require("./hubs");
 const { getUserById } = require("../db/users");
 router.use("/hubs", hubsRouter);
+
+const adminRouter = require("./admin");
+router.use("/admin", adminRouter);
 
 module.exports = router;

@@ -23,6 +23,8 @@ carTagsRouter.get("/", (req, res, next) => {
 
 carTagsRouter.post("/add-tag/:tagId/:carId", async (req, res, next) => {
   try {
+    if(req.admin)
+    {
     const { tagId, carId } = req.params;
     const checkCarId = await getCarById(carId);
     if (!checkCarId) {
@@ -51,6 +53,11 @@ carTagsRouter.post("/add-tag/:tagId/:carId", async (req, res, next) => {
         }
       }
     }
+  }
+  else
+  {
+    res.sendStatus(401);
+  }
   } catch (error) {
     next(error);
   }
@@ -58,11 +65,18 @@ carTagsRouter.post("/add-tag/:tagId/:carId", async (req, res, next) => {
 
 carTagsRouter.delete("/delete/:tagId/:carId", async (req, res, next) => {
   try {
+    if(req.admin)
+    {
     const { tagId, carId } = req.params;
 
     const deletedCar = await removeTagFromCar(tagId, carId);
 
     res.send(deletedCar);
+    }
+    else
+    {
+      res.sendStatus(401);
+    }
   } catch (error) {
     next(error);
   }

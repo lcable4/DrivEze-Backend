@@ -23,6 +23,8 @@ vehiclesRouter.get("/", async (req, res) => {
 
 //Post /api/cars
 vehiclesRouter.post("/", async (req,res, next) => {
+    if(req.admin)
+    {
     const {name, description, daily_rate, hubLocation} = req.body;
     const data = {
         name,
@@ -36,16 +38,23 @@ vehiclesRouter.post("/", async (req,res, next) => {
     }else {
         next({name: "Car Error", message: "Error creating cars"});
     }
-    
+    }
+    else{
+        res.sendStatus(401);
+    }
   
     
 });
 
-// Delete /api/car/id
-vehiclesRouter.delete("/:id", async (req, res, next) => {
+// Delete /api/car
+vehiclesRouter.delete("/", async (req, res, next) => {
+    const {carId} = req.body;
+
     try{
+        if(req.admin)
+        {
         const {id} = req.params;
-        const routine = await getCarById(id);
+        const routine = await getCarById(carId);
         console.log(routine, "id log")
         //  console.log(req.user, "req user log")
         // if (!routine) {
@@ -68,7 +77,10 @@ vehiclesRouter.delete("/:id", async (req, res, next) => {
         //   }
         const deletecar = await deleteCar(id);
              res.send(deletecar);
-
+        }
+        else{
+            res.sendStatus(401);
+        }
         } catch ({ name, message }) {
           next({ name, message });
         }
