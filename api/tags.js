@@ -14,9 +14,16 @@ const tagsRouter = express.Router();
 //POST /api/tags/
 tagsRouter.post("/", async (req, res, next) => {
   try {
+    if(req.admin)
+    {
     const { tagName } = req.body;
     const tag = await createTag(tagName);
     res.send(tag);
+    }
+    else
+    {
+      res.sendStatus(401);
+    }
   } catch ({ name, message }) {
     next({ name, message });
   }
@@ -34,7 +41,7 @@ tagsRouter.get("/", async (req, res, next) => {
 });
 
 //Gets one tag by ID
-//GET /api/tags/:id
+//GET /api/tags/:id || might be useless route; can't think when we would need to just get one tag
 tagsRouter.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -49,10 +56,17 @@ tagsRouter.get("/:id", async (req, res, next) => {
 //PATCH /api/tags/:id
 tagsRouter.patch("/:id", async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { name } = req.body;
-    const updatedTag = await updateTag({ tagId: id, name });
-    res.send(updatedTag);
+    if(req.admin)
+    {
+      const { id } = req.params;
+      const { name } = req.body;
+      const updatedTag = await updateTag({ tagId: id, name });
+      res.send(updatedTag);
+    }
+    else
+    {
+      res.sendStatus(401);
+    }
   } catch ({ name, message }) {
     next({ name, message });
   }
@@ -60,14 +74,21 @@ tagsRouter.patch("/:id", async (req, res, next) => {
 
 //Deactivates a tag matching the ID
 //PATCH /api/tags/deactivateTag/:id
-tagsRouter.patch("/deactivateTag/:id", async (req, res, next) => {
+tagsRouter.patch("/deactivate/:id", async (req, res, next) => {
   try {
+    if(req.admin)
+    {
     const { id } = req.params;
     const rowCount = await deactivateTag(id);
     if (rowCount === 1) {
       res.status(200).json({ message: `Tag ${id} has been deactivated.` });
     } else {
       res.status(404).json({ message: `Tag ${id} not found.` });
+    }
+    }
+    else
+    {
+      res.sendStatus(401);
     }
   } catch ({ name, message }) {
     res.status(500).json({ message: "Internal server error." });
@@ -77,14 +98,21 @@ tagsRouter.patch("/deactivateTag/:id", async (req, res, next) => {
 
 //Deletes a tag match the ID
 //DELETE /api/tags/deleteTag/:id
-tagsRouter.delete("/deleteTag/:id", async (req, res, next) => {
+tagsRouter.delete("/:id", async (req, res, next) => {
   try {
+    if(req.admin)
+    {
     const { id } = req.params;
     const deletedTag = await deleteTag(id);
     if (deletedTag) {
       res.status(200).json({ message: `Tag ${id} has been deleted.` });
     } else {
       res.status(404).json({ message: `Tag ${id} was not found` });
+    }
+    }
+    else
+    {
+      res.sendStatus(401);
     }
   } catch ({ name, message }) {
     res.status(500).json({ message: "Internal server error." });
