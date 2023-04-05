@@ -1,6 +1,6 @@
 const client = require("./index");
 //Creates a new hub
-async function createHub({ location }) {
+async function createHub(location) {
   try {
     await client.connect();
 
@@ -42,9 +42,7 @@ async function getHubById(hubId) {
   try {
     await client.connect();
 
-    const {
-      rows: hub,
-    } = await client.query(
+    const { rows: hub } = await client.query(
       `
             SELECT *
             FROM hubs
@@ -64,9 +62,7 @@ async function getHubByLocation(location) {
   try {
     await client.connect();
 
-    const {
-      rows: hub,
-    } = await client.query(
+    const { rows: hub } = await client.query(
       `
             SELECT *
             FROM hubs
