@@ -59,8 +59,8 @@ tagsRouter.patch("/:id", async (req, res, next) => {
     if(req.admin)
     {
       const { id } = req.params;
-      const { name } = req.body;
-      const updatedTag = await updateTag({ tagId: id, name });
+      const { tagName } = req.body;
+      const updatedTag = await updateTag({ tagId: id, tagName });
       res.send(updatedTag);
     }
     else

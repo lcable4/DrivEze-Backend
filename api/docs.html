@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DrivEze Api Docs</title>
+</head>
+<body>
+    <h1>DrivEze Api Docs</h1>
+    <h2>/api/users/</h2>
+    <div class="routeList">
+        <ul>
+            <li>
+                <div id="apiRoute">
+                    <h3>
+                        <span id="routeName">
+                            POST /register
+                        </span>
+                        <br>
+                        <span id="routeDescription">
+                            Registers a new user to the database
+                            <br>
+                            Headers:none,
+                            <br>
+                            Body: username, password, email
+                            <br>
+                            Returns: token
+                        </span>
+                    </h3>
+                </div>
+            </li>
+            <li>
+                <div id="apiRoute">
+                    <h3>
+                        <span id="routeName">
+                            POST /login
+                        </span>
+                        <br>
+                        <span id="routeDescription">
+                            Logins in a previously registered user
+                            <br>
+                            Headers: none
+                            <br>
+                            Body: username, password
+                            <br>
+                            Returns: User auth token
+                        </span>
+                    </h3>
+                </div>
+            </li>
+            <li>
+                <div id="apiRoute">
+                    <h3>
+                        <span id="routeName">
+                            GET /me
+                        </span>
+                        <br>
+                        <span id="routeDescription">
+                            Gets the user information
+                            <br>
+                            Headers: User auth token
+                            <br>
+                            Body: none
+                            <br>
+                            Returns: user objects without the password
+                        </span>
+                    </h3>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <h2>/api/admin/</h2>
+    <ul>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        POST /login
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Login in as admin
+                        <br>
+                        Headers: none
+                        <br>
+                        Body: username, password
+                        <br>
+                        Returns: Admin auth token
+                    </span>
+                </h3>
+            </div>
+        </li>
+    </ul>
+    <h2>/api/cars/</h2>
+    <ul>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        GET /
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Gets all the cars
+                        <br>
+                        Headers: none
+                        <br>
+                        Body: none
+                        <br>
+                        Returns: array of cars
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        GET /:id
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Gets a car based on the car's id
+                        <br>
+                        Headers: none
+                        <br>
+                        Body: none
+                        <br>
+                        Returns: a single car based on the id 
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        POST /
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Adds a new car to the car table
+                        <br>
+                        Headers: Admin auth token
+                        <br>
+                        Body: {name, description, daily_rate, hubLocation}
+                        <br>
+                        Returns: the added car
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        DELETE /
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Deletes a car and all referances to the car from the car table 
+                        <br>
+                        Headers: Admin auth token
+                        <br>
+                        Body: {carId} 
+                        <br>
+                        Returns: the deleted car
+                    </span>
+                </h3>
+            </div>
+        </li>
+    </ul>
+    <h2>/api/hubs/</h2>
+    <ul>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                <span id="routeName">
+                    GET /
+                </span>
+                <br>
+                <span id="routeDescription">
+                    Gets all the hubs
+                    <br>
+                    Headers: none
+                    <br>
+                    Body: none
+                    <br>
+                    Returns: array of hubs
+                </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        POST /
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Add a new hub
+                        <br>
+                        Headers: Admin auth token
+                        <br>
+                        Body: {location}
+                        <br>
+                        Returns: created hub object
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        PATCH /:hubId
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Update hub based on hubId
+                        <br>
+                        Headers: Admin auth token
+                        <br>
+                        Body: {location}
+                        <br>
+                        Returns: updated hub object
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        DELETE /:hubId
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Delete hub based on hubId
+                        <br>
+                        Headers: Admin auth token
+                        <br>
+                        Body: none
+                        <br>
+                        Returns: message saying if delete was succes or not
+                    </span>
+                </h3>
+            </div>
+        </li>
+    </ul>
+    <h2>/api/inventory/</h2>
+    <ul>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        GET /:hubId
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Get the inventory for a hub based on hubId
+                        <br>
+                        Headers: none
+                        <br>
+                        Body: none
+                        <br>
+                        Returns: an array of cars in the inventory of the selected hub
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        POST /:hubId
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Add a new car to a hub's inventory based on the hubId and carId
+                        <br>
+                        Headers: Admin auth token
+                        <br>
+                        Body: {carId}
+                        <br>
+                        Returns: car object that was added to the inventory
+                    </span>
+                </h3>
+            </div>
+        </li>
+    </ul>
+    <h2>/api/tags/</h2>
+    <ul>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        GET /
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Get all the tags
+                        <br>
+                        Headers: none
+                        <br>
+                        Body: none
+                        <br>
+                        Returns: an array of tags
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        POST /
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Add a new tag to the tags table
+                        <br>
+                        Headers: Admin auth token
+                        <br>
+                        Body: {tagName}
+                        <br>
+                        Returns: created tag object
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        PATCH /:id
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Update a tag based on the tagId
+                        <br>
+                        Headers: Admin auth token
+                        <br>
+                        Body: {tagName}
+                        <br>
+                        Returns: update tag object
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        PATCH /deactivate/:id
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        deactivates the tag based on tagId
+                        <br>
+                        Headers: Admin auth token
+                        <br>
+                        Body: none
+                        <br>
+                        Returns: a message saying if the deactiviation was a success
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        DELETE /:id
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Delete a tag based on the tagId
+                        <br>
+                        Headers: Admin auth token
+                        <br>
+                        Body: none
+                        <br>
+                        Returns: a message saying if the delete was a success 
+                    </span>
+                </h3>
+            </div>
+        </li>
+    </ul>
+    <h2>/api/car-tags/</h2>
+    <ul>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        POST /add-tag/:tagId/:carId
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Create a new car-tag
+                        <br>
+                        Headers: Admin auth token
+                        <br>
+                        Body: none
+                        <br>
+                        Returns: the created car-tag object
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        DELETE /delete/:tagId/:carId
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Deletes a car-tag from a car
+                        <br>
+                        Headers: Admin auth token
+                        <br>
+                        Body: none
+                        <br>
+                        Returns: the removed car-tag
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        GET /tags-by-car/:carId
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Gets the tags for a car based on the carId
+                        <br>
+                        Headers: none
+                        <br>
+                        Body: none
+                        <br>
+                        Returns: an array of tags
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        GET /cars-by-tags/:tagId
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Get the cars by tag based on the tagId
+                        <br>
+                        Headers: none
+                        <br>
+                        Body: none
+                        <br>
+                        Returns: an array of cars
+                    </span>
+                </h3>
+            </div>
+        </li>
+    </ul>
+    <h2>/api/cart</h2>
+    <ul>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        GET /
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Get the users cart
+                        <br>
+                        Headers: User auth token || NEED TO ADD Guest auth token
+                        <br>
+                        Body: none
+                        <br>
+                        Returns: an array of cart-items
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        POST /
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Add a cart-item to a user's cart
+                        <br>
+                        Headers: User auth token || NEED TO ADD Guest auth token
+                        <br>
+                        Body: {carId, price}
+                        <br>
+                        Returns: the added cart-item object
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        PATCH /
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Update a cart-item in a user's cart
+                        <br>
+                        Headers: User auth token || NEED TO ADD Guest auth token
+                        <br>
+                        Body: {carId, quanitity}
+                        <br>
+                        Returns: the updated car-item object
+                    </span>
+                </h3>
+            </div>
+        </li>
+        <li>
+            <div id="apiRoute">
+                <h3>
+                    <span id="routeName">
+                        DELETE /
+                    </span>
+                    <br>
+                    <span id="routeDescription">
+                        Delete the cart-item from the user's cart
+                        <br>
+                        Headers: User auth token || NEED TO ADD Guest auth token
+                        <br>
+                        Body: {carId}
+                        <br>
+                        Returns: the deleted cart-item object
+                    </span>
+                </h3>
+            </div>
+        </li>
+    </ul>
+</body>
+</html>
