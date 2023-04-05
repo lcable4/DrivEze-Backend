@@ -52,9 +52,7 @@ async function updateCar({ carId, ...fields }) {
 async function getAllCars() {
   try {
     await client.connect();
-    const {
-      rows: cars,
-    } = await client.query(`
+    const { rows: cars } = await client.query(`
         SELECT *
         FROM cars;
       `);
@@ -102,7 +100,6 @@ async function getCarsByHubLocation(hubLocation) {
       [hubLocation]
     );
     await client.release();
-    console.log(car, "CAR BY HUB");
     return car;
   } catch (e) {
     console.error(e);
@@ -114,21 +111,25 @@ async function deleteCar(carId) {
   try {
     await client.connect();
     const {
-      rows:[result]
-    } = await client.query(`
+      rows: [result],
+    } = await client.query(
+      `
         DELETE FROM car_tags
         WHERE "carId"=$1
         RETURNING *;
-    `, [carId])
-    console.log(result);
+    `,
+      [carId]
+    );
     const {
-      rows:[inventoryRow]
-    } = await client.query(`
+      rows: [inventoryRow],
+    } = await client.query(
+      `
         DELETE FROM inventory
         WHERE "carId"=$1
         RETURNING *;
-    `,[carId])
-    console.log(inventoryRow)
+    `,
+      [carId]
+    );
     const {
       rows: [car],
     } = await client.query(
@@ -159,7 +160,8 @@ async function deactivateCar(carId) {
       `
       UPDATE cars
       SET active = false
-      WHERE id=$1;
+      WHERE id = $1
+      RETURNING *;
       `,
       [carId]
     );
