@@ -1,3 +1,4 @@
+const { createCart } = require("./cart");
 const client = require("./index");
 const bcrypt = require("bcrypt");
 //Creates a new user
@@ -16,6 +17,7 @@ async function createUser({ username, password, email }) {
       [username, password, email]
     );
     await client.release();
+    await createCart(user.id);
     return user;
   } catch (e) {
     throw e;
