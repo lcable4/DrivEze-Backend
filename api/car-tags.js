@@ -20,7 +20,7 @@ carTagsRouter.get("/", (req, res, next) => {
   res.send("hello world");
   next();
 });
-
+//this route needs to be changed! || can just be post("/") and req.body{tagId, carId}
 carTagsRouter.post("/add-tag/:tagId/:carId", async (req, res, next) => {
   try {
     if(req.admin)
@@ -62,7 +62,7 @@ carTagsRouter.post("/add-tag/:tagId/:carId", async (req, res, next) => {
     next(error);
   }
 });
-
+//this route also needs to be changed || .delete(/) req.body{tagId, carId}
 carTagsRouter.delete("/delete/:tagId/:carId", async (req, res, next) => {
   try {
     if(req.admin)
@@ -81,7 +81,7 @@ carTagsRouter.delete("/delete/:tagId/:carId", async (req, res, next) => {
     next(error);
   }
 });
-
+//this route should probably be moved to into the /api/cars route
 carTagsRouter.get("/tags-by-car/:carId", async (req, res, next) => {
   try {
     const { carId } = req.params;
@@ -93,7 +93,7 @@ carTagsRouter.get("/tags-by-car/:carId", async (req, res, next) => {
     next(error);
   }
 });
-
+//this route could be changed to .get(/:tagId) if getTagsByCar is moved
 carTagsRouter.get("/cars-by-tag/:tagId", async (req, res, next) => {
   try {
     const { tagId } = req.params;

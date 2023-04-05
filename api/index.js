@@ -76,4 +76,7 @@ router.use("/hubs", hubsRouter);
 const adminRouter = require("./admin");
 router.use("/admin", adminRouter);
 
+const guestRouter = require("./guests");
+router.use("/guests", guestRouter);
+
 module.exports = router;

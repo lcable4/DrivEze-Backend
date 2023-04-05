@@ -61,14 +61,17 @@ async function dropTables() {
     console.log("Starting to drop tables...");
     await client.connect();
     await client.query(`
+      DROP TABLE IF EXISTS guest_cart_items;
       DROP TABLE IF EXISTS cart_items;
       DROP TABLE IF EXISTS cart;
+      DROP TABLE IF EXISTS guest_cart;
       DROP TABLE IF EXISTS inventory;
       DROP TABLE IF EXISTS car_tags;
       DROP TABLE IF EXISTS hubs;
       DROP TABLE IF EXISTS tags;
       DROP TABLE IF EXISTS cars;
       DROP TABLE IF EXISTS users;
+      DROP TABLE IF EXISTS guests;
       DROP TABLE IF EXISTS admins;
       `);
     console.log("Finished dropping tables!");
@@ -93,7 +96,7 @@ async function createTables() {
       );
 
       CREATE TABLE users(
-        id SERIAL PRIMARY KEY,
+        id SERIAL PRIMARY KEY UNIQUE,
         email VARCHAR(255) UNIQUE NOT NULL,
         location VARCHAR(255),
         active BOOLEAN DEFAULT TRUE,
@@ -101,6 +104,18 @@ async function createTables() {
         password VARCHAR(255) NOT NULL
       );
       
+      CREATE TABLE guests(
+        id SERIAL PRIMARY KEY UNIQUE,
+        name VARCHAR(255) NOT NULL
+      );
+      
+      CREATE TABLE guest_cart(
+        id SERIAL PRIMARY KEY UNIQUE,
+        "guestId"  INTEGER REFERENCES guests(id) ON DELETE CASCADE,
+        "isOrdered" BOOLEAN DEFAULT false
+      );
+      
+
       CREATE TABLE cars(
         id SERIAL PRIMARY KEY UNIQUE,
         name VARCHAR(255) NOT NULL,
@@ -145,6 +160,14 @@ async function createTables() {
       CREATE TABLE cart_items(
         id SERIAL PRIMARY KEY,
         "cartId" INTEGER REFERENCES cart(id) ON DELETE CASCADE,
+        "carId" INTEGER REFERENCES cars(id) ON DELETE CASCADE,
+        price INTEGER,
+        quantity INTEGER NOT NULL DEFAULT 1
+      );
+
+      CREATE TABLE guest_cart_items(
+        id SERIAL PRIMARY KEY UNIQUE,
+        "cartId" INTEGER REFERENCES guest_cart(id) ON DELETE CASCADE,
         "carId" INTEGER REFERENCES cars(id) ON DELETE CASCADE,
         price INTEGER,
         quantity INTEGER NOT NULL DEFAULT 1
