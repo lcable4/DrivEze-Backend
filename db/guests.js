@@ -100,7 +100,6 @@ async function addCarToGuestCart(carId, cartId, price)
     console.log(carId, cartId, price);
     try
     {
-        console.log("here")
         await client.connect();
         const
         {
@@ -122,9 +121,33 @@ async function addCarToGuestCart(carId, cartId, price)
     }
 }
 
+async function getCartItemsByGuestCartId(cartId)
+{
+    try
+    {
+        await client.connect();
+
+        const{
+            rows: cartItems
+        } = await client.query(`
+            SELECT *
+            FROM guest_cart_items
+            WHERE "guestCartId"=$1
+        `, [cartId]);
+        await client.release();
+
+        return cartItems;
+    }
+    catch(e)
+    {
+        throw e;
+    }
+}
+
 module.exports = {
     createGuest,
     getGuestById,
     getCartByGuestId,
-    addCarToGuestCart
+    addCarToGuestCart,
+    getCartItemsByGuestCartId
 }
