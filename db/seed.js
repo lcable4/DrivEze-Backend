@@ -167,7 +167,7 @@ async function createTables() {
 
       CREATE TABLE guest_cart_items(
         id SERIAL PRIMARY KEY UNIQUE,
-        "cartId" INTEGER REFERENCES guest_cart(id) ON DELETE CASCADE,
+        "guestCartId" INTEGER REFERENCES guest_cart(id) ON DELETE CASCADE,
         "carId" INTEGER REFERENCES cars(id) ON DELETE CASCADE,
         price INTEGER,
         quantity INTEGER NOT NULL DEFAULT 1

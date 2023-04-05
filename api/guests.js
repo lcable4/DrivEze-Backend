@@ -19,6 +19,7 @@ guestRoute.post("/", async(req, res, next)=>
             {
                 id: guest.id,
                 name,
+                guest:true
             },
             process.env.JWT_SECRET,
             {

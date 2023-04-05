@@ -10,6 +10,7 @@ const
     getCartByUserId, createCart
 } = require("../db/cart")
 const { requireUser } = require('./utils');
+const { getCartByGuestId, addCarToGuestCart } = require('../db/guests');
 
 // /api/cart/:userId/:carId
 cartRouter.post("/",  async(req, res, next)=>
@@ -19,7 +20,8 @@ cartRouter.post("/",  async(req, res, next)=>
 
     try
     {
-        if(req.user)
+        console.log(req.user.guest)
+        if(req.user && !req.user.guest)
         {
             const userId = req.user.id;
             let userCart = await getCartByUserId(userId);
@@ -35,6 +37,15 @@ cartRouter.post("/",  async(req, res, next)=>
                 const cartItem = await addCarToCart(carId, userCart.cartId, price);
                 res.send(cartItem);
             }
+        }
+        else if(req.user.guest)
+        {
+            const guestId = req.user.guest.id;
+            let cart = await getCartByGuestId(guestId);
+            console.log(cart);
+            const cartItem = await addCarToGuestCart(carId, cart.cartId, price)
+            console.log(cartItem);
+            res.send(cartItem);
         }
         else
         {
