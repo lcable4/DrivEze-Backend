@@ -10,7 +10,7 @@ const
     getCartByUserId, createCart
 } = require("../db/cart")
 const { requireUser } = require('./utils');
-const { getCartByGuestId, addCarToGuestCart, getCartItemsByGuestCartId, updateGuestCarQuantity } = require('../db/guests');
+const { getCartByGuestId, addCarToGuestCart, getCartItemsByGuestCartId, updateGuestCarQuantity, removeCarFromGuestCart } = require('../db/guests');
 
 // /api/cart/:userId/:carId
 cartRouter.post("/",  async(req, res, next)=>
@@ -145,13 +145,23 @@ cartRouter.delete("/", async(req, res, next)=>
     const{carId} = req.body;
     try
     {
-        if(req.user)
+        if(req.user && !req.user.guest)
         {
             const userId = req.user.id;
             const cart = await getCartByUserId(userId);
             if(cart)
             {
                 const removed = await removeCarFromCart(carId, cart.cartId);
+                res.send(removed);
+            }
+        }
+        else if(req.user.guest)
+        {
+            const userId = req.user.guest.id;
+            const cart = await getCartByGuestId(userId);
+            if(cart)
+            {
+                const removed = await removeCarFromGuestCart(carId, cart.cartId);
                 res.send(removed);
             }
         }
