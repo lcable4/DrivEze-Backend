@@ -7,25 +7,37 @@ const
 } = require("../db/cart-items");
 const 
 {
-    getCartByUserId
+    getCartByUserId, createCart
 } = require("../db/cart")
 const { requireUser } = require('./utils');
 
 // /api/cart/:userId/:carId
 cartRouter.post("/",  async(req, res, next)=>
 {
-    const {userId, carId, price} = req.body;
+
+    const {carId, price} = req.body;
 
     try
     {
-        const userCart = await getCartByUserId(userId);
+        if(req.user)
+        {
+            const userId = req.user.id;
+        let userCart = await getCartByUserId(userId);
         console.log("usercart", userCart)
+        if(!userCart && req.user)
+        {   
+            userCart = await createCart(userId);
+            console.log("usercart", userCart)
+        }
+
         if(userCart)
         {
             const cartItem = await addCarToCart(carId, userCart.cartId, price);
             res.send(cartItem);
         }
+    }
         else{
+            
             res.sendStatus(401)
         }
     }
@@ -38,17 +50,28 @@ cartRouter.post("/",  async(req, res, next)=>
 
 cartRouter.get("/", async(req, res, next)=>
 {
-    const {userId} = req.body;
     try
     {
-        const cart = await getCartByUserId(userId);
-        if(cart){
-            const cartItems = await getCartItemsByCartId(cart.cartId);
-            console.log(cartItems)
-             res.send(cartItems);
+        if(req.user)
+        {
+            const userId = req.user.id;
+            const cart = await getCartByUserId(userId);
+            if(cart){
+                const cartItems = await getCartItemsByCartId(cart.cartId);
+                console.log(cartItems)
+                res.send(cartItems);
+            }
+            else
+            {
+                const newCart = await createCart(userId);
+            }
         }
-            
-    }catch(e)
+        else
+        {
+            res.sendStatus(401);
+        }    
+    }
+    catch(e)
     {
         throw e;
     }
@@ -56,7 +79,7 @@ cartRouter.get("/", async(req, res, next)=>
 
 cartRouter.patch("/", async(req, res, next)=>
 {
-    const {userId, carId, quantity} = req.body;
+    
     try
     {
         const cart = await getCartByUserId(userId);
