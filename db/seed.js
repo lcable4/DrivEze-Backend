@@ -539,14 +539,19 @@ async function testCarDB() {
       hubLocation: "Texas",
     });
     console.log(updatedCar, "UPDATED CAR RESULT");
+
     const allCars = await getAllCars();
     console.log(allCars, "ALL CARS RESULTS");
+
     const carByID = await getCarById(3);
     console.log(carByID, "CAR BY ID RESULTS");
-    const carByHUB = await getCarsByHubLocation(2);
+
+    const carByHUB = await getCarsByHubLocation("Colorado");
     console.log(carByHUB, "CAR BY HUB RESULTS");
+
     const deletedCar = await deleteCar(1);
     console.log(deletedCar, "DELETED CAR RESULTS");
+
     const deactivatedCar = await deactivateCar(2);
     console.log(deactivatedCar, "DEACTIVATED CAR RESULTS");
   } catch (error) {
@@ -643,17 +648,6 @@ async function testCartItemsDB() {
   console.log(clearedCart, "TEST RESULTS");
 }
 
-async function testDB() {
-  await testHubDB();
-  await testTagsDB();
-  await testUserDB();
-  await testCarDB();
-  await testCarTagsDB();
-  await testCartDB();
-  await testInventoryDB();
-  await testCartItemsDB();
-}
-
 async function rebuildDB() {
   await dropTables();
   await createTables();
@@ -666,6 +660,17 @@ async function rebuildDB() {
   await createInitialCartItems(1);
   await testDB();
   return;
+}
+
+async function testDB() {
+  await testHubDB();
+  await testTagsDB();
+  await testUserDB();
+  await testCarDB();
+  await testCarTagsDB();
+  await testCartDB();
+  await testInventoryDB();
+  await testCartItemsDB();
 }
 
 rebuildDB();
