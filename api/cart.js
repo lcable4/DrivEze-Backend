@@ -10,6 +10,7 @@ const
     getCartByUserId, createCart
 } = require("../db/cart")
 const { requireUser } = require('./utils');
+const { getCartByGuestId, addCarToGuestCart, getCartItemsByGuestCartId, updateGuestCarQuantity, removeCarFromGuestCart } = require('../db/guests');
 
 // /api/cart/:userId/:carId
 cartRouter.post("/",  async(req, res, next)=>
@@ -19,7 +20,8 @@ cartRouter.post("/",  async(req, res, next)=>
 
     try
     {
-        if(req.user)
+        console.log(req.user.guest)
+        if(req.user && !req.user.guest)
         {
             const userId = req.user.id;
             let userCart = await getCartByUserId(userId);
@@ -35,6 +37,15 @@ cartRouter.post("/",  async(req, res, next)=>
                 const cartItem = await addCarToCart(carId, userCart.cartId, price);
                 res.send(cartItem);
             }
+        }
+        else if(req.user.guest)
+        {
+            const guestId = req.user.guest.id;
+            let cart = await getCartByGuestId(guestId);
+            console.log(cart);
+            const cartItem = await addCarToGuestCart(carId, cart.cartId, price)
+            console.log(cartItem);
+            res.send(cartItem);
         }
         else
         {
@@ -52,7 +63,7 @@ cartRouter.get("/", async(req, res, next)=>
 {
     try
     {
-        if(req.user)
+        if(req.user && !req.user.guest)
         {
             const userId = req.user.id;
             const cart = await getCartByUserId(userId);
@@ -64,6 +75,18 @@ cartRouter.get("/", async(req, res, next)=>
             else
             {
                 const newCart = await createCart(userId);
+            }
+        }
+        else if(req.user.guest)
+        {
+            const userId = req.user.guest.id;
+            const cart = await getCartByGuestId(userId);
+            if(cart)
+            {
+                console.log("here")
+                const cartItems = await getCartItemsByGuestCartId(cart.cartId);
+                console.log(cartItems);
+                res.send(cartItems);
             }
         }
         else
@@ -82,19 +105,29 @@ cartRouter.patch("/", async(req, res, next)=>
     const {carId, quantity} = req.body; 
     try
     {
-        if(req.user)
+        if(req.user && !req.user.guest)
         {
             const userId = req.user.id;
-        let cart = await getCartByUserId(userId);
-        if(!cart)
-        {
-            cart = await createCart(userId);
+            let cart = await getCartByUserId(userId);
+            if(!cart)
+            {
+              cart = await createCart(userId);
+            }
+            if(cart)
+            {
+                const car = await updateCarQuantity(carId, cart.cartId, quantity);
+                res.send(car);
+            }
         }
-        if(cart)
+        else if(req.user.guest)
         {
-            const car = await updateCarQuantity(carId, cart.cartId, quantity);
-            res.send(car);
-        }
+            const userId = req.user.guest.id;
+            let cart = await getCartByGuestId(userId);
+            if(cart)
+            {
+                const car = await updateGuestCarQuantity(carId, cart.cartId, quantity);
+                res.send(car);
+            }
         }
         else
         {
@@ -112,13 +145,23 @@ cartRouter.delete("/", async(req, res, next)=>
     const{carId} = req.body;
     try
     {
-        if(req.user)
+        if(req.user && !req.user.guest)
         {
             const userId = req.user.id;
             const cart = await getCartByUserId(userId);
             if(cart)
             {
                 const removed = await removeCarFromCart(carId, cart.cartId);
+                res.send(removed);
+            }
+        }
+        else if(req.user.guest)
+        {
+            const userId = req.user.guest.id;
+            const cart = await getCartByGuestId(userId);
+            if(cart)
+            {
+                const removed = await removeCarFromGuestCart(carId, cart.cartId);
                 res.send(removed);
             }
         }

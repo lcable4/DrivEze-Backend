@@ -23,6 +23,11 @@ router.use(async(req, res, next)=>
         req.admin = true; //if a function can only be used by a admin it must check if(req.admin)
         next();
       }
+      else if(vToken.guest)
+      {
+        req.user = {guest: await getGuestById(vToken.id)};
+        next();
+      }
       else if(vToken.id)
       {
         req.user = await getUserById(id);// if a function can only be used by a logged in user it must use if(req.user) or requireUser from ./utils
@@ -75,5 +80,9 @@ router.use("/hubs", hubsRouter);
 
 const adminRouter = require("./admin");
 router.use("/admin", adminRouter);
+
+const guestRouter = require("./guests");
+const { getGuestById } = require("../db/guests");
+router.use("/guests", guestRouter);
 
 module.exports = router;

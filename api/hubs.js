@@ -84,7 +84,7 @@ hubsRouter.patch("/:hubId", async (req, res, next) => {
   }
 });
 
-hubsRouter.delete("/deleteHub/:id", async (req, res, next) => {
+hubsRouter.delete("/:id", async (req, res, next) => {
   const { id } = req.params;
   try {
     if(req.admin)
