@@ -207,36 +207,24 @@ async function createInitialUsers() {
   }
 }
 
-async function createAdminUsers()
-{
-  console.log("Starting to create admin users...")
-  const userToCreate = [
-    {username:"carter", password:"password"}
-  ]
-  try
-  {
-      const users = [];
-      for(let i = 0; i < userToCreate.length; i++)
-      {
-        users.push(await createAdmin(userToCreate[i]));
-      }
+async function createAdminUsers() {
+  console.log("Starting to create admin users...");
+  const userToCreate = [{ username: "carter", password: "password" }];
+  try {
+    const users = [];
+    for (let i = 0; i < userToCreate.length; i++) {
+      users.push(await createAdmin(userToCreate[i]));
     }
-    catch(error)
-    {
-      console.error("Error creating admin users");
-      throw error;
-    }
+  } catch (error) {
+    console.error("Error creating admin users");
+    throw error;
+  }
 }
 
 async function createInitialHubs() {
   console.log("Starting to create hubs...");
   try {
-    const hubsToCreate = [
-      { id: 1, location: "Arizona" },
-      { id: 2, location: "Nevada" },
-      { id: 3, location: "Texas" },
-      { id: 4, location: "Colorado" },
-    ];
+    const hubsToCreate = ["Arizona", "Nevada", "Texas", "Colorado"];
     //const hubs = await Promise.all(hubsToCreate.map(createHub));
     const hubs = [];
 
@@ -501,21 +489,32 @@ async function testHubDB() {
     "////////////////////////////////////////////testing hubs////////////////////////////////////////////"
   );
   console.log("Calling create hub");
-  const hub = await createHub({ location: "New York" });
+  const hub = await createHub("New York");
   console.log("Result:", hub);
-  console.log("Calling get all hub");
-  const allHubs = await getAllHubs();
-  console.log("Result:", allHubs);
-  const hubById = await getHubById(1);
+
+  // console.log("Calling get all hubs");
+  // const allHubs = await getAllHubs();
+  // console.log("Result:", allHubs);
+
+  const hubById = await getHubById(3);
   console.log("Hub ID LOG:", hubById);
-  const hubLocation = await getHubByLocation("Nevada");
+
+  const hubLocation = await getHubByLocation("Chicago");
   console.log("HUB LOCATION RESULT:", hubLocation);
-  const updatedHub = await updateHub(1, "Kansas");
+  //could use error handling if the param doesnt exist inside the database(ex:Chicago, returns [])
+
+  const updatedHub = await updateHub("Kansas", 1);
   console.log("UPDATED HUB LOG:", updatedHub);
+
   const deletedRowCount = await deleteHub(1);
   console.log(`Deleted ${deletedRowCount} hub(s)`);
+  // const allHubsDELETE = await getAllHubs();
+  // console.log("all hubs delete", allHubsDELETE);
+
   const deactivatedHub = await deactivateHub(3);
   console.log(`deactivated ${deactivatedHub} hub(s)`);
+  // const allHubsDEACTIVATE = await getAllHubs();
+  // console.log("all hubs deactivate", allHubsDEACTIVATE);
 
   console.log("Finish testing Hub Database Functions");
 }
@@ -645,15 +644,9 @@ async function testCartItemsDB() {
 }
 
 async function testDB() {
-
   await testHubDB();
-  await testCarDB();
-
   await testTagsDB();
-
-
   await testUserDB();
-  await testHubDB();
   await testCarDB();
   await testCarTagsDB();
   await testCartDB();
@@ -676,4 +669,3 @@ async function rebuildDB() {
 }
 
 rebuildDB();
-
