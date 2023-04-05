@@ -144,10 +144,33 @@ async function getCartItemsByGuestCartId(cartId)
     }
 }
 
+async function updateGuestCarQuantity(carId, cartId, quantity)
+{
+    try
+    {
+        await client.connect();
+        const{
+            rows:[cartItem]
+        } = await client.query(`
+            UPDATE guest_cart_items
+            SET quantity = $1
+            WHERE "carId"=$2 AND "guestCartId"=$3
+            RETURNING *;
+        `, [quantity, carId, cartId]);
+        await client.release;
+        return cartItem;
+    }
+    catch(e)
+    {
+        throw e;
+    }
+}
+
 module.exports = {
     createGuest,
     getGuestById,
     getCartByGuestId,
     addCarToGuestCart,
-    getCartItemsByGuestCartId
+    getCartItemsByGuestCartId,
+    updateGuestCarQuantity
 }
