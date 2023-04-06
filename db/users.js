@@ -114,10 +114,10 @@ async function updateUser({ userId, ...fields }) {
       `
             UPDATE users
             SET ${setString}
-            WHERE id=${userId}
+            WHERE id=$${Object.keys(fields).length + 1}
             RETURNING *;
         `,
-      Object.values(fields)
+      [...Object.values(fields), userId]
     );
 
     await client.release();

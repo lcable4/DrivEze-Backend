@@ -19,10 +19,9 @@ class client {
 
   async connect() {
     // use this before you query the db
-    try{
-    this.#client = await pool.connect();
-    }
-    catch(e){
+    try {
+      this.#client = await pool.connect();
+    } catch (e) {
       throw e;
     }
   }
@@ -36,22 +35,19 @@ class client {
       console.log("Query Will Still Run");
       await this.connect();
     }
-    try{
-    const result = await this.#client.query(sql, params);
-    return result;
-    }catch(e)
-    {
+    try {
+      const result = await this.#client.query(sql, params);
+      return result;
+    } catch (e) {
       throw e;
     }
   }
 
   async release() {
     //release the connection back to the pool
-    try{
-    await this.#client.release();
-    }
-    catch(e)
-    {
+    try {
+      await this.#client.release();
+    } catch (e) {
       throw e;
     }
   }
