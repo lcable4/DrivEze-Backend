@@ -5,7 +5,6 @@ const pool = new Pool({
   // create the pool object
   connectionString:
     process.env.DATABASE_URL || "postgres://localhost/driveZe-dev",
-  database: "driveZe-dev",
 
   ssl:
     process.env.NODE_ENV === "production"
@@ -20,7 +19,12 @@ class client {
 
   async connect() {
     // use this before you query the db
+    try{
     this.#client = await pool.connect();
+    }
+    catch(e){
+      throw e;
+    }
   }
 
   async query(
@@ -32,13 +36,24 @@ class client {
       console.log("Query Will Still Run");
       await this.connect();
     }
+    try{
     const result = await this.#client.query(sql, params);
     return result;
+    }catch(e)
+    {
+      throw e;
+    }
   }
 
   async release() {
     //release the connection back to the pool
+    try{
     await this.#client.release();
+    }
+    catch(e)
+    {
+      throw e;
+    }
   }
 }
 /*
