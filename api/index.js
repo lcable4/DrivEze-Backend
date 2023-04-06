@@ -30,7 +30,7 @@ router.use(async(req, res, next)=>
       }
       else if(vToken.id)
       {
-        req.user = await getUserById(id);// if a function can only be used by a logged in user it must use if(req.user) or requireUser from ./utils
+        req.user = await getUserById(vToken.id);// if a function can only be used by a logged in user it must use if(req.user) or requireUser from ./utils
         next();
       }
     }
