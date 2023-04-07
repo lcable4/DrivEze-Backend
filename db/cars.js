@@ -1,6 +1,6 @@
 const client = require("./index");
 
-async function createCar({ name, description, daily_rate, hubLocation }) {
+async function createCar({ name, description, daily_rate, hubLocation, image }) {
   try {
     await client.connect();
 
@@ -8,10 +8,10 @@ async function createCar({ name, description, daily_rate, hubLocation }) {
       rows: [car],
     } = await client.query(
       `
-        INSERT INTO cars(name, description, daily_rate, "hubLocation")
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO cars(name, description, daily_rate, "hubLocation", image)
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING *;`,
-      [name, description, daily_rate, hubLocation]
+      [name, description, daily_rate, hubLocation, image]
     );
     await client.release();
     return car;

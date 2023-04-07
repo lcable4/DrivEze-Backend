@@ -5,6 +5,7 @@ const {
     getAllCars,
     getCarById,
     deleteCar,
+    updateCar,
 } = require("../db/cars");
 
 // Get /api/cars/:id
@@ -45,6 +46,29 @@ vehiclesRouter.post("/", async (req,res, next) => {
   
     
 });
+
+vehiclesRouter.patch("/", async(req, res, next)=>
+{
+    const carId = req.body.carId;
+    delete req.body.carId;
+    const fields = req.body;
+    try
+    {
+        if(req.admin)
+        {
+            const car = await updateCar({carId, ...fields});
+            res.send(car);
+        }
+        else
+        {
+            res.sendStatus(401);
+        }
+    }
+    catch(e)
+    {
+        throw e;
+    }
+})
 
 // Delete /api/car
 vehiclesRouter.delete("/", async (req, res, next) => {

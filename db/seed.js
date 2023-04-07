@@ -122,7 +122,8 @@ async function createTables() {
         description TEXT NOT NULL,
         daily_rate INTEGER NOT NULL,
         "hubLocation" VARCHAR(255) NOT NULL,
-        active BOOLEAN DEFAULT TRUE
+        active BOOLEAN DEFAULT TRUE,
+        image VARCHAR(255)
       );
       
       CREATE TABLE tags(
