@@ -186,12 +186,23 @@ async function createInitialUsers() {
   console.log("Starting to create users...");
   try {
     const usersToCreate = [
-      { username: "albert", password: "bertie99", email: "albert@gmail.com" },
-      { username: "sandra", password: "sandra123", email: "sandra@gmail.com" },
+      {
+        username: "albert",
+        password: "bertie99",
+        email: "albert@gmail.com",
+        location: "",
+      },
+      {
+        username: "sandra",
+        password: "sandra123",
+        email: "sandra@gmail.com",
+        location: "",
+      },
       {
         username: "glamgal",
         password: "glamgal123",
         email: "glamgal@gmail.com",
+        location: "",
       },
     ];
     //const users = await Promise.all(usersToCreate.map(createUser));
@@ -285,90 +296,105 @@ async function createInitialVehicles() {
         description: "high-mpg sedan",
         daily_rate: 100,
         hubLocation: "Nevada",
+        image: "./images/vehicles/fordFocus.png",
       },
       {
         name: "Toyota Camry",
         description: "high-mpg sedan",
         daily_rate: 100,
         hubLocation: "Arizona",
+        image: "./images/vehicles/toyotaCamry.png",
       },
       {
         name: "Honda Civic",
         description: "high-mpg sedan",
         daily_rate: 100,
         hubLocation: "Texas",
+        image: "./images/vehicles/hondaCivic.png",
       },
       {
         name: "Chevrolet Silverado",
         description: "powerful truck",
         daily_rate: 150,
         hubLocation: "Nevada",
+        image: "./images/vehicles/chevySilverado.png",
       },
       {
         name: "Ford F-150",
         description: "powerful truck",
         daily_rate: 150,
         hubLocation: "Colorado",
+        image: "./images/vehicles/fordF150.png",
       },
       {
         name: "Ram 1500",
         description: "powerful truck",
         daily_rate: 150,
         hubLocation: "Arizona",
+        image: "./images/vehicles/ram1500.png",
       },
       {
         name: "Jeep Wrangler",
         description: "off-road SUV",
         daily_rate: 200,
         hubLocation: "Nevada",
+        image: "./images/vehicles/jeepWrangler.png",
       },
       {
         name: "Toyota 4Runner",
         description: "off-road SUV",
         daily_rate: 200,
         hubLocation: "Colorado",
+        image: "./images/vehicles/toyota4Runner.png",
       },
       {
         name: "Chevrolet Tahoe",
         description: "family SUV",
         daily_rate: 175,
         hubLocation: "Texas",
+        image: "./images/vehicles/chevyTahoe.png",
       },
       {
         name: "Tesla Model S",
         description: "luxury electric sedan",
         daily_rate: 400,
         hubLocation: "Nevada",
+        image: "./images/vehicles/teslaModelS.png",
       },
       {
         name: "BMW 7 Series",
         description: "luxury sedan",
         daily_rate: 350,
         hubLocation: "Colorado",
+        image: "./images/vehicles/bmw7Series.png",
       },
       {
         name: "Mercedes-Benz S-Class",
         description: "luxury sedan",
         daily_rate: 350,
         hubLocation: "Texas",
+        image: "./images/vehicles/mercedesSClass.png",
       },
       {
         name: "Mercedes-Benz GLS",
         description: "luxury SUV",
         daily_rate: 400,
         hubLocation: "Nevada",
+        image: "./images/vehicles/mercedesGLSClass.png",
       },
       {
         name: "Range Rover",
         description: "luxury SUV",
         daily_rate: 400,
         hubLocation: "Colorado",
+        image: "./images/vehicles/rangeRover.png",
       },
       {
         name: "Lamborghini Urus",
         description: "luxury SUV",
         daily_rate: 500,
         hubLocation: "Texas",
+        image: "./images/vehicles/lamborghiniUrus.png",
       },
     ];
     //const vehicles = await Promise.all(vehiclesToCreate.map(createCar));
