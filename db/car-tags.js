@@ -58,7 +58,7 @@ async function getTagsByCar(carId) {
       [carId]
     );
     await client.release();
-
+    console.log(rows, "ROWS LOG");
     return rows;
   } catch (error) {
     throw error;
@@ -70,8 +70,11 @@ async function getCarsByTag(tagId) {
     await client.connect();
     const { rows } = await client.query(
       `
-    SELECT * FROM car_tags
-    WHERE "tagId" = $1;
+    SELECT *
+    FROM car_tags
+    INNER JOIN cars
+    ON car_tags."carId" = cars.id
+    WHERE car_tags."tagId" = $1;
     `,
       [tagId]
     );
