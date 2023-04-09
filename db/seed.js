@@ -592,12 +592,24 @@ async function testCarTagsDB() {
   );
   try {
     console.log("Calling addTagToCar(1, 1)");
-    const tag1 = await addTagToCar(2, 1);
-    const tag2 = await addTagToCar(2, 2);
-    const tag3 = await addTagToCar(2, 3);
-    console.log("addTagToCar(1, 1) Result:", tag1);
-    console.log("addTagToCar(1, 2) Result:", tag2);
-    console.log("addTagToCar(1, 3) Result:", tag3);
+    const car1 = await addTagToCar(2, 2);
+    const car2 = await addTagToCar(3, 2);
+    const car3 = await addTagToCar(4, 1);
+    const car4 = await addTagToCar(5, 1);
+    const car5 = await addTagToCar(6, 1);
+    const car6 = await addTagToCar(7, 1);
+    const car7 = await addTagToCar(8, 7);
+    const car8 = await addTagToCar(9, 7);
+    const car9 = await addTagToCar(10, 10);
+    const car10 = await addTagToCar(11, 11);
+    const car11 = await addTagToCar(12, 14);
+    const car12 = await addTagToCar(13, 9);
+    const car13 = await addTagToCar(14, 9);
+    const car14 = await addTagToCar(15, 14);
+    const car15 = await addTagToCar(16, 6);
+    console.log("addTagToCar(1, 1) Result:", car1);
+    console.log("addTagToCar(1, 2) Result:", car2);
+    console.log("addTagToCar(1, 3) Result:", car3);
 
     console.log("calling removeTagFromCar(1,1)");
     const removedTag = await removeTagFromCar(1, 1);
