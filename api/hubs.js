@@ -16,6 +16,7 @@ hubsRouter.get("/", async (req, res, next) => {
     });
 
     res.send(hubs);
+    console.log(hubs, "HUBS LOG");
   } catch ({ location }) {
     next({ location });
   }
@@ -29,19 +30,16 @@ hubsRouter.post("/", async (req, res, next) => {
   };
 
   try {
-    if(req.admin)
-    {
-    const hub = await createHub(hubData);
-    if (hub) {
-      res.send(hub);
+    if (req.admin) {
+      const hub = await createHub(hubData);
+      if (hub) {
+        res.send(hub);
+      } else {
+        next({ name: "hubCreationError", message: "Error creating hub." });
+      }
     } else {
-      next({ name: "hubCreationError", message: "Error creating hub." });
+      res.sendStatus(401);
     }
-  }
-  else
-  {
-    res.sendStatus(401);
-  }
   } catch ({ name, message }) {
     next({
       name,
@@ -52,31 +50,28 @@ hubsRouter.post("/", async (req, res, next) => {
 
 hubsRouter.patch("/:hubId", async (req, res, next) => {
   try {
-    if(req.admin)
-    {
-    const { hubId } = req.params;
-    const getHubId = await getHubById(hubId);
-    if (!getHubId) {
-      next({
-        name: "not found",
-        message: `Hub ${hubId} not found`,
-      });
-    } else {
-      const { location } = req.body;
-      try {
-        const updatedHub = await updateHub(location, hubId);
-        res.send(updatedHub);
-      } catch (error) {
+    if (req.admin) {
+      const { hubId } = req.params;
+      const getHubId = await getHubById(hubId);
+      if (!getHubId) {
         next({
-          name: "",
-          message: `An hub with location ${location} already exists`,
+          name: "not found",
+          message: `Hub ${hubId} not found`,
         });
-        console.log(error);
+      } else {
+        const { location } = req.body;
+        try {
+          const updatedHub = await updateHub(location, hubId);
+          res.send(updatedHub);
+        } catch (error) {
+          next({
+            name: "",
+            message: `An hub with location ${location} already exists`,
+          });
+          console.log(error);
+        }
       }
-    }
-    }
-    else
-    {
+    } else {
       res.sendStatus(401);
     }
   } catch (error) {
@@ -87,19 +82,16 @@ hubsRouter.patch("/:hubId", async (req, res, next) => {
 hubsRouter.delete("/:id", async (req, res, next) => {
   const { id } = req.params;
   try {
-    if(req.admin)
-    {
-    const deletedHub = await deleteHub(id);
-    if (deletedHub) {
-      res.status(200).json({ message: `Hub ${id} was deleted.` });
+    if (req.admin) {
+      const deletedHub = await deleteHub(id);
+      if (deletedHub) {
+        res.status(200).json({ message: `Hub ${id} was deleted.` });
+      } else {
+        res.status(404).json({ message: `Hub ${id} could not be found` });
+      }
     } else {
-      res.status(404).json({ message: `Hub ${id} could not be found` });
+      res.sendStatus(401);
     }
-  }
-  else
-  {
-    res.sendStatus(401);
-  }
   } catch (error) {
     res.status(500).json({ message: "Internal server error." });
     next(error);

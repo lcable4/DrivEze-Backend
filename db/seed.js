@@ -142,6 +142,8 @@ async function createTables() {
       CREATE TABLE hubs(
         id SERIAL PRIMARY KEY,
         location VARCHAR(255) UNIQUE NOT NULL,
+        latitude FLOAT NOT NULL,
+        longitude FLOAT NOT NULL,
         active BOOLEAN DEFAULT TRUE
       );
       
@@ -236,7 +238,12 @@ async function createAdminUsers() {
 async function createInitialHubs() {
   console.log("Starting to create hubs...");
   try {
-    const hubsToCreate = ["Arizona", "Nevada", "Texas", "Colorado"];
+    const hubsToCreate = [
+      { state: "Arizona", latitude: 33.4484, longitude: -112.074 },
+      { state: "Nevada", latitude: 36.1699, longitude: -115.1398 },
+      { state: "Texas", latitude: 29.4241, longitude: -98.4936 },
+      { state: "Colorado", latitude: 39.7392, longitude: -104.9903 },
+    ];
     //const hubs = await Promise.all(hubsToCreate.map(createHub));
     const hubs = [];
 
@@ -515,13 +522,13 @@ async function testHubDB() {
   console.log(
     "////////////////////////////////////////////testing hubs////////////////////////////////////////////"
   );
-  console.log("Calling create hub");
-  const hub = await createHub("New York");
-  console.log("Result:", hub);
+  //console.log("Calling create hub");
+  //const hub = await createHub("New York");
+  //console.log("Result:", hub);
 
-  // console.log("Calling get all hubs");
-  // const allHubs = await getAllHubs();
-  // console.log("Result:", allHubs);
+  console.log("Calling get all hubs");
+  const allHubs = await getAllHubs();
+  console.log("Result:", allHubs);
 
   const hubById = await getHubById(3);
   console.log("Hub ID LOG:", hubById);
@@ -530,16 +537,16 @@ async function testHubDB() {
   console.log("HUB LOCATION RESULT:", hubLocation);
   //could use error handling if the param doesnt exist inside the database(ex:Chicago, returns [])
 
-  const updatedHub = await updateHub("Kansas", 1);
-  console.log("UPDATED HUB LOG:", updatedHub);
+  //const updatedHub = await updateHub("Kansas", 1);
+  //console.log("UPDATED HUB LOG:", updatedHub);
 
-  const deletedRowCount = await deleteHub(1);
-  console.log(`Deleted ${deletedRowCount} hub(s)`);
+  //const deletedRowCount = await deleteHub(1);
+  //console.log(`Deleted ${deletedRowCount} hub(s)`);
   // const allHubsDELETE = await getAllHubs();
   // console.log("all hubs delete", allHubsDELETE);
 
-  const deactivatedHub = await deactivateHub(3);
-  console.log(`deactivated ${deactivatedHub} hub(s)`);
+  //const deactivatedHub = await deactivateHub(3);
+  //console.log(`deactivated ${deactivatedHub} hub(s)`);
   // const allHubsDEACTIVATE = await getAllHubs();
   // console.log("all hubs deactivate", allHubsDEACTIVATE);
 
@@ -641,14 +648,21 @@ async function testInventoryDB() {
   console.log(
     "////////////////////////////////////////////testing inventory////////////////////////////////////////////"
   );
-
-  console.log("calling addCarToHubInventory(3, 4)");
-  const car1 = await addCarToHubInventory(3, 4);
-  const car2 = await addCarToHubInventory(8, 4);
-  const car3 = await addCarToHubInventory(6, 4);
-  console.log("addCarToHubInventory(3) Result: ", car1);
-  console.log("addCarToHubInventory(8) Result: ", car2);
-  console.log("addCarToHubInventory(6) Result: ", car3);
+  console.log("calling addCarToHubInventory");
+  const civic = await addCarToHubInventory(3, 3);
+  const silverado = await addCarToHubInventory(4, 2);
+  const f150 = await addCarToHubInventory(5, 4);
+  const ram1500 = await addCarToHubInventory(6, 1);
+  const jeep = await addCarToHubInventory(7, 2);
+  const toyota4Runner = await addCarToHubInventory(8, 4);
+  const tahoe = await addCarToHubInventory(9, 3);
+  const tesla = await addCarToHubInventory(10, 2);
+  const bmw = await addCarToHubInventory(11, 4);
+  const mercedesSClass = await addCarToHubInventory(12, 3);
+  const mercedesGLSClass = await addCarToHubInventory(13, 2);
+  const rangeRover = await addCarToHubInventory(14, 4);
+  const lamborghiniUrus = await addCarToHubInventory(15, 3);
+  const toyotaCamry = await addCarToHubInventory(2, 1);
 
   // console.log("calling removeCarFromHubInventory(3, 4)");
   // const removedCar = await removeCarFromHubInventory(3, 4);
