@@ -239,10 +239,10 @@ async function createInitialHubs() {
   console.log("Starting to create hubs...");
   try {
     const hubsToCreate = [
-      { state: "Arizona", latitude: 33.4484, longitude: -112.074 },
-      { state: "Nevada", latitude: 36.1699, longitude: -115.1398 },
-      { state: "Texas", latitude: 29.4241, longitude: -98.4936 },
-      { state: "Colorado", latitude: 39.7392, longitude: -104.9903 },
+      { state: "Pheonix, Arizona", latitude: 33.4484, longitude: -112.074 },
+      { state: "Las Vegas, Nevada", latitude: 36.1699, longitude: -115.1398 },
+      { state: "San Antonio, Texas", latitude: 29.4241, longitude: -98.4936 },
+      { state: "Denver, Colorado", latitude: 39.7392, longitude: -104.9903 },
     ];
     //const hubs = await Promise.all(hubsToCreate.map(createHub));
     const hubs = [];
