@@ -26,7 +26,7 @@ async function updateCar({ carId, ...fields }) {
     const setString = Object.keys(fields)
       .map((key, index) => `"${key}"=$${index + 1}`)
       .join(", ");
-
+    console.log(fields)
     await client.connect();
 
     const {
@@ -46,6 +46,7 @@ async function updateCar({ carId, ...fields }) {
     return car;
   } catch (e) {
     console.error(e);
+    throw e;
   }
 }
 

@@ -37,6 +37,7 @@ async function getAdmin({username, password})
     await client.release();
 
     let isValid;
+    console.log(user)
     if(user.password)
     {
         isValid = await bcrypt.compare(password, user.password);

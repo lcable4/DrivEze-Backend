@@ -24,12 +24,13 @@ vehiclesRouter.get("/", async (req, res) => {
 //Post /api/cars
 vehiclesRouter.post("/", async (req, res, next) => {
   if (req.admin) {
-    const { name, description, daily_rate, hubLocation } = req.body;
+    const { name, description, daily_rate, hubLocation, image } = req.body;
     const data = {
       name,
       description,
       daily_rate,
       hubLocation,
+      image
     };
     const post = await createCar(data);
     if (post) {
@@ -43,9 +44,9 @@ vehiclesRouter.post("/", async (req, res, next) => {
 });
 
 vehiclesRouter.patch("/", async (req, res, next) => {
-  const carId = req.body.carId;
-  delete req.body.carId;
+  const carId =  req.body.carId;
   const fields = req.body;
+  console.log(carId);
   try {
     if (req.admin) {
       const car = await updateCar({ carId, ...fields });
@@ -67,25 +68,6 @@ vehiclesRouter.delete("/", async (req, res, next) => {
       const { id } = req.params;
       const routine = await getCarById(carId);
       console.log(routine, "id log");
-      //  console.log(req.user, "req user log")
-      // if (!routine) {
-      //     next({
-      //       name: "Error",
-      //       message: "Car does not exist!",
-      //      });
-      //   } else if (routine.creatorId !== req.user.id) {
-      //      console.log("HERE")
-      //      res.status(403);
-      //      next({
-      //       name: "Delete Error",
-      //        message: "This Car does not belong to you.",
-      //      });
-
-      //   } else {
-      //     const deletecar = await deleteCar(id);
-      //     res.send(routine);
-      //     console.log("HELLO")
-      //   }
       const deletecar = await deleteCar(carId);
       res.send(deletecar);
     } else {

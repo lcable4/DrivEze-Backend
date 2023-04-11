@@ -39,6 +39,18 @@ adminRouter.post("/login", async(req, res, next)=>
       {
         throw e;
       }
+});
+
+adminRouter.post("/auth", async(req, res, next)=>
+{
+  if(req.admin)
+  {
+    res.send(true);
+  }
+  else
+  {
+    res.send(false);
+  }
 })
 
 module.exports = adminRouter;

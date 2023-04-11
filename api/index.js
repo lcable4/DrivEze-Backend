@@ -18,6 +18,7 @@ router.use(async(req, res, next)=>
     try
     {
       const vToken = jwt.verify(token, JWT_SECRET);
+      console.log(vToken);
       if(vToken.isAdmin)
       {
         req.admin = true; //if a function can only be used by a admin it must check if(req.admin)
