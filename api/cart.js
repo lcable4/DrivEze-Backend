@@ -24,7 +24,7 @@ cartRouter.post("/", async (req, res, next) => {
   const { carId, price } = req.body;
 
   try {
-    console.log(req.user.guest);
+    console.log("////////////////", req.user);
     if (req.user && !req.user.guest) {
       const userId = req.user.id;
       let userCart = await getCartByUserId(userId);
@@ -136,26 +136,25 @@ cartRouter.delete("/", async (req, res, next) => {
 });
 
 cartRouter.delete("/clear-cart/", async (req, res, next) => {
-
   try {
-    if(req.user && !req.user.guest){
-    const userCart = await getCartByUserId(req.user.id);
-    const clearedCart = await clearCart(userCart.id);
-    if (clearedCart) {
-      res.send(clearedCart);
+    console.log(req.user, "/////req.user/////");
+    if (req.user && !req.user.guest) {
+      const userCart = await getCartByUserId(req.user.id);
+      const clearedCart = await clearCart(userCart.cartId);
+      console.log(clearedCart, "/////clearedCart//////");
+      console.log(userCart, "//////////userCart/////////////");
+      if (clearedCart) {
+        res.send(clearedCart);
+      }
+    } else if (req.user.guest) {
+      const userCart = await getCartByGuestId(req.user.guest.id);
+      console.log(userCart);
+      const clearedCart = await clearGuestCart(userCart.cartId);
+      console.log(clearedCart);
+      if (clearedCart) {
+        res.send(clearedCart);
+      }
     }
-  }
-  else if(req.user.guest)
-  {
-    const userCart = await getCartByGuestId(req.user.guest.id);
-    console.log(userCart);
-    const clearedCart = await clearGuestCart(userCart.cartId);
-    console.log(clearedCart)
-    if(clearedCart)
-    {
-      res.send(clearedCart);
-    }
-  }
   } catch (error) {
     throw error;
   }
