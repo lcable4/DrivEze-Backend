@@ -7,6 +7,7 @@ const {
   updateCarQuantity,
   removeCarFromCart,
   clearCart,
+  clearGuestCart,
 } = require("../db/cart-items");
 const { getCartByUserId, createCart } = require("../db/cart");
 const { requireUser } = require("./utils");
@@ -134,13 +135,27 @@ cartRouter.delete("/", async (req, res, next) => {
   }
 });
 
-cartRouter.delete("/clear-cart/:cartId", async (req, res, next) => {
-  const { cartId } = req.params;
+cartRouter.delete("/clear-cart/", async (req, res, next) => {
+
   try {
-    const clearedCart = await clearCart(cartId);
+    if(req.user && !req.user.guest){
+    const userCart = await getCartByUserId(req.user.id);
+    const clearedCart = await clearCart(userCart.id);
     if (clearedCart) {
       res.send(clearedCart);
     }
+  }
+  else if(req.user.guest)
+  {
+    const userCart = await getCartByGuestId(req.user.guest.id);
+    console.log(userCart);
+    const clearedCart = await clearGuestCart(userCart.cartId);
+    console.log(clearedCart)
+    if(clearedCart)
+    {
+      res.send(clearedCart);
+    }
+  }
   } catch (error) {
     throw error;
   }

@@ -118,10 +118,33 @@ async function clearCart(cartId) {
   }
 }
 
+async function clearGuestCart(cartId)
+{
+  try
+  {
+    await client.connect()
+
+    const{rows:cart} = await client.query(
+      `
+        DELETE FROM guest_cart_items
+        WHERE "guestCartId"=$1
+        RETURNING *
+      `,
+      [cartId]);
+    await client.release();
+    return cart;
+  }
+  catch(e)
+  {
+    console.log(e);
+  }
+}
+
 module.exports = {
   addCarToCart,
   removeCarFromCart,
   updateCarQuantity,
   getCartItemsByCartId,
   clearCart,
+  clearGuestCart
 };
