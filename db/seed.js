@@ -239,10 +239,10 @@ async function createInitialHubs() {
   console.log("Starting to create hubs...");
   try {
     const hubsToCreate = [
-      { state: "Pheonix, Arizona", latitude: 33.4484, longitude: -112.074 },
-      { state: "Las Vegas, Nevada", latitude: 36.1699, longitude: -115.1398 },
-      { state: "San Antonio, Texas", latitude: 29.4241, longitude: -98.4936 },
-      { state: "Denver, Colorado", latitude: 39.7392, longitude: -104.9903 },
+      { location: "Pheonix, Arizona", latitude: 33.4484, longitude: -112.074 },
+      { location: "Las Vegas, Nevada", latitude: 36.1699, longitude: -115.1398 },
+      { location: "San Antonio, Texas", latitude: 29.4241, longitude: -98.4936 },
+      { location: "Denver, Colorado", latitude: 39.7392, longitude: -104.9903 },
     ];
     //const hubs = await Promise.all(hubsToCreate.map(createHub));
     const hubs = [];
@@ -558,8 +558,6 @@ async function testCarDB() {
     console.log(
       "//////////////////////////////////////////// testing cars ////////////////////////////////////////////"
     );
-
-    console.log(newCar);
     const updatedCar = await updateCar({
       carId: 1,
       name: "Ford Raptor",
@@ -605,7 +603,7 @@ async function testCarTagsDB() {
     const car12 = await addTagToCar(13, 9);
     const car13 = await addTagToCar(14, 9);
     const car14 = await addTagToCar(15, 14);
-    const car15 = await addTagToCar(16, 6);
+
     console.log("addTagToCar(1, 1) Result:", car1);
     console.log("addTagToCar(1, 2) Result:", car2);
     console.log("addTagToCar(1, 3) Result:", car3);
