@@ -240,8 +240,16 @@ async function createInitialHubs() {
   try {
     const hubsToCreate = [
       { location: "Pheonix, Arizona", latitude: 33.4484, longitude: -112.074 },
-      { location: "Las Vegas, Nevada", latitude: 36.1699, longitude: -115.1398 },
-      { location: "San Antonio, Texas", latitude: 29.4241, longitude: -98.4936 },
+      {
+        location: "Las Vegas, Nevada",
+        latitude: 36.1699,
+        longitude: -115.1398,
+      },
+      {
+        location: "San Antonio, Texas",
+        latitude: 29.4241,
+        longitude: -98.4936,
+      },
       { location: "Denver, Colorado", latitude: 39.7392, longitude: -104.9903 },
     ];
     //const hubs = await Promise.all(hubsToCreate.map(createHub));
@@ -263,21 +271,7 @@ async function createInitialHubs() {
 async function createInitialTags() {
   console.log("Starting to create tags...");
   try {
-    const tagsToCreate = [
-      "Truck",
-      "Sedan",
-      "Coupe",
-      "Van",
-      "Minivan",
-      "Hatchback",
-      "SUV",
-      "Convertible",
-      "Luxury",
-      "Electric",
-      "Gas",
-      "Hybrid",
-      "Dummy Data",
-    ];
+    const tagsToCreate = ["Truck", "Sedan", "SUV", "Luxury", "Electric", "Gas"];
     //const tags = await Promise.all(tagsToCreate.map(createTags));
     const tags = [];
 
@@ -595,14 +589,14 @@ async function testCarTagsDB() {
     const car4 = await addTagToCar(5, 1);
     const car5 = await addTagToCar(6, 1);
     const car6 = await addTagToCar(7, 1);
-    const car7 = await addTagToCar(8, 7);
-    const car8 = await addTagToCar(9, 7);
-    const car9 = await addTagToCar(10, 10);
-    const car10 = await addTagToCar(11, 11);
-    const car11 = await addTagToCar(12, 14);
-    const car12 = await addTagToCar(13, 9);
-    const car13 = await addTagToCar(14, 9);
-    const car14 = await addTagToCar(15, 14);
+    const car7 = await addTagToCar(8, 3);
+    const car8 = await addTagToCar(9, 3);
+    const car9 = await addTagToCar(10, 5);
+    const car10 = await addTagToCar(11, 6);
+    const car11 = await addTagToCar(12, 7);
+    const car12 = await addTagToCar(13, 4);
+    const car13 = await addTagToCar(14, 4);
+    const car14 = await addTagToCar(15, 7);
 
     console.log("addTagToCar(1, 1) Result:", car1);
     console.log("addTagToCar(1, 2) Result:", car2);
