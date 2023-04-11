@@ -1,7 +1,8 @@
 const client = require("./index");
 //Creates a new hub
-async function createHub({ state, latitude, longitude }) {
+async function createHub({ location, latitude, longitude }) {
   try {
+    console.log("Location", location)
     await client.connect();
 
     const {
@@ -12,7 +13,7 @@ async function createHub({ state, latitude, longitude }) {
             VALUES ($1, $2, $3)
             RETURNING *;
             `,
-      [state, latitude, longitude]
+      [location, latitude, longitude]
     );
     await client.release();
     console.log(hub, "HUB CREATION LOG");

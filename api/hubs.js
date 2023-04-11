@@ -23,12 +23,14 @@ hubsRouter.get("/", async (req, res, next) => {
 });
 
 hubsRouter.post("/", async (req, res, next) => {
-  const { location = "" } = req.body;
+  const { location, latitude, longitude } = req.body;
 
   const hubData = {
     location,
+    latitude, 
+    longitude
   };
-
+  console.log("HUB DATA: ", hubData)
   try {
     if (req.admin) {
       const hub = await createHub(hubData);
@@ -79,8 +81,8 @@ hubsRouter.patch("/:hubId", async (req, res, next) => {
   }
 });
 
-hubsRouter.delete("/:id", async (req, res, next) => {
-  const { id } = req.params;
+hubsRouter.delete("/", async (req, res, next) => {
+  const { id } = req.body;
   try {
     if (req.admin) {
       const deletedHub = await deleteHub(id);
