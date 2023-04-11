@@ -558,12 +558,7 @@ async function testCarDB() {
     console.log(
       "//////////////////////////////////////////// testing cars ////////////////////////////////////////////"
     );
-    const newCar = await createCar({
-      name: "Honda Civic",
-      description: "Sedan",
-      daily_rate: 80,
-      hubLocation: "Nevada",
-    });
+
     console.log(newCar);
     const updatedCar = await updateCar({
       carId: 1,
@@ -585,9 +580,6 @@ async function testCarDB() {
 
     const deletedCar = await deleteCar(1);
     console.log(deletedCar, "DELETED CAR RESULTS");
-
-    const deactivatedCar = await deactivateCar(2);
-    console.log(deactivatedCar, "DEACTIVATED CAR RESULTS");
   } catch (error) {
     console.log(error);
   }
