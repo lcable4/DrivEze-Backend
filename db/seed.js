@@ -342,7 +342,7 @@ async function createInitialVehicles() {
         image: "./images/vehicles/jeepWrangler.png",
       },
       {
-        name: "Toyota 4Runner",
+        name: "Toyota Rav4",
         description: "off-road SUV",
         daily_rate: 200,
         hubLocation: "Colorado",
