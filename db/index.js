@@ -9,7 +9,7 @@ const pool = new Pool({
   ssl:
     process.env.NODE_ENV === "production"
       ? { rejectUnauthorized: false }
-      : false,
+      : true,
 });
 
 class client {
