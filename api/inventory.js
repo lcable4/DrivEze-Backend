@@ -4,6 +4,7 @@ const { requireUser } = require("./utils");
 const {
   getInventoryByHubId,
   addCarToHubInventory,
+  removeCarFromHubInventory
 } = require("../db/inventory");
 
 inventoryRouter.use((req, res, next) => {
@@ -45,7 +46,30 @@ inventoryRouter.post("/:hubId", async (req, res, next) => {
     next(error);
   }
 });
+inventoryRouter.delete("/", async (req, res, next)=>
+{
+  const {carId, hubId} = req.body;
 
+  try
+  {
+    if(req.admin)
+    {
+      const deletedCar = await removeCarFromHubInventory(carId, hubId);
+
+      if(deletedCar) res.send(deletedCar);
+      else res.send("error at delete car route")
+    }
+    else
+    {
+      res.sendStatus(401);
+    }
+  }
+  catch(e)
+  {
+    next(e);
+  }
+
+})
 module.exports = inventoryRouter;
 
 /*
